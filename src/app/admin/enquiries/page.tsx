@@ -371,8 +371,7 @@ export default function EnquiriesPage() {
                       {showDropdown === enquiry.id && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-10" style={{ borderColor: '#E7DED4' }}>
                           <div className="p-1">
-                            {(["NEW", "IN_PROGRESS", "RESOLVED"] as EnquiryStatus).map((status) => (
-                              <button
+{(["NEW", "IN_PROGRESS", "RESOLVED"] as EnquiryStatus[]).map((status) => (                              <button
                                 key={status}
                                 className="w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-100 flex items-center gap-2"
                                 style={{ color: '#292522' }}
@@ -472,8 +471,7 @@ export default function EnquiriesPage() {
                   Update Status
                 </label>
                 <div className="flex gap-2 mb-6">
-                  {(["NEW", "IN_PROGRESS", "RESOLVED"] as EnquiryStatus).map((status) => (
-                    <Button
+{(["NEW", "IN_PROGRESS", "RESOLVED"] as EnquiryStatus[]).map((status) => (                    <Button
                       key={status}
                       variant={selectedEnquiry.status === status ? "default" : "outline"}
                       size="sm"
