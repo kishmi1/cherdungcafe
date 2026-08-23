@@ -70,18 +70,7 @@ export default async function MenuPage() {
           "
         >
 
-          <p
-            className="
-              mb-3
-              text-sm
-              font-semibold
-              uppercase
-              tracking-[0.2em]
-              text-[#718794]
-            "
-          >
-            Cherdung Café
-          </p>
+         
 
           <h1
             className="

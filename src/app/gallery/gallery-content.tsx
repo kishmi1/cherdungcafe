@@ -91,20 +91,7 @@ export default function GalleryContent({
 
           <div className="text-center">
 
-            {/* Small Label */}
-            <p
-              className="
-                mb-3
-                text-xs
-                font-semibold
-                uppercase
-                tracking-[0.25em]
-                text-[#A66A3F]
-                sm:text-sm
-              "
-            >
-              Cherdung Café
-            </p>
+           
 
             {/* Heading */}
             <h1

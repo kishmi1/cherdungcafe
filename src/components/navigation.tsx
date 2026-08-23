@@ -3,10 +3,15 @@
 import Link from "next/link"
 import { Menu, X, Lock } from "lucide-react"
 import { useState } from "react"
-import { ThemeToggle } from "./theme-toggle"
+import { Settings } from "@/lib/use-settings"
 
-export default function Navigation() {
+interface NavigationProps {
+  settings?: Settings
+}
+
+export default function Navigation({ settings }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const siteName = settings?.siteName || "CHERDUNG CAFE"
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -25,7 +30,7 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="text-black dark:text-white text-2xl font-bold tracking-wider">
-            CHERDUNG CAFE
+            {siteName}
           </Link>
 
           {/* Desktop Navigation */}
@@ -50,12 +55,11 @@ export default function Navigation() {
               Enquiry
             </Link>
             
-            {/* Theme Toggle */}
-            <ThemeToggle />
-            
             {/* Admin Login */}
             <Link href="/login" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Admin">
-              <Lock className="h-5 w-5" />
+              <span className="flex items-center">
+                <Lock className="h-5 w-5" />
+              </span>
             </Link>
           </div>
 
@@ -95,9 +99,10 @@ export default function Navigation() {
               Enquiry
             </Link>
             <div className="flex items-center justify-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-800">
-              <ThemeToggle />
               <Link href="/login" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Admin">
-                <Lock className="h-5 w-5" />
+                <span className="flex items-center">
+                  <Lock className="h-5 w-5" />
+                </span>
               </Link>
             </div>
           </div>

@@ -175,28 +175,7 @@ export default function BlogPage() {
 
           <div className="text-center">
 
-            {/* Small Label */}
-
-            <div
-              className="
-                mb-3
-                inline-flex
-                items-center
-                rounded-full
-                border
-                px-4
-                py-1.5
-                text-sm
-                font-medium
-              "
-              style={{
-                backgroundColor: "#FFFFFF",
-                borderColor: "#E7DED4",
-                color: "#7A4E2D",
-              }}
-            >
-              Cherdung Café
-            </div>
+           
 
             {/* Heading */}
 

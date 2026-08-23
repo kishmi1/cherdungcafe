@@ -97,7 +97,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-gray-900 dark:text-white"
                   placeholder="admin@cherdungcafe.com"
                   required
                 />
@@ -118,7 +118,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-12"
+                  className="pl-10 pr-12 text-gray-900 dark:text-white"
                   placeholder="••••••••"
                   required
                 />

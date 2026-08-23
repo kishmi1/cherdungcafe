@@ -132,9 +132,7 @@ export default async function ServicesPage() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
 
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#8B684A]">
-              Cherdung Café
-            </p>
+            
 
             <h1
               className="

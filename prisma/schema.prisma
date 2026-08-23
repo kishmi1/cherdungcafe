@@ -132,3 +132,41 @@ model EnquiryReply {
   message   String
   sentAt    DateTime @default(now())
 }
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Settings {
+  id                   Int      @id @default(autoincrement())
+  siteName             String   @default("Cherdung Café")
+  siteDescription      String?
+  contactEmail         String?
+  contactPhone         String?
+  contactAddress       String?
+  socialFacebook       String?
+  socialInstagram      String?
+  socialTwitter        String?
+  socialWhatsApp       String?
+  socialTikTok         String?
+  openingHours         String?
+  businessHours        String?
+  seoTitle             String?
+  seoDescription       String?
+  logoUrl              String?
+  faviconUrl           String?
+  googleMapsEmbed      String?
+  themeColor           String   @default("#B68A52")
+  accentColor          String   @default("#7A4E2D")
+  backgroundColor      String   @default("#F7F4EF")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}

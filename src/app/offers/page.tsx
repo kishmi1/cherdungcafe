@@ -159,18 +159,7 @@ export default function OffersPage() {
           "
         >
 
-          <p
-            className="
-              mb-3
-              text-sm
-              font-semibold
-              uppercase
-              tracking-[0.2em]
-              text-[#A66A3F]
-            "
-          >
-            Cherdung Café
-          </p>
+        
 
           <h1
             className="

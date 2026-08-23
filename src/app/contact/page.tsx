@@ -1,18 +1,14 @@
-import { MapPin, Send, Share2 } from "lucide-react"
+"use client"
+
+import { MapPin, Send } from "lucide-react"
 import Link from "next/link"
 import { FAQPageSchema } from "@/components/structured-data"
-import { Metadata } from "next"
-
-export const metadata: Metadata = {
-  title: "Contact Us - Cherdung Café",
-  description: "Get in touch with Cherdung Café. Find our location, contact details, opening hours, and send us a message.",
-  openGraph: {
-    title: "Contact Us - Cherdung Café",
-    description: "Get in touch with us for questions, feedback, or just to say hello.",
-  },
-}
+import ContactForm from "./contact-form"
+import { useSettings } from "@/lib/use-settings"
+import SocialMediaIcons from "@/components/social-media-icons"
 
 export default function ContactPage() {
+  const { settings } = useSettings()
   const faqs = [
     {
       question: "Do you take reservations?",
@@ -62,10 +58,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
-                    <p className="text-gray-600">
-                      Sankhamul<br />
-                      Kathmandu 44600<br />
-                      Nepal
+                    <p className="text-gray-600 whitespace-pre-line">
+                      {settings?.contactAddress || "Sankhamul\nKathmandu 44600\nNepal"}
                     </p>
                   </div>
                 </div>
@@ -74,29 +68,11 @@ export default function ContactPage() {
               {/* Social Media */}
               <div className="mt-8">
                 <h3 className="font-semibold text-gray-900 mb-4">Follow Us</h3>
-                <div className="flex space-x-4">
-                  <a
-                    href="#"
-                    className="bg-gray-100 p-3 rounded-lg hover:bg-amber-100 transition-colors"
-                    aria-label="Facebook"
-                  >
-                    <Share2 className="h-6 w-6 text-gray-700 hover:text-amber-600" />
-                  </a>
-                  <a
-                    href="#"
-                    className="bg-gray-100 p-3 rounded-lg hover:bg-amber-100 transition-colors"
-                    aria-label="Instagram"
-                  >
-                    <Share2 className="h-6 w-6 text-gray-700 hover:text-amber-600" />
-                  </a>
-                  <a
-                    href="#"
-                    className="bg-gray-100 p-3 rounded-lg hover:bg-amber-100 transition-colors"
-                    aria-label="Twitter"
-                  >
-                    <Share2 className="h-6 w-6 text-gray-700 hover:text-amber-600" />
-                  </a>
-                </div>
+                <SocialMediaIcons 
+                  settings={settings} 
+                  variant="boxed"
+                  iconClassName="h-6 w-6"
+                />
               </div>
             </div>
 
@@ -105,14 +81,14 @@ export default function ContactPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-8">Visit Us</h2>
               <div className="rounded-lg overflow-hidden h-96 shadow-lg mb-6">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.047940368783!2d85.3123859!3d27.6919288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb18f8c8a0e3eb%3A0x5e4b9c8a5e4b9c8a!2sSankhamul%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1700000000000!5m2!1sen!2snp"
+                  src={settings?.googleMapsEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.047940368783!2d85.3123859!3d27.6919288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb18f8c8a0e3eb%3A0x5e4b9c8a5e4b9c8a!2sSankhamul%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1700000000000!5m2!1sen!2snp"}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Cherdung Cafe Location - Sankhamul, Kathmandu"
+                  title="Cherdung Cafe Location"
                 />
               </div>
               <div className="flex items-center justify-center space-x-2 mb-4">
@@ -144,90 +120,7 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  placeholder="+1 (555) 000-0000"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                  Subject *
-                </label>
-                <select
-                  id="subject"
-                  name="subject"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                >
-                  <option value="">Select a subject</option>
-                  <option value="general">General Inquiry</option>
-                  <option value="feedback">Feedback</option>
-                  <option value="catering">Catering Request</option>
-                  <option value="events">Private Events</option>
-                  <option value="partnership">Partnership</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  placeholder="Your message..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-amber-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-amber-700 transition-colors"
-              >
-                Send Message
-              </button>
-            </form>
+            <ContactForm />
 
             <p className="text-center text-sm text-gray-500 mt-6">
               Or use our <Link href="/enquiry" className="text-amber-600 hover:text-amber-700">detailed enquiry form</Link> for more comprehensive requests.

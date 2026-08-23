@@ -93,6 +93,8 @@ export default function AdminLayout({
   const [notificationCount, setNotificationCount] =
     useState(0)
 
+  // Don't show sidebar and navbar for login page
+  const isLoginPage = pathname === '/admin/login'
 
   /* =====================================================
      NOTIFICATIONS
@@ -141,7 +143,8 @@ export default function AdminLayout({
         backgroundColor: "#F7F4EF",
       }}
     >
-
+      {!isLoginPage && (
+        <>
       {/* =================================================
           MOBILE OVERLAY
       ================================================= */}
@@ -381,12 +384,13 @@ export default function AdminLayout({
       ================================================= */}
 
       <div
-        className="
+        className={`
           min-h-screen
-          lg:ml-64
-        "
+          ${!isLoginPage ? 'lg:ml-64' : ''}
+        `}
       >
-
+        {!isLoginPage && (
+        <>
         {/* =================================================
             TOP NAVBAR
         ================================================= */}
@@ -612,6 +616,8 @@ export default function AdminLayout({
           </div>
 
         </header>
+        </>
+        )}
 
 
         {/* =================================================
@@ -619,14 +625,18 @@ export default function AdminLayout({
         ================================================= */}
 
         <main
-          className="
+          className={`
             min-h-[calc(100vh-73px)]
-          "
+            ${isLoginPage ? 'min-h-screen' : ''}
+          `}
         >
           {children}
         </main>
 
       </div>
+
+      </>
+      )}
 
     </div>
   )
