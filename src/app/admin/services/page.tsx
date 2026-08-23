@@ -13,7 +13,9 @@ import {
   ChevronUp,
   ChevronDown,
   Eye,
-  EyeOff
+  EyeOff,
+  Upload,
+  X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -43,6 +45,7 @@ const iconOptions = [
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isUploading, setIsUploading] = useState(false)
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingService, setEditingService] = useState<Service | null>(null)
   const [formData, setFormData] = useState({
@@ -103,6 +106,36 @@ export default function ServicesPage() {
       }
     } catch (error) {
       console.error('Error saving service:', error)
+    }
+  }
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setIsUploading(true)
+    try {
+      const uploadData = new FormData()
+      uploadData.append('file', file)
+      uploadData.append('folder', 'services')
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: uploadData,
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to upload image')
+      }
+
+      setFormData((current) => ({ ...current, image: data.url }))
+    } catch (error) {
+      console.error('Error uploading service image:', error)
+      alert(error instanceof Error ? error.message : 'Failed to upload image')
+    } finally {
+      setIsUploading(false)
+      event.target.value = ''
     }
   }
 
@@ -381,14 +414,43 @@ export default function ServicesPage() {
 
                 <div>
                   <label className="block text-sm font-semibold mb-2" style={{ color: '#292522' }}>
-                    Image URL (optional)
+                    Service Image (optional)
                   </label>
-                  <Input
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                    style={{ borderColor: '#E7DED4' }}
-                  />
+                  <div className="space-y-3">
+                    {formData.image && (
+                      <div className="relative h-44 overflow-hidden rounded-lg border" style={{ borderColor: '#E7DED4' }}>
+                        <img
+                          src={formData.image}
+                          alt="Service preview"
+                          className="h-full w-full object-cover"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setFormData({ ...formData, image: '' })}
+                          className="absolute right-2 top-2 bg-white/90 p-1"
+                          style={{ color: '#B94A48' }}
+                        >
+                          <X className="h-4 w-4" />
+                          <span className="sr-only">Remove image</span>
+                        </Button>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={isUploading}
+                        style={{ borderColor: '#E7DED4' }}
+                      />
+                      <Upload className="h-5 w-5 shrink-0" style={{ color: '#7A4E2D' }} />
+                    </div>
+                    <p className="text-xs" style={{ color: '#756E68' }}>
+                      {isUploading ? 'Uploading to Cloudinary…' : 'Choose an image from your computer (max 5 MB).'}
+                    </p>
+                  </div>
                 </div>
 
                 <div>
@@ -432,9 +494,10 @@ export default function ServicesPage() {
                   <Button
                     type="submit"
                     className="flex-1"
+                    disabled={isUploading}
                     style={{ backgroundColor: '#7A4E2D', color: '#FFFFFF' }}
                   >
-                    {editingService ? 'Update' : 'Create'}
+                    {isUploading ? 'Uploading…' : editingService ? 'Update' : 'Create'}
                   </Button>
                 </div>
               </form>

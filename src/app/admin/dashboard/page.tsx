@@ -1,69 +1,64 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { 
-  LogOut, 
-  Menu, 
-  X, 
-  LayoutDashboard, 
-  Coffee, 
-  Tag, 
-  Image as ImageIcon, 
-  FileText, 
-  MessageSquare, 
-  Mail, 
-  Settings, 
-  Bell, 
-  User,
-  Plus,
-  ChevronRight
-} from "lucide-react"
+import { Coffee, Tag, Image as ImageIcon, FileText, MessageSquare, Plus, ChevronRight } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-const sidebarItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/admin/dashboard" },
-  { icon: Coffee, label: "Services", href: "/admin/services" },
-  { icon: Tag, label: "Offers", href: "/admin/offers" },
-  { icon: ImageIcon, label: "Gallery", href: "/admin/gallery" },
-  { icon: FileText, label: "Blog", href: "/admin/blog" },
-  { icon: MessageSquare, label: "Enquiries", href: "/admin/enquiries" },
-  { icon: Mail, label: "Messages", href: "/admin/messages" },
-  { icon: Settings, label: "Settings", href: "/admin/settings" },
-]
+type DashboardStats = {
+  totalServices: number
+  activeOffers: number
+  galleryImages: number
+  blogPosts: number
+  newEnquiries: number
+  recentActivities: {
+    action: string
+    item: string
+    createdAt: string
+  }[]
+}
 
 export default function AdminDashboard() {
-  const router = useRouter()
   const [mounted, setMounted] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [statsError, setStatsError] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+
+    const loadStats = async () => {
+      try {
+        const response = await fetch("/api/dashboard/stats", { cache: "no-store" })
+        if (!response.ok) throw new Error("Failed to fetch dashboard statistics")
+        setStats(await response.json())
+      } catch (error) {
+        console.error("Failed to load dashboard statistics:", error)
+        setStatsError(true)
+      }
+    }
+
+    loadStats()
   }, [])
 
   if (!mounted) return null
 
-  const handleLogout = () => {
-    router.push("/login")
+  const statCards = [
+    { title: "Total Services", value: stats?.totalServices, icon: Coffee, detail: "All services" },
+    { title: "Active Offers", value: stats?.activeOffers, icon: Tag, detail: "Active right now" },
+    { title: "Gallery Images", value: stats?.galleryImages, icon: ImageIcon, detail: "All gallery images" },
+    { title: "Blog Posts", value: stats?.blogPosts, icon: FileText, detail: "All blog posts" },
+    { title: "New Enquiries", value: stats?.newEnquiries, icon: MessageSquare, detail: "Awaiting response" },
+  ]
+
+  const formatRelativeTime = (dateString: string) => {
+    const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateString).getTime()) / 1000))
+    if (seconds < 60) return "Just now"
+    if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hr ago`
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`
+    return new Date(dateString).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
   }
-
-  const stats = [
-    { title: "Total Services", value: "12", icon: Coffee, color: "amber", change: "+2 this month" },
-    { title: "Active Offers", value: "5", icon: Tag, color: "green", change: "+1 this week" },
-    { title: "Gallery Images", value: "48", icon: ImageIcon, color: "blue", change: "+8 this month" },
-    { title: "Blog Posts", value: "24", icon: FileText, color: "purple", change: "+3 this month" },
-    { title: "New Enquiries", value: "18", icon: MessageSquare, color: "orange", change: "+5 today" },
-  ]
-
-  const recentActivities = [
-    { action: "New enquiry received", item: "Catering request for wedding", time: "2 hours ago" },
-    { action: "Blog post published", item: "Summer Menu Specials", time: "5 hours ago" },
-    { action: "Offer updated", item: "Weekend Coffee Deal", time: "1 day ago" },
-    { action: "New gallery image added", item: "Interior renovation photos", time: "2 days ago" },
-    { action: "Service modified", item: "Breakfast menu updated", time: "3 days ago" },
-  ]
 
   return (
     <div className="p-6" style={{ backgroundColor: '#F7F4EF' }}>
@@ -74,7 +69,7 @@ export default function AdminDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
-        {stats.map((stat) => (
+        {statCards.map((stat) => (
           <Card key={stat.title} className="hover:shadow-md transition-shadow" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E7DED4' }}>
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="text-sm font-semibold" style={{ color: '#756E68' }}>
@@ -83,8 +78,10 @@ export default function AdminDashboard() {
               <stat.icon className="h-5 w-5" style={{ color: '#7A4E2D' }} />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold" style={{ color: '#292522' }}>{stat.value}</div>
-              <p className="text-sm mt-1 font-medium" style={{ color: '#756E68' }}>{stat.change}</p>
+              <div className="text-3xl font-bold" style={{ color: '#292522' }}>
+                {statsError ? "—" : stat.value ?? "…"}
+              </div>
+              <p className="text-sm mt-1 font-medium" style={{ color: '#756E68' }}>{stat.detail}</p>
             </CardContent>
           </Card>
         ))}
@@ -103,14 +100,19 @@ export default function AdminDashboard() {
                 <span>Add Service</span>
               </Button>
             </Link>
-            <Button variant="outline" className="flex items-center gap-2 h-auto py-4 font-medium" style={{ backgroundColor: '#FFFFFF', borderColor: '#E7DED4', color: '#7A4E2D' }}>
+             <Link href="/admin/offers">
+            <Button variant="outline" className="flex items-center gap-2 h-auto py-4 font-medium w-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E7DED4', color: '#7A4E2D' }}>
               <Plus className="h-4 w-4" />
               <span>Add Offer</span>
             </Button>
-            <Button variant="outline" className="flex items-center gap-2 h-auto py-4 font-medium" style={{ backgroundColor: '#FFFFFF', borderColor: '#E7DED4', color: '#7A4E2D' }}>
+            </Link>
+                 <Link href="/admin/blog">
+
+            <Button variant="outline" className="flex items-center gap-2 h-auto py-4 font-medium w-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E7DED4', color: '#7A4E2D' }}>
               <Plus className="h-4 w-4" />
               <span>Add Blog</span>
             </Button>
+            </Link>
             <Link href="/admin/enquiries">
               <Button variant="outline" className="flex items-center gap-2 h-auto py-4 font-medium w-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E7DED4', color: '#7A4E2D' }}>
                 <MessageSquare className="h-4 w-4" />
@@ -127,32 +129,37 @@ export default function AdminDashboard() {
           <CardTitle className="font-semibold" style={{ color: '#292522' }}>Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {recentActivities.map((activity, index) => (
-              <div 
-                key={index}
-                className="flex items-start gap-4 p-4 rounded-lg transition-all duration-200"
-                style={{ backgroundColor: '#F7F4EF', border: '1px solid #E7DED4' }}
-              >
-                <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 border" style={{ backgroundColor: '#F7F4EF', borderColor: '#B68A52' }}>
-                  <ChevronRight className="h-5 w-5" style={{ color: '#7A4E2D' }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold" style={{ color: '#292522' }}>
-                    {activity.action}
+          {!stats && !statsError ? (
+            <p className="text-sm" style={{ color: '#756E68' }}>Loading recent activity…</p>
+          ) : statsError ? (
+            <p className="text-sm" style={{ color: '#756E68' }}>Recent activity could not be loaded.</p>
+          ) : stats?.recentActivities.length === 0 ? (
+            <p className="text-sm" style={{ color: '#756E68' }}>No recent activity yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {stats?.recentActivities.map((activity, index) => (
+                <div
+                  key={`${activity.action}-${activity.item}-${activity.createdAt}-${index}`}
+                  className="flex items-start gap-4 p-4 rounded-lg"
+                  style={{ backgroundColor: '#F7F4EF', border: '1px solid #E7DED4' }}
+                >
+                  <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 border" style={{ backgroundColor: '#F7F4EF', borderColor: '#B68A52' }}>
+                    <ChevronRight className="h-5 w-5" style={{ color: '#7A4E2D' }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold" style={{ color: '#292522' }}>{activity.action}</p>
+                    <p className="text-sm truncate" style={{ color: '#756E68' }}>{activity.item}</p>
+                  </div>
+                  <p className="text-xs flex-shrink-0 font-medium" style={{ color: '#756E68' }}>
+                    {formatRelativeTime(activity.createdAt)}
                   </p>
-                  <p className="text-sm truncate" style={{ color: '#756E68' }}>
-                    {activity.item}
-                  </p>
                 </div>
-                <p className="text-xs flex-shrink-0 font-medium" style={{ color: '#756E68' }}>
-                  {activity.time}
-                </p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
+
     </div>
   )
 }

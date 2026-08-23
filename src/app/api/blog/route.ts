@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 
 // GET all blog posts
@@ -71,9 +72,40 @@ export async function POST(request: Request) {
       status, 
       metaTitle, 
       metaDescription, 
-      readTime, 
-      authorId 
+      readTime,
     } = body
+
+    if (!title || !content) {
+      return NextResponse.json({ error: 'Title and content are required' }, { status: 400 })
+    }
+
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get('adminSession')
+
+    if (!sessionCookie) {
+      return NextResponse.json({ error: 'Please log in again to create a blog post' }, { status: 401 })
+    }
+
+    let sessionEmail: string
+    try {
+      const session = JSON.parse(sessionCookie.value)
+      sessionEmail = typeof session.email === 'string' ? session.email : ''
+    } catch {
+      return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
+    }
+
+    if (!sessionEmail) {
+      return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
+    }
+
+    const author = await prisma.user.findUnique({
+      where: { email: sessionEmail },
+      select: { id: true, name: true, email: true },
+    })
+
+    if (!author) {
+      return NextResponse.json({ error: 'Your account could not be found. Please log in again.' }, { status: 401 })
+    }
 
     // Generate slug if not provided
     const finalSlug = slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -100,20 +132,20 @@ export async function POST(request: Request) {
         metaTitle,
         metaDescription,
         readTime,
-        authorId,
+        authorId: author.id,
         publishedAt: status === 'PUBLISHED' ? new Date() : null
       }
     })
     
     // Fetch author separately to avoid Prisma Query Engine panic
-    const author = await prisma.user.findUnique({
+    const postAuthor = await prisma.user.findUnique({
       where: { id: post.authorId },
       select: { id: true, name: true, email: true }
     })
     
     const postWithAuthor = {
       ...post,
-      author: author || { id: post.authorId, name: 'Unknown', email: '' }
+      author: postAuthor || { id: post.authorId, name: 'Unknown', email: '' }
     }
 
     return NextResponse.json(postWithAuthor, { status: 201 })

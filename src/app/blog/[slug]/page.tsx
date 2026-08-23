@@ -1,9 +1,19 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import { Calendar, User, Clock, ArrowLeft, Share2 } from "lucide-react"
+import {
+  Calendar,
+  User,
+  Clock,
+  ArrowLeft,
+  Share2,
+  ArrowRight,
+} from "lucide-react"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
-import { BlogPostingSchema, BreadcrumbSchema } from "@/components/structured-data"
+import {
+  BlogPostingSchema,
+  BreadcrumbSchema,
+} from "@/components/structured-data"
 import { Metadata } from "next"
 
 interface BlogPostPageProps {
@@ -34,7 +44,13 @@ interface BlogPostWithAuthor {
   updatedAt: string | Date
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+/* =========================================================
+   METADATA
+========================================================= */
+
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
   const post = await getBlogPost(slug)
 
@@ -45,268 +61,979 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   return {
-    title: post.metaTitle || `${post.title} - Cherdung Café Blog`,
-    description: post.metaDescription || post.excerpt || post.content.substring(0, 160),
+    title:
+      post.metaTitle ||
+      `${post.title} - Cherdung Café Blog`,
+
+    description:
+      post.metaDescription ||
+      post.excerpt ||
+      post.content.substring(0, 160),
+
     openGraph: {
       title: post.title,
-      description: post.metaDescription || post.excerpt || post.content.substring(0, 160),
-      images: post.coverImage ? [post.coverImage] : [],
+
+      description:
+        post.metaDescription ||
+        post.excerpt ||
+        post.content.substring(0, 160),
+
+      images: post.coverImage
+        ? [post.coverImage]
+        : [],
     },
   }
 }
 
-async function getBlogPost(slug: string): Promise<BlogPostWithAuthor | null> {
+/* =========================================================
+   GET BLOG POST
+========================================================= */
+
+async function getBlogPost(
+  slug: string
+): Promise<BlogPostWithAuthor | null> {
   try {
     const post = await prisma.blogPost.findUnique({
-      where: { slug }
+      where: {
+        slug,
+      },
     })
-    
+
     if (post) {
-      // Fetch author separately to avoid Prisma Query Engine panic
-      const author = await prisma.user.findUnique({
-        where: { id: post.authorId },
-        select: { id: true, name: true, email: true }
-      })
-        return { ...post, author: author || { id: post.authorId, name: 'Unknown Author', email: '' } } as BlogPostWithAuthor
+      const author =
+        await prisma.user.findUnique({
+          where: {
+            id: post.authorId,
+          },
+
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        })
+
+      return {
+        ...post,
+
+        author:
+          author || {
+            id: post.authorId,
+            name: "Unknown Author",
+            email: "",
+          },
+      } as BlogPostWithAuthor
     }
-    
+
     return post
   } catch (error) {
-    console.error('Error fetching blog post:', error)
+    console.error(
+      "Error fetching blog post:",
+      error
+    )
+
     return null
   }
 }
 
-async function getRelatedPosts(currentPostId: number, category?: string | null): Promise<BlogPostWithAuthor[]> {
+/* =========================================================
+   GET RELATED POSTS
+========================================================= */
+
+async function getRelatedPosts(
+  currentPostId: number,
+  category?: string | null
+): Promise<BlogPostWithAuthor[]> {
   try {
     const where: any = {
       status: "PUBLISHED",
-      id: { not: currentPostId }
+
+      id: {
+        not: currentPostId,
+      },
     }
-    
+
     if (category) {
       where.category = category
     }
 
-    const posts = await prisma.blogPost.findMany({
-      where,
-      orderBy: { publishedAt: 'desc' },
-      take: 3
-    })
-    
-    // Fetch authors separately to avoid Prisma Query Engine panic
-    const authorIds = posts.map(post => post.authorId)
-    const authors = await prisma.user.findMany({
-      where: { id: { in: authorIds } },
-      select: { id: true, name: true, email: true }
-    })
-    
-    const authorMap = new Map(authors.map(a => [a.id, a]))
-    
-    return posts.map(post => ({
+    const posts =
+      await prisma.blogPost.findMany({
+        where,
+
+        orderBy: {
+          publishedAt: "desc",
+        },
+
+        take: 3,
+      })
+
+    const authorIds = posts.map(
+      (post) => post.authorId
+    )
+
+    const authors =
+      await prisma.user.findMany({
+        where: {
+          id: {
+            in: authorIds,
+          },
+        },
+
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      })
+
+    const authorMap = new Map(
+      authors.map((author) => [
+        author.id,
+        author,
+      ])
+    )
+
+    return posts.map((post) => ({
       ...post,
-      author: authorMap.get(post.authorId) || { id: post.authorId, name: 'Unknown', email: '' }
+
+      author:
+        authorMap.get(post.authorId) || {
+          id: post.authorId,
+          name: "Unknown Author",
+          email: "",
+        },
     })) as BlogPostWithAuthor[]
   } catch (error) {
-    console.error('Error fetching related posts:', error)
+    console.error(
+      "Error fetching related posts:",
+      error
+    )
+
     return []
   }
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+/* =========================================================
+   BLOG DETAIL PAGE
+========================================================= */
+
+export default async function BlogPostPage({
+  params,
+}: BlogPostPageProps) {
   const { slug } = await params
+
   const post = await getBlogPost(slug)
 
   if (!post) {
     notFound()
   }
 
-  const relatedPosts = await getRelatedPosts(post.id, post.category)
+  const relatedPosts =
+    await getRelatedPosts(
+      post.id,
+      post.category
+    )
 
-  // Fallback content if needed
-  const fallbackContent = post.content || `
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  const fallbackContent = `
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+
     <h2>Section Heading</h2>
-    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+
+    <p>
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco
+      laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
   `
 
   return (
-    <div className="flex flex-col">
-      <BlogPostingSchema
-        title={post.title}
-        description={post.excerpt || post.content.substring(0, 160)}
-        author={post.author?.name || 'Unknown Author'}
-        datePublished={post.publishedAt ? new Date(post.publishedAt).toISOString() : new Date().toISOString()}
-        url={`https://cherdungcafe.com/blog/${post.slug}`}
-      />
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", item: "https://cherdungcafe.com" },
-          { name: "Blog", item: "https://cherdungcafe.com/blog" },
-          { name: post.title, item: `https://cherdungcafe.com/blog/${post.slug}` }
-        ]}
-      />
-      {/* Header */}
-      <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/blog" className="inline-flex items-center text-amber-600 hover:text-amber-700 mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "#FFFFFF",
+        color: "#292522",
+      }}
+    >
+
+      {/* =====================================================
+          BLOG HERO
+      ===================================================== */}
+
+      <section
+        className="py-12 md:py-16"
+        style={{
+          backgroundColor: "#FFF9F3",
+        }}
+      >
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-4
+            sm:px-6
+            lg:px-8
+          "
+        >
+
+          {/* ================= BACK TO BLOG ================= */}
+
+          <Link
+            href="/blog"
+            className="
+              mb-8
+              inline-flex
+              items-center
+              gap-2
+              text-sm
+              font-medium
+              transition-opacity
+              hover:opacity-70
+            "
+            style={{
+              color: "#7A4E2D",
+            }}
+          >
+            <ArrowLeft className="h-4 w-4" />
+
             Back to Blog
           </Link>
-          <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{post.title}</h1>
-            <div className="flex items-center gap-4 text-gray-600">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span>{post.author?.name || 'Unknown Author'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <time dateTime={post.publishedAt ? new Date(post.publishedAt).toISOString() : ''}>
-                  {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  }) : ''}
-                </time>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>5 min read</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Blog Content */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            {/* Cover Image */}
-            {post.coverImage && (
-              <div className="aspect-video rounded-lg mb-8 overflow-hidden">
-                <img 
-                  src={post.coverImage} 
-                  alt={post.title}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            )}
 
-            {/* Category */}
-            {post.category && (
-              <span className="inline-block text-sm font-medium mb-4" style={{ color: '#7A4E2D' }}>
-                {post.category}
-              </span>
-            )}
+          {/* =================================================
+              IMAGE + CONTENT
+          ================================================= */}
 
-            {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#292522' }}>
-              {post.title}
-            </h1>
+          <div
+            className="
+              grid
+              grid-cols-1
+              items-center
+              gap-8
+              md:grid-cols-2
+              md:gap-12
+              lg:gap-16
+            "
+          >
 
-            {/* Author + Date */}
-            <div className="flex items-center gap-4 mb-8 pb-8 border-b" style={{ color: '#756E68' }}>
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span>{post.author?.name || 'Unknown Author'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <time dateTime={post.publishedAt ? new Date(post.publishedAt).toISOString() : ''}>
-                  {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  }) : ''}
-                </time>
-              </div>
-              {post.readTime && (
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  <span>{post.readTime} min read</span>
+            {/* ================= IMAGE ================= */}
+
+            <div
+              className="
+                overflow-hidden
+                rounded-2xl
+                border
+                bg-white
+                shadow-sm
+              "
+              style={{
+                borderColor: "#E7DED4",
+              }}
+            >
+
+              {post.coverImage ? (
+
+                <div
+                  className="
+                    aspect-[4/3]
+                    overflow-hidden
+                  "
+                >
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="
+                      h-full
+                      w-full
+                      object-cover
+                      transition-transform
+                      duration-500
+                      hover:scale-105
+                    "
+                  />
                 </div>
+
+              ) : (
+
+                <div
+                  className="
+                    flex
+                    aspect-[4/3]
+                    items-center
+                    justify-center
+                  "
+                  style={{
+                    backgroundColor: "#F7F4EF",
+                  }}
+                >
+
+                  <Clock
+                    className="h-12 w-12"
+                    style={{
+                      color: "#C9B9A9",
+                    }}
+                  />
+
+                </div>
+
               )}
+
             </div>
 
-            {/* Full rich content */}
-            <div className="prose prose-lg max-w-none mb-8">
-              <div dangerouslySetInnerHTML={{ __html: post.content || fallbackContent }} />
-            </div>
 
-            {/* Tags */}
-            {post.tags && post.tags.length > 0 && (
-              <div className="mt-8 pt-8 border-t">
-                <h3 className="text-lg font-semibold mb-3" style={{ color: '#292522' }}>Tags</h3>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag: string) => (
-                    <span
-                      key={tag}
-                      className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+            {/* ================= CONTENT ================= */}
+
+            <div className="max-w-xl">
+
+              {/* Category */}
+
+              {post.category && (
+                <span
+                  className="
+                    mb-4
+                    inline-block
+                    rounded-full
+                    border
+                    px-3
+                    py-1.5
+                    text-xs
+                    font-semibold
+                    uppercase
+                    tracking-wider
+                  "
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    borderColor: "#E7DED4",
+                    color: "#7A4E2D",
+                  }}
+                >
+                  {post.category}
+                </span>
+              )}
+
+
+              {/* Title */}
+
+              <h1
+                className="
+                  mb-5
+                  text-3xl
+                  font-semibold
+                  leading-tight
+                  md:text-4xl
+                  lg:text-5xl
+                "
+                style={{
+                  color: "#292522",
+                }}
+              >
+                {post.title}
+              </h1>
+
+
+              {/* Excerpt */}
+
+              {post.excerpt && (
+                <p
+                  className="
+                    mb-6
+                    text-base
+                    leading-relaxed
+                    md:text-lg
+                  "
+                  style={{
+                    color: "#756E68",
+                  }}
+                >
+                  {post.excerpt}
+                </p>
+              )}
+
+
+              {/* Divider */}
+
+              <div
+                className="mb-6 h-px w-full"
+                style={{
+                  backgroundColor: "#E7DED4",
+                }}
+              />
+
+
+              {/* ================= META ================= */}
+
+              <div
+                className="
+                  flex
+                  flex-wrap
+                  items-center
+                  gap-x-5
+                  gap-y-3
+                  text-sm
+                "
+                style={{
+                  color: "#756E68",
+                }}
+              >
+
+                {/* Author */}
+
+                <div className="flex items-center gap-2">
+
+                  <User
+                    className="h-4 w-4"
+                    style={{
+                      color: "#7A4E2D",
+                    }}
+                  />
+
+                  <span>
+                    {post.author?.name ||
+                      "Unknown Author"}
+                  </span>
+
                 </div>
-              </div>
-            )}
 
-            {/* Share */}
-            <div className="mt-8 pt-8 border-t flex items-center justify-between">
-              <span className="text-gray-600">Share this post:</span>
-              <button className="flex items-center gap-2 text-amber-600 hover:text-amber-700">
-                <Share2 className="h-5 w-5" />
-                Share
-              </button>
+
+                {/* Date */}
+
+                <div className="flex items-center gap-2">
+
+                  <Calendar
+                    className="h-4 w-4"
+                    style={{
+                      color: "#7A4E2D",
+                    }}
+                  />
+
+                  <time
+                    dateTime={
+                      post.publishedAt
+                        ? new Date(
+                            post.publishedAt
+                          ).toISOString()
+                        : ""
+                    }
+                  >
+                    {post.publishedAt
+                      ? new Date(
+                          post.publishedAt
+                        ).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      : ""}
+                  </time>
+
+                </div>
+
+
+                {/* Read Time */}
+
+                <div className="flex items-center gap-2">
+
+                  <Clock
+                    className="h-4 w-4"
+                    style={{
+                      color: "#7A4E2D",
+                    }}
+                  />
+
+                  <span>
+                    {post.readTime || 5} min read
+                  </span>
+
+                </div>
+
+              </div>
+
             </div>
+
           </div>
+
         </div>
       </section>
 
-      {/* Related Posts */}
-      {relatedPosts.length > 0 && (
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold mb-8" style={{ color: '#292522' }}>Related Posts</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedPosts.map((relatedPost) => (
-                <Card key={relatedPost.id} className="hover:shadow-lg transition-shadow">
-                  {relatedPost.coverImage ? (
-                    <div className="aspect-video rounded-t-lg overflow-hidden">
-                      <img 
-                        src={relatedPost.coverImage} 
-                        alt={relatedPost.title}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 rounded-t-lg flex items-center justify-center">
-                      <Clock className="h-12 w-12 text-amber-400" />
-                    </div>
-                  )}
-                  <CardContent className="p-6">
-                    {relatedPost.category && (
-                      <span className="text-xs font-medium mb-2 inline-block" style={{ color: '#7A4E2D' }}>
-                        {relatedPost.category}
-                      </span>
-                    )}
-                    <h3 className="text-xl font-semibold mb-2 line-clamp-2">{relatedPost.title}</h3>
-                    <p className="text-gray-600 mb-4 line-clamp-2">{relatedPost.excerpt}</p>
-                    <Link
-                      href={`/blog/${relatedPost.slug}`}
-                      className="text-amber-600 hover:text-amber-700 font-medium"
-                    >
-                      Read More →
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
+
+      {/* =====================================================
+          BLOG CONTENT
+      ===================================================== */}
+
+      <section
+        className="py-12 md:py-16"
+        style={{
+          backgroundColor: "#FFFFFF",
+        }}
+      >
+
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-4
+            sm:px-6
+            lg:px-8
+          "
+        >
+
+          <article className="mx-auto max-w-4xl">
+
+            {/* ================= CONTENT ================= */}
+
+            <div
+              className="
+                prose
+                prose-lg
+                max-w-none
+                prose-headings:font-semibold
+                prose-p:leading-relaxed
+                prose-a:no-underline
+                prose-blockquote:border-l-4
+              "
+              style={{
+                color: "#756E68",
+              }}
+            >
+
+              <div
+                dangerouslySetInnerHTML={{
+                  __html:
+                    post.content ||
+                    fallbackContent,
+                }}
+              />
+
             </div>
+
+
+            {/* =================================================
+                TAGS
+            ================================================= */}
+
+            {post.tags &&
+              post.tags.length > 0 && (
+
+                <div
+                  className="
+                    mt-10
+                    border-t
+                    pt-6
+                  "
+                  style={{
+                    borderColor: "#E7DED4",
+                  }}
+                >
+
+                  <h3
+                    className="
+                      mb-3
+                      text-lg
+                      font-semibold
+                    "
+                    style={{
+                      color: "#292522",
+                    }}
+                  >
+                    Tags
+                  </h3>
+
+
+                  <div className="flex flex-wrap gap-2">
+
+                    {post.tags.map(
+                      (tag: string) => (
+
+                        <span
+                          key={tag}
+                          className="
+                            rounded-full
+                            border
+                            px-3
+                            py-1
+                            text-sm
+                          "
+                          style={{
+                            backgroundColor:
+                              "#FFF9F3",
+                            borderColor:
+                              "#E7DED4",
+                            color: "#7A4E2D",
+                          }}
+                        >
+                          #{tag}
+                        </span>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+              )}
+
+
+            {/* =================================================
+                SHARE
+            ================================================= */}
+
+            <div
+              className="
+                mt-6
+                flex
+                items-center
+                justify-between
+                border-t
+                pt-6
+              "
+              style={{
+                borderColor: "#E7DED4",
+              }}
+            >
+
+              <span
+                className="text-sm"
+                style={{
+                  color: "#756E68",
+                }}
+              >
+                Share this post
+              </span>
+
+
+              <button
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  font-medium
+                  transition-opacity
+                  hover:opacity-70
+                "
+                style={{
+                  color: "#7A4E2D",
+                }}
+              >
+
+                <Share2 className="h-5 w-5" />
+
+                Share
+
+              </button>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          RELATED POSTS
+      ===================================================== */}
+
+      {relatedPosts.length > 0 && (
+
+        <section
+          className="py-12 md:py-16"
+          style={{
+            backgroundColor: "#F7F4EF",
+          }}
+        >
+
+          <div
+            className="
+              mx-auto
+              max-w-7xl
+              px-4
+              sm:px-6
+              lg:px-8
+            "
+          >
+
+            {/* ================= TITLE ================= */}
+
+            <div className="mb-8">
+
+              <h2
+                className="
+                  text-3xl
+                  font-semibold
+                "
+                style={{
+                  color: "#292522",
+                }}
+              >
+                Related Posts
+              </h2>
+
+
+              <p
+                className="mt-2"
+                style={{
+                  color: "#756E68",
+                }}
+              >
+                You may also enjoy these stories.
+              </p>
+
+            </div>
+
+
+            {/* ================= CARDS ================= */}
+
+            <div
+              className="
+                grid
+                grid-cols-1
+                gap-6
+                md:grid-cols-3
+              "
+            >
+
+              {relatedPosts.map(
+                (relatedPost) => (
+
+                  <Card
+                    key={relatedPost.id}
+                    className="
+                      group
+                      overflow-hidden
+                      rounded-xl
+                      border
+                      bg-white
+                      shadow-sm
+                      transition-all
+                      duration-300
+                      hover:-translate-y-1
+                      hover:shadow-xl
+                    "
+                    style={{
+                      borderColor: "#E7DED4",
+                    }}
+                  >
+
+                    {/* ================= IMAGE ================= */}
+
+                    {relatedPost.coverImage ? (
+
+                      <div
+                        className="
+                          aspect-video
+                          overflow-hidden
+                        "
+                      >
+
+                        <img
+                          src={
+                            relatedPost.coverImage
+                          }
+                          alt={
+                            relatedPost.title
+                          }
+                          className="
+                            h-full
+                            w-full
+                            object-cover
+                            transition-transform
+                            duration-500
+                            group-hover:scale-105
+                          "
+                        />
+
+                      </div>
+
+                    ) : (
+
+                      <div
+                        className="
+                          flex
+                          aspect-video
+                          items-center
+                          justify-center
+                        "
+                        style={{
+                          backgroundColor:
+                            "#FFF9F3",
+                        }}
+                      >
+
+                        <Clock
+                          className="h-10 w-10"
+                          style={{
+                            color: "#C9B9A9",
+                          }}
+                        />
+
+                      </div>
+
+                    )}
+
+
+                    {/* ================= CARD CONTENT ================= */}
+
+                    <CardContent className="p-5">
+
+                      {/* Category */}
+
+                      {relatedPost.category && (
+
+                        <span
+                          className="
+                            mb-2
+                            inline-block
+                            text-xs
+                            font-semibold
+                            uppercase
+                            tracking-wide
+                          "
+                          style={{
+                            color: "#7A4E2D",
+                          }}
+                        >
+                          {
+                            relatedPost.category
+                          }
+                        </span>
+
+                      )}
+
+
+                      {/* Title */}
+
+                      <h3
+                        className="
+                          mb-2
+                          line-clamp-2
+                          text-lg
+                          font-semibold
+                        "
+                        style={{
+                          color: "#292522",
+                        }}
+                      >
+                        {
+                          relatedPost.title
+                        }
+                      </h3>
+
+
+                      {/* Excerpt */}
+
+                      <p
+                        className="
+                          mb-4
+                          line-clamp-2
+                          text-sm
+                        "
+                        style={{
+                          color: "#756E68",
+                        }}
+                      >
+                        {
+                          relatedPost.excerpt
+                        }
+                      </p>
+
+
+                      {/* Read More */}
+
+                      <Link
+                        href={`/blog/${relatedPost.slug}`}
+                        className="
+                          group/link
+                          inline-flex
+                          items-center
+                          gap-2
+                          text-sm
+                          font-medium
+                          transition-opacity
+                          hover:opacity-70
+                        "
+                        style={{
+                          color: "#7A4E2D",
+                        }}
+                      >
+
+                        Read More
+
+                        <ArrowRight
+                          className="
+                            h-4
+                            w-4
+                            transition-transform
+                            group-hover/link:translate-x-1
+                          "
+                        />
+
+                      </Link>
+
+                    </CardContent>
+
+                  </Card>
+
+                )
+              )}
+
+            </div>
+
           </div>
+
         </section>
+
       )}
+
+
+      {/* =====================================================
+          STRUCTURED DATA
+      ===================================================== */}
+
+      <BlogPostingSchema
+        title={post.title}
+        description={
+          post.excerpt ||
+          post.content.substring(0, 160)
+        }
+        author={
+          post.author?.name ||
+          "Unknown Author"
+        }
+        datePublished={
+          post.publishedAt
+            ? new Date(
+                post.publishedAt
+              ).toISOString()
+            : new Date().toISOString()
+        }
+        url={`https://cherdungcafe.com/blog/${post.slug}`}
+      />
+
+
+      <BreadcrumbSchema
+        items={[
+          {
+            name: "Home",
+            item: "https://cherdungcafe.com",
+          },
+          {
+            name: "Blog",
+            item: "https://cherdungcafe.com/blog",
+          },
+          {
+            name: post.title,
+            item: `https://cherdungcafe.com/blog/${post.slug}`,
+          },
+        ]}
+      />
+
     </div>
   )
 }

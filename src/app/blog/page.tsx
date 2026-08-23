@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Calendar, User, ArrowRight, Clock, Search } from "lucide-react"
+import {
+  Calendar,
+  User,
+  ArrowRight,
+  Clock,
+  Search,
+} from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -29,7 +35,7 @@ const CATEGORIES = [
   "Cafe Stories",
   "Events",
   "Behind the Scenes",
-  "Sustainability"
+  "Sustainability",
 ]
 
 const POSTS_PER_PAGE = 6
@@ -47,217 +53,941 @@ export default function BlogPage() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/blog')
+      const response = await fetch("/api/blog")
       const data = await response.json()
       setPosts(data)
     } catch (error) {
-      console.error('Error fetching blog posts:', error)
+      console.error("Error fetching blog posts:", error)
     } finally {
       setIsLoading(false)
     }
   }
 
-  // Filter posts
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = searchTerm === '' || 
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesCategory = categoryFilter === 'All' || post.category === categoryFilter
-    
+  // ================= FILTER POSTS =================
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesSearch =
+      searchTerm === "" ||
+      post.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      post.excerpt
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase())
+
+    const matchesCategory =
+      categoryFilter === "All" ||
+      post.category === categoryFilter
+
     return matchesSearch && matchesCategory
   })
 
-  // Pagination
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
-  const startIndex = (currentPage - 1) * POSTS_PER_PAGE
-  const endIndex = startIndex + POSTS_PER_PAGE
-  const currentPosts = filteredPosts.slice(startIndex, endIndex)
+  // ================= PAGINATION =================
 
-  // Reset to page 1 when filters change
+  const totalPages = Math.ceil(
+    filteredPosts.length / POSTS_PER_PAGE
+  )
+
+  const startIndex =
+    (currentPage - 1) * POSTS_PER_PAGE
+
+  const endIndex =
+    startIndex + POSTS_PER_PAGE
+
+  const currentPosts =
+    filteredPosts.slice(startIndex, endIndex)
+
+  // Reset page when filter/search changes
   useEffect(() => {
     setCurrentPage(1)
   }, [searchTerm, categoryFilter])
 
+  // ================= LOADING =================
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p style={{ color: '#756E68' }}>Loading blog posts...</p>
+      <div
+        className="flex min-h-screen items-center justify-center"
+        style={{
+          backgroundColor: "#F7F4EF",
+        }}
+      >
+        <div className="text-center">
+
+          <div
+            className="
+              mx-auto
+              mb-4
+              h-10
+              w-10
+              animate-spin
+              rounded-full
+              border-4
+            "
+            style={{
+              borderColor: "#E7DED4",
+              borderTopColor: "#7A4E2D",
+            }}
+          />
+
+          <p
+            className="text-sm"
+            style={{
+              color: "#756E68",
+            }}
+          >
+            Loading blog posts...
+          </p>
+
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col">
-      {/* Header */}
-      <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+      className="flex min-h-screen flex-col"
+      style={{
+        backgroundColor: "#FFFFFF",
+      }}
+    >
+
+      {/* =====================================================
+          HERO
+      ===================================================== */}
+
+      <section
+        className="py-14 md:py-16"
+        style={{
+          backgroundColor: "#FFF9F3",
+        }}
+      >
+
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-4
+            sm:px-6
+            lg:px-8
+          "
+        >
+
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Blog</h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              Discover coffee tips, recipes, and stories from our café journey
+
+            {/* Small Label */}
+
+            <div
+              className="
+                mb-3
+                inline-flex
+                items-center
+                rounded-full
+                border
+                px-4
+                py-1.5
+                text-sm
+                font-medium
+              "
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#E7DED4",
+                color: "#7A4E2D",
+              }}
+            >
+              Cherdung Café
+            </div>
+
+            {/* Heading */}
+
+            <h1
+              className="
+                mb-4
+                text-4xl
+                font-light
+                md:text-5xl
+              "
+              style={{
+                color: "#292522",
+              }}
+            >
+              Our Blog
+            </h1>
+
+            {/* Description */}
+
+            <p
+              className="
+                mx-auto
+                max-w-3xl
+                text-base
+                leading-relaxed
+                md:text-lg
+              "
+              style={{
+                color: "#756E68",
+              }}
+            >
+              Discover coffee tips, recipes, and stories
+              from our café journey.
             </p>
+
           </div>
+
         </div>
+
       </section>
 
-      {/* Filters */}
-      <section className="py-8 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex flex-wrap gap-2">
+
+      {/* =====================================================
+          FILTER SECTION
+      ===================================================== */}
+
+      <section
+        className="
+          border-b
+          py-6
+        "
+        style={{
+          backgroundColor: "#FFFFFF",
+          borderColor: "#E7DED4",
+        }}
+      >
+
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-4
+            sm:px-6
+            lg:px-8
+          "
+        >
+
+          <div
+            className="
+              flex
+              flex-col
+              gap-5
+              lg:flex-row
+              lg:items-center
+              lg:justify-between
+            "
+          >
+
+            {/* ================= CATEGORIES ================= */}
+
+            <div
+              className="
+                flex
+                flex-wrap
+                justify-center
+                gap-2
+                lg:justify-start
+              "
+            >
+
               {CATEGORIES.map((category) => (
+
                 <button
                   key={category}
-                  onClick={() => setCategoryFilter(category)}
-                  className={`px-4 py-2 rounded-full transition-colors ${
+                  onClick={() => {
+                    setCategoryFilter(category)
+                    setCurrentPage(1)
+                  }}
+                  className="
+                    rounded-full
+                    border
+                    px-4
+                    py-2
+                    text-sm
+                    font-medium
+                    transition-all
+                    duration-200
+                    hover:-translate-y-0.5
+                  "
+                  style={
                     categoryFilter === category
-                      ? "bg-amber-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                      ? {
+                          backgroundColor: "#7A4E2D",
+                          borderColor: "#7A4E2D",
+                          color: "#FFFFFF",
+                          boxShadow:
+                            "0 4px 12px rgba(122, 78, 45, 0.18)",
+                        }
+                      : {
+                          backgroundColor: "#FFFFFF",
+                          borderColor: "#E7DED4",
+                          color: "#756E68",
+                        }
+                  }
                 >
                   {category}
                 </button>
+
               ))}
+
             </div>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+
+
+            {/* ================= SEARCH ================= */}
+
+            <div
+              className="
+                relative
+                mx-auto
+                w-full
+                max-w-xs
+                lg:mx-0
+              "
+            >
+
+              <Search
+                className="
+                  absolute
+                  left-3
+                  top-1/2
+                  h-4
+                  w-4
+                  -translate-y-1/2
+                "
+                style={{
+                  color: "#756E68",
+                }}
+              />
+
               <Input
+                type="text"
                 placeholder="Search posts..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-64"
-                style={{ borderColor: '#E7DED4' }}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                  setCurrentPage(1)
+                }}
+                className="
+                  h-10
+                  rounded-lg
+                  bg-white
+                  pl-10
+                  pr-4
+                  outline-none
+                  focus:ring-2
+                "
+                style={{
+                  borderColor: "#E7DED4",
+                  color: "#292522",
+                }}
               />
+
             </div>
+
           </div>
+
         </div>
+
       </section>
 
-      {/* Blog Posts Grid */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {/* =====================================================
+          BLOG POSTS
+      ===================================================== */}
+
+      <section
+        className="py-14 md:py-16"
+        style={{
+          backgroundColor: "#F7F4EF",
+        }}
+      >
+
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-4
+            sm:px-6
+            lg:px-8
+          "
+        >
+
           {currentPosts.length > 0 ? (
+
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              {/* ================= GRID ================= */}
+
+              <div
+                className="
+                  grid
+                  grid-cols-1
+                  gap-6
+                  md:grid-cols-2
+                  lg:grid-cols-3
+                "
+              >
+
                 {currentPosts.map((post) => (
-                  <Card key={post.id} className="hover:shadow-lg transition-shadow flex flex-col">
+
+                  <Card
+                    key={post.id}
+                    className="
+                      group
+                      flex
+                      flex-col
+                      overflow-hidden
+                      rounded-xl
+                      border
+                      bg-white
+                      shadow-sm
+                      transition-all
+                      duration-300
+                      hover:-translate-y-1
+                      hover:shadow-xl
+                    "
+                    style={{
+                      borderColor: "#E7DED4",
+                    }}
+                  >
+
+                    {/* ================= IMAGE ================= */}
+
                     {post.coverImage ? (
-                      <div className="aspect-video rounded-t-lg overflow-hidden">
-                        <img 
-                          src={post.coverImage} 
+
+                      <div
+                        className="
+                          h-52
+                          overflow-hidden
+                        "
+                      >
+
+                        <img
+                          src={post.coverImage}
                           alt={post.title}
-                          className="h-full w-full object-cover"
+                          className="
+                            h-full
+                            w-full
+                            object-cover
+                            transition-transform
+                            duration-500
+                            group-hover:scale-105
+                          "
                         />
+
                       </div>
+
                     ) : (
-                      <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 rounded-t-lg flex items-center justify-center">
-                        <Clock className="h-12 w-12 text-amber-400" />
+
+                      <div
+                        className="
+                          flex
+                          h-52
+                          items-center
+                          justify-center
+                        "
+                        style={{
+                          backgroundColor: "#FFF9F3",
+                        }}
+                      >
+
+                        <Clock
+                          className="h-12 w-12"
+                          style={{
+                            color: "#C9B9A9",
+                          }}
+                        />
+
                       </div>
+
                     )}
-                    <CardContent className="p-6 flex-1 flex flex-col">
+
+
+                    {/* ================= CONTENT ================= */}
+
+                    <CardContent
+                      className="
+                        flex
+                        flex-1
+                        flex-col
+                        p-6
+                      "
+                    >
+
+                      {/* Category */}
+
                       {post.category && (
-                        <span className="text-xs font-medium mb-2" style={{ color: '#7A4E2D' }}>
+
+                        <span
+                          className="
+                            mb-2
+                            text-xs
+                            font-semibold
+                            uppercase
+                            tracking-wide
+                          "
+                          style={{
+                            color: "#7A4E2D",
+                          }}
+                        >
                           {post.category}
                         </span>
+
                       )}
-                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                        <Calendar className="h-4 w-4" />
-                        <time dateTime={post.publishedAt}>
-                          {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
+
+
+                      {/* Date + Read Time */}
+
+                      <div
+                        className="
+                          mb-3
+                          flex
+                          flex-wrap
+                          items-center
+                          gap-2
+                          text-sm
+                        "
+                        style={{
+                          color: "#756E68",
+                        }}
+                      >
+
+                        <Calendar
+                          className="h-4 w-4"
+                        />
+
+                        <time
+                          dateTime={post.publishedAt}
+                        >
+                          {new Date(
+                            post.publishedAt
+                          ).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
                         </time>
+
                         <span>•</span>
-                        <span>{post.readTime ? `${post.readTime} min read` : "5 min read"}</span>
+
+                        <span>
+                          {post.readTime
+                            ? `${post.readTime} min read`
+                            : "5 min read"}
+                        </span>
+
                       </div>
-                      <h3 className="text-xl font-semibold mb-2 line-clamp-2">{post.title}</h3>
-                      <p className="text-gray-600 mb-4 line-clamp-3 flex-1">{post.excerpt}</p>
-                      <div className="flex items-center justify-between mt-auto">
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <User className="h-4 w-4" />
-                          <span>{post.author.name}</span>
+
+
+                      {/* Title */}
+
+                      <h3
+                        className="
+                          mb-2
+                          line-clamp-2
+                          text-xl
+                          font-semibold
+                        "
+                        style={{
+                          color: "#292522",
+                        }}
+                      >
+                        {post.title}
+                      </h3>
+
+
+                      {/* Excerpt */}
+
+                      <p
+                        className="
+                          mb-5
+                          line-clamp-3
+                          flex-1
+                          leading-relaxed
+                        "
+                        style={{
+                          color: "#756E68",
+                        }}
+                      >
+                        {post.excerpt}
+                      </p>
+
+
+                      {/* ================= BOTTOM ================= */}
+
+                      <div
+                        className="
+                          mt-auto
+                          flex
+                          items-center
+                          justify-between
+                          border-t
+                          pt-4
+                        "
+                        style={{
+                          borderColor: "#E7DED4",
+                        }}
+                      >
+
+                        {/* Author */}
+
+                        <div
+                          className="
+                            flex
+                            items-center
+                            gap-2
+                            text-sm
+                          "
+                          style={{
+                            color: "#756E68",
+                          }}
+                        >
+
+                          <User
+                            className="h-4 w-4"
+                          />
+
+                          <span>
+                            {post.author.name}
+                          </span>
+
                         </div>
-                        <Link href={`/blog/${post.slug}`} className="text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1">
+
+
+                        {/* Read More */}
+
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          className="
+                            group/link
+                            flex
+                            items-center
+                            gap-1
+                            font-medium
+                            transition-colors
+                          "
+                          style={{
+                            color: "#7A4E2D",
+                          }}
+                        >
+
                           Read More
-                          <ArrowRight className="h-4 w-4" />
+
+                          <ArrowRight
+                            className="
+                              h-4
+                              w-4
+                              transition-transform
+                              duration-300
+                              group-hover/link:translate-x-1
+                            "
+                          />
+
                         </Link>
+
                       </div>
+
                     </CardContent>
+
                   </Card>
+
                 ))}
+
               </div>
 
-              {/* Pagination */}
+
+              {/* =================================================
+                  PAGINATION
+              ================================================= */}
+
               {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-12">
+
+                <div
+                  className="
+                    mt-12
+                    flex
+                    flex-wrap
+                    items-center
+                    justify-center
+                    gap-2
+                  "
+                >
+
+                  {/* Previous */}
+
                   <Button
                     variant="outline"
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) =>
+                        Math.max(prev - 1, 1)
+                      )
+                    }
                     disabled={currentPage === 1}
-                    style={{ borderColor: '#E7DED4', color: '#756E68' }}
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#E7DED4",
+                      color: "#756E68",
+                    }}
                   >
                     Previous
                   </Button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+
+
+                  {/* Pages */}
+
+                  {Array.from(
+                    {
+                      length: totalPages,
+                    },
+                    (_, i) => i + 1
+                  ).map((page) => (
+
                     <Button
                       key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      onClick={() => setCurrentPage(page)}
+                      variant={
+                        currentPage === page
+                          ? "default"
+                          : "outline"
+                      }
+                      onClick={() =>
+                        setCurrentPage(page)
+                      }
                       style={{
-                        backgroundColor: currentPage === page ? '#7A4E2D' : 'transparent',
-                        color: currentPage === page ? '#FFFFFF' : '#756E68',
-                        borderColor: '#E7DED4'
+                        backgroundColor:
+                          currentPage === page
+                            ? "#7A4E2D"
+                            : "#FFFFFF",
+
+                        color:
+                          currentPage === page
+                            ? "#FFFFFF"
+                            : "#756E68",
+
+                        borderColor:
+                          currentPage === page
+                            ? "#7A4E2D"
+                            : "#E7DED4",
                       }}
                     >
                       {page}
                     </Button>
+
                   ))}
+
+
+                  {/* Next */}
+
                   <Button
                     variant="outline"
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    style={{ borderColor: '#E7DED4', color: '#756E68' }}
+                    onClick={() =>
+                      setCurrentPage((prev) =>
+                        Math.min(
+                          prev + 1,
+                          totalPages
+                        )
+                      )
+                    }
+                    disabled={
+                      currentPage === totalPages
+                    }
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#E7DED4",
+                      color: "#756E68",
+                    }}
                   >
                     Next
                   </Button>
+
                 </div>
+
               )}
+
             </>
+
           ) : (
-            <div className="text-center py-12">
-              <Clock className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-              <p className="text-gray-500 text-lg">No blog posts found matching your criteria.</p>
+
+            /* =================================================
+               EMPTY STATE
+            ================================================= */
+
+            <div
+              className="
+                py-20
+                text-center
+              "
+            >
+
+              <div
+                className="
+                  mx-auto
+                  mb-5
+                  flex
+                  h-16
+                  w-16
+                  items-center
+                  justify-center
+                  rounded-full
+                "
+                style={{
+                  backgroundColor: "#FFF9F3",
+                }}
+              >
+
+                <Clock
+                  className="h-8 w-8"
+                  style={{
+                    color: "#C9B9A9",
+                  }}
+                />
+
+              </div>
+
+
+              <h3
+                className="
+                  mb-2
+                  text-xl
+                  font-semibold
+                "
+                style={{
+                  color: "#292522",
+                }}
+              >
+                No Blog Posts Found
+              </h3>
+
+
+              <p
+                style={{
+                  color: "#756E68",
+                }}
+              >
+                No blog posts found matching
+                your criteria.
+              </p>
+
             </div>
+
           )}
+
         </div>
+
       </section>
 
-      {/* Newsletter CTA */}
-      <section className="py-16 bg-gradient-to-br from-amber-600 to-orange-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-          <p className="text-amber-100 mb-8 max-w-2xl mx-auto">
-            Subscribe to our newsletter for the latest coffee tips, recipes, and café updates
+
+      {/* =====================================================
+          NEWSLETTER
+      ===================================================== */}
+
+      <section
+        className="py-14 md:py-16"
+        style={{
+          backgroundColor: "#292522",
+        }}
+      >
+
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-4
+            text-center
+            sm:px-6
+            lg:px-8
+          "
+        >
+
+          <h2
+            className="
+              mb-3
+              text-3xl
+              font-semibold
+              text-white
+            "
+          >
+            Stay Updated
+          </h2>
+
+
+          <p
+            className="
+              mx-auto
+              mb-7
+              max-w-2xl
+              text-base
+            "
+            style={{
+              color: "#E7DED4",
+            }}
+          >
+            Subscribe to our newsletter for the
+            latest coffee tips, recipes, and café
+            updates.
           </p>
-          <form className="max-w-md mx-auto flex gap-2">
+
+
+          {/* Newsletter Form */}
+
+          <form
+            className="
+              mx-auto
+              flex
+              max-w-md
+              flex-col
+              gap-2
+              sm:flex-row
+            "
+          >
+
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-300"
+              className="
+                flex-1
+                rounded-lg
+                border
+                bg-white
+                px-4
+                py-3
+                text-[#292522]
+                outline-none
+                focus:ring-2
+                focus:ring-[#7A4E2D]
+              "
+              style={{
+                borderColor: "#E7DED4",
+              }}
               required
             />
+
+
             <button
               type="submit"
-              className="bg-white text-amber-600 px-6 py-3 rounded-lg font-semibold hover:bg-amber-50 transition-colors"
+              className="
+                rounded-lg
+                px-6
+                py-3
+                font-semibold
+                text-white
+                transition-all
+                duration-200
+                hover:-translate-y-0.5
+                hover:shadow-lg
+              "
+              style={{
+                backgroundColor: "#7A4E2D",
+              }}
             >
               Subscribe
             </button>
+
           </form>
+
         </div>
+
       </section>
+
     </div>
   )
 }

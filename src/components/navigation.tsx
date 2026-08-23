@@ -11,6 +11,7 @@ export default function Navigation() {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/services", label: "Services" },
+    { href: "/menu", label: "Menu" },
     { href: "/offers", label: "Offers" },
     { href: "/gallery", label: "Gallery" },
     { href: "/blog", label: "Blog", hasDropdown: true },

@@ -80,7 +80,6 @@ export default function BlogPage() {
     metaTitle: '',
     metaDescription: '',
     readTime: 5,
-    authorId: 2 // Default author ID (matches admin user ID in database)
   })
 
   useEffect(() => {
@@ -171,7 +170,6 @@ export default function BlogPage() {
       metaTitle: '',
       metaDescription: '',
       readTime: 5,
-      authorId: 2
     })
   }
 
@@ -189,7 +187,6 @@ export default function BlogPage() {
       metaTitle: post.metaTitle || '',
       metaDescription: post.metaDescription || '',
       readTime: post.readTime || 5,
-      authorId: post.authorId
     })
     setShowAddModal(true)
     setPreviewMode(false)
