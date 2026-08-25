@@ -48,6 +48,13 @@ export default async function Home() {
     take: 4,
   })
 
+  // Fetch latest blog posts for Latest Updates section
+  const latestBlogPosts = await prisma.blogPost.findMany({
+    where: { status: "PUBLISHED" },
+    orderBy: { publishedAt: "desc" },
+    take: 3,
+  })
+
   // Map icon names to Lucide components
   const iconMap: Record<string, any> = {
     coffee: Coffee,
@@ -632,71 +639,116 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {latestBlogPosts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {latestBlogPosts.map((post) => (
+                <div key={post.id} className="bg-[#FCFAF6] dark:bg-[#302C28] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                  {post.coverImage ? (
+                    <div className="aspect-video overflow-hidden rounded-lg mb-4">
+                      <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-4 flex items-center justify-center">
+                      <Coffee className="h-12 w-12 text-[#76503A]" />
+                    </div>
+                  )}
 
-            <div className="bg-[#FCFAF6] dark:bg-[#302C28] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-4 flex items-center justify-center">
-                <Coffee className="h-12 w-12 text-[#76503A]" />
+                  <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                    {post.title}
+                  </h3>
+
+                  <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                    {post.excerpt || "Discover our latest stories and updates..."}
+                  </p>
+
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                  >
+                    Read More →
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-[#FCFAF6] dark:bg-[#302C28] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-4 flex items-center justify-center">
+                  <Coffee className="h-12 w-12 text-[#76503A]" />
+                </div>
+
+                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                  New Summer Menu Launch
+                </h3>
+
+                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
+                  Discover our refreshing seasonal offerings...
+                </p>
+
+                <Link
+                  href="/blog"
+                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                >
+                  Read More →
+                </Link>
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
-                New Summer Menu Launch
-              </h3>
+              <div className="bg-[#FCFAF6] dark:bg-[#302C28] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-4 flex items-center justify-center">
+                  <Coffee className="h-12 w-12 text-[#76503A]" />
+                </div>
 
-              <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
-                Discover our refreshing seasonal offerings...
-              </p>
+                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                  Coffee Brewing Tips
+                </h3>
 
-              <Link
-                href="/blog"
-                className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
-              >
-                Read More →
-              </Link>
-            </div>
+                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
+                  Learn the art of perfect pour-over at home...
+                </p>
 
-            <div className="bg-[#FCFAF6] dark:bg-[#302C28] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-4 flex items-center justify-center">
-                <Coffee className="h-12 w-12 text-[#76503A]" />
+                <Link
+                  href="/blog"
+                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                >
+                  Read More →
+                </Link>
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
-                Coffee Brewing Tips
-              </h3>
+              <div className="bg-[#FCFAF6] dark:bg-[#302C28] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-4 flex items-center justify-center">
+                  <Calendar className="h-12 w-12 text-[#76503A]" />
+                </div>
 
-              <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
-                Learn the art of perfect pour-over at home...
-              </p>
+                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                  Community Events
+                </h3>
 
-              <Link
-                href="/blog"
-                className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
-              >
-                Read More →
-              </Link>
-            </div>
+                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
+                  Join us for music nights and art shows...
+                </p>
 
-            <div className="bg-[#FCFAF6] dark:bg-[#302C28] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-4 flex items-center justify-center">
-                <Calendar className="h-12 w-12 text-[#76503A]" />
+                <Link
+                  href="/blog"
+                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                >
+                  Read More →
+                </Link>
               </div>
-
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
-                Community Events
-              </h3>
-
-              <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
-                Join us for music nights and art shows...
-              </p>
-
-              <Link
-                href="/blog"
-                className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
-              >
-                Read More →
-              </Link>
             </div>
+          )}
 
+          <div className="text-center mt-12">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#76543C] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors"
+            >
+              View Latest Updates
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>

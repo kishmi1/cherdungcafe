@@ -38,7 +38,7 @@ export default function LoginPage() {
       }
 
       if (data.success) {
-        router.push('/admin/dashboard')
+        router.push(data.redirectUrl || '/admin/dashboard')
       }
     } catch (error) {
       setError('An error occurred. Please try again.')
@@ -67,10 +67,10 @@ export default function LoginPage() {
               <Lock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Admin Login
+              Staff Login
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Sign in to access the cafe management dashboard.
+              Sign in to access the cafe management system.
             </p>
           </div>
 

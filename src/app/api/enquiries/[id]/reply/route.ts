@@ -2,11 +2,42 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendReplyToCustomer } from "@/lib/email"
 
+async function checkAuth(request: NextRequest) {
+  const sessionCookie = request.cookies.get('adminSession')
+  
+  if (!sessionCookie) {
+    return null
+  }
+
+  let sessionData
+  try {
+    sessionData = JSON.parse(sessionCookie.value)
+  } catch (error) {
+    return null
+  }
+
+  if (!sessionData.userId || !sessionData.role) {
+    return null
+  }
+
+  // Allow both ADMIN and STAFF
+  if (sessionData.role !== 'ADMIN' && sessionData.role !== 'STAFF') {
+    return null
+  }
+
+  return sessionData
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const sessionData = await checkAuth(request)
+    if (!sessionData) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { id: idParam } = await params
     const id = parseInt(idParam)
     const body = await request.json()

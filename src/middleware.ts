@@ -4,29 +4,60 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
 
-  // Only protect dashboard route
-  if (path === '/dashboard') {
-    // Check for session cookie
+  // Protect admin routes
+  if (path.startsWith('/admin') && path !== '/admin/login') {
     const sessionCookie = request.cookies.get('adminSession')
 
     if (!sessionCookie) {
-      // Redirect to login if no session
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
+
+    try {
+      const sessionData = JSON.parse(sessionCookie.value)
+      if (!sessionData.userId || !sessionData.email || !sessionData.role) {
+        const response = NextResponse.redirect(new URL('/admin/login', request.url))
+        response.cookies.delete('adminSession')
+        return response
+      }
+
+      // Only ADMIN can access admin routes
+      if (sessionData.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/staff/dashboard', request.url))
+      }
+    } catch (error) {
+      const response = NextResponse.redirect(new URL('/admin/login', request.url))
+      response.cookies.delete('adminSession')
+      return response
+    }
+  }
+
+  // Protect staff routes (but exclude the login page)
+  if (path.startsWith('/staff') && path !== '/staff/login') {
+    const sessionCookie = request.cookies.get('staffSession')
+
+    if (!sessionCookie) {
+      console.log('No staff session cookie found, redirecting to login')
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
     try {
-      // Verify session data
       const sessionData = JSON.parse(sessionCookie.value)
-      if (!sessionData.userId || !sessionData.email) {
-        // Invalid session, redirect to login
+      if (!sessionData.userId || !sessionData.email || !sessionData.role) {
+        console.log('Invalid session data, redirecting to login')
         const response = NextResponse.redirect(new URL('/login', request.url))
-        response.cookies.delete('adminSession')
+        response.cookies.delete('staffSession')
         return response
       }
+
+      // Only STAFF can access staff routes
+      if (sessionData.role !== 'STAFF') {
+        console.log('Non-STAFF role trying to access staff routes')
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+      }
     } catch (error) {
-      // Invalid session data, redirect to login
+      console.log('Error parsing session, redirecting to login:', error)
       const response = NextResponse.redirect(new URL('/login', request.url))
-      response.cookies.delete('adminSession')
+      response.cookies.delete('staffSession')
       return response
     }
   }
@@ -35,5 +66,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/dashboard',
+  matcher: ['/admin/:path*', '/staff/:path*'],
 }

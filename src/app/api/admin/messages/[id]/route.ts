@@ -1,14 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+async function checkAdminAuth(request: NextRequest) {
+  const sessionCookie = request.cookies.get('adminSession')
+  
+  if (!sessionCookie) {
+    return null
+  }
+
+  let sessionData
+  try {
+    sessionData = JSON.parse(sessionCookie.value)
+  } catch (error) {
+    return null
+  }
+
+  if (!sessionData.userId || !sessionData.role || sessionData.role !== 'ADMIN') {
+    return null
+  }
+
+  return sessionData
+}
+
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const sessionData = await checkAdminAuth(request)
+    if (!sessionData) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-    if (isNaN(id)) {
+    const { id } = await params
+    const messageId = parseInt(id)
+
+    if (isNaN(messageId)) {
       return NextResponse.json(
         { error: 'Invalid message ID' },
         { status: 400 }
@@ -19,7 +46,7 @@ export async function PATCH(
     const { isRead } = body
 
     const message = await prisma.message.update({
-      where: { id },
+      where: { id: messageId },
       data: { isRead: isRead !== undefined ? isRead : true },
     })
 
@@ -38,12 +65,18 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const sessionData = await checkAdminAuth(request)
+    if (!sessionData) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-    if (isNaN(id)) {
+    const { id } = await params
+    const messageId = parseInt(id)
+
+    if (isNaN(messageId)) {
       return NextResponse.json(
         { error: 'Invalid message ID' },
         { status: 400 }
@@ -51,7 +84,7 @@ export async function DELETE(
     }
 
     await prisma.message.delete({
-      where: { id },
+      where: { id: messageId },
     })
 
     return NextResponse.json({

@@ -35,15 +35,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user is ADMIN role
-    if (user.role !== 'ADMIN') {
+    // Check if user is STAFF role
+    if (user.role !== 'STAFF') {
       return NextResponse.json(
-        { error: 'Access denied. Admin access only.' },
+        { error: 'Access denied. Staff access only.' },
         { status: 403 }
       )
     }
 
-    // Check if admin account is active
+    // Check if staff account is active
     if (user.status !== 'ACTIVE') {
       return NextResponse.json(
         { error: 'Your account is currently inactive. Please contact your administrator.' },
@@ -60,9 +60,6 @@ export async function POST(request: NextRequest) {
       position: user.position
     }
 
-    // Redirect to admin dashboard
-    const redirectUrl = '/admin/dashboard'
-
     // Create response with session cookie
     const response = NextResponse.json({
       success: true,
@@ -73,11 +70,11 @@ export async function POST(request: NextRequest) {
         role: user.role,
         position: user.position
       },
-      redirectUrl
+      redirectUrl: '/staff/dashboard'
     })
 
-    // Set admin session cookie
-    response.cookies.set('adminSession', JSON.stringify(sessionData), {
+    // Set staff session cookie
+    response.cookies.set('staffSession', JSON.stringify(sessionData), {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -85,10 +82,10 @@ export async function POST(request: NextRequest) {
       path: '/'
     })
 
-    console.log('Admin session cookie set for:', user.email)
+    console.log('Staff session cookie set for:', user.email)
     return response
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('Staff login error:', error)
     return NextResponse.json(
       { error: 'An error occurred during login' },
       { status: 500 }

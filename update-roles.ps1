@@ -1,0 +1,1 @@
+Invoke-WebRequest -Uri "http://localhost:3000/api/temp-update-roles" -Method POST

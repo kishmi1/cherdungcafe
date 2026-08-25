@@ -1,8 +1,35 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { NextRequest } from "next/server"
 
-export async function GET() {
+async function checkAdminAuth(request: NextRequest) {
+  const sessionCookie = request.cookies.get('adminSession')
+  
+  if (!sessionCookie) {
+    return null
+  }
+
+  let sessionData
   try {
+    sessionData = JSON.parse(sessionCookie.value)
+  } catch (error) {
+    return null
+  }
+
+  if (!sessionData.userId || !sessionData.role || sessionData.role !== 'ADMIN') {
+    return null
+  }
+
+  return sessionData
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const sessionData = await checkAdminAuth(request)
+    if (!sessionData) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const now = new Date()
 
     const [

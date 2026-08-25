@@ -6,16 +6,11 @@ import {
   Menu,
   X,
   LayoutDashboard,
-  Coffee,
-  Utensils,
-  Tag,
-  Image as ImageIcon,
-  FileText,
   MessageSquare,
   Mail,
-  Settings,
-  Bell,
   User,
+  Bell,
+  Utensils,
 } from "lucide-react"
 
 import Link from "next/link"
@@ -29,61 +24,36 @@ import {
 } from "@/lib/notifications"
 
 
-const sidebarItems = [
+const allSidebarItems = [
   {
     icon: LayoutDashboard,
     label: "Dashboard",
-    href: "/admin/dashboard",
-  },
-  {
-    icon: Coffee,
-    label: "Services",
-    href: "/admin/services",
+    href: "/staff/dashboard",
   },
   {
     icon: Utensils,
     label: "Menu",
-    href: "/admin/menu",
-  },
-  {
-    icon: Tag,
-    label: "Offers",
-    href: "/admin/offers",
-  },
-  {
-    icon: ImageIcon,
-    label: "Gallery",
-    href: "/admin/gallery",
-  },
-  {
-    icon: FileText,
-    label: "Blog",
-    href: "/admin/blog",
+    href: "/staff/menu",
   },
   {
     icon: MessageSquare,
     label: "Enquiries",
-    href: "/admin/enquiries",
+    href: "/staff/enquiries",
   },
   {
     icon: Mail,
     label: "Messages",
-    href: "/admin/messages",
+    href: "/staff/messages",
   },
   {
     icon: User,
-    label: "Staff",
-    href: "/admin/staff",
-  },
-  {
-    icon: Settings,
-    label: "Settings",
-    href: "/admin/settings",
+    label: "My Profile",
+    href: "/staff/profile",
   },
 ]
 
 
-export default function AdminLayout({
+export default function StaffLayout({
   children,
 }: {
   children: React.ReactNode
@@ -98,8 +68,36 @@ export default function AdminLayout({
   const [notificationCount, setNotificationCount] =
     useState(0)
 
-  // Don't show sidebar and navbar for login page
-  const isLoginPage = pathname === '/admin/login'
+  const [userData, setUserData] = useState<{ name: string; email: string; role: string; position?: string } | null>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  useEffect(() => {
+    // Get user data from staff session API
+    const fetchSession = async () => {
+      try {
+        const response = await fetch('/api/staff/session')
+        if (response.ok) {
+          const sessionData = await response.json()
+          setUserData({
+            name: sessionData.name,
+            email: sessionData.email,
+            role: sessionData.role,
+            position: sessionData.position,
+          })
+          setIsAuthenticated(true)
+        } else {
+          setIsAuthenticated(false)
+          router.push('/login')
+        }
+      } catch (error) {
+        console.error('Failed to fetch session data:', error)
+        setIsAuthenticated(false)
+        router.push('/login')
+      }
+    }
+
+    fetchSession()
+  }, [router])
 
   /* =====================================================
      NOTIFICATIONS
@@ -125,7 +123,7 @@ export default function AdminLayout({
 
   useEffect(() => {
 
-    if (pathname === "/admin/enquiries") {
+    if (pathname === "/staff/enquiries") {
       resetNewEnquiryCount()
     }
 
@@ -137,11 +135,15 @@ export default function AdminLayout({
   ===================================================== */
 
   const handleLogout = () => {
-    // Clear session cookie
-    document.cookie = 'adminSession=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-    router.push("/admin/login")
+    // Clear staff session cookie
+    document.cookie = 'staffSession=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    router.push("/login")
   }
 
+  // Redirect if not authenticated
+  if (!isAuthenticated) {
+    return null // Will redirect in useEffect
+  }
 
   return (
     <div
@@ -150,8 +152,6 @@ export default function AdminLayout({
         backgroundColor: "#F7F4EF",
       }}
     >
-      {!isLoginPage && (
-        <>
       {/* =================================================
           MOBILE OVERLAY
       ================================================= */}
@@ -225,12 +225,14 @@ export default function AdminLayout({
             }}
           >
 
-            <Coffee
-              className="h-6 w-6"
+            <div
+              className="h-6 w-6 rounded-full flex items-center justify-center"
               style={{
-                color: "#B68A52",
+                backgroundColor: "#B68A52",
               }}
-            />
+            >
+              <span className="text-white text-xs font-bold">C</span>
+            </div>
 
             <div>
 
@@ -250,7 +252,7 @@ export default function AdminLayout({
                   color: "#E7DED4",
                 }}
               >
-                Admin Panel
+                Staff Panel
               </p>
 
             </div>
@@ -272,7 +274,7 @@ export default function AdminLayout({
             "
           >
 
-            {sidebarItems.map((item) => {
+            {allSidebarItems.map((item) => {
 
               const isActive =
                 pathname === item.href
@@ -393,11 +395,9 @@ export default function AdminLayout({
       <div
         className={`
           min-h-screen
-          ${!isLoginPage ? 'lg:ml-64' : ''}
+          lg:ml-64
         `}
       >
-        {!isLoginPage && (
-        <>
         {/* =================================================
             TOP NAVBAR
         ================================================= */}
@@ -475,7 +475,7 @@ export default function AdminLayout({
                     color: "#292522",
                   }}
                 >
-                  Admin Panel
+                  Staff Panel
                 </h2>
 
                 <p
@@ -484,7 +484,7 @@ export default function AdminLayout({
                     color: "#756E68",
                   }}
                 >
-                  Manage your café
+                  Manage enquiries and messages
                 </p>
 
               </div>
@@ -504,7 +504,7 @@ export default function AdminLayout({
 
               {/* Notification */}
 
-              <Link href="/admin/enquiries">
+              <Link href="/staff/enquiries">
 
                 <Button
                   variant="ghost"
@@ -554,7 +554,7 @@ export default function AdminLayout({
               </Link>
 
 
-              {/* Admin Profile */}
+              {/* Staff Profile */}
 
               <div
                 className="
@@ -602,7 +602,7 @@ export default function AdminLayout({
                       color: "#292522",
                     }}
                   >
-                    Admin
+                    {userData?.name || 'Staff'}
                   </p>
 
                   <p
@@ -611,7 +611,7 @@ export default function AdminLayout({
                       color: "#756E68",
                     }}
                   >
-                    Manager
+                    {userData?.position || userData?.role || 'STAFF'}
                   </p>
 
                 </div>
@@ -623,8 +623,6 @@ export default function AdminLayout({
           </div>
 
         </header>
-        </>
-        )}
 
 
         {/* =================================================
@@ -632,18 +630,14 @@ export default function AdminLayout({
         ================================================= */}
 
         <main
-          className={`
+          className="
             min-h-[calc(100vh-73px)]
-            ${isLoginPage ? 'min-h-screen' : ''}
-          `}
+          "
         >
           {children}
         </main>
 
       </div>
-
-      </>
-      )}
 
     </div>
   )

@@ -16,27 +16,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [role, setRole] = useState<"ADMIN" | "STAFF">("STAFF")
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    // Mock login for now - will be replaced with real authentication later
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const apiUrl = role === 'ADMIN' ? '/api/admin/login' : '/api/staff/login'
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
 
-      // Basic validation
-      if (!email || !password) {
-        setError('Please enter both email and password')
-        setIsLoading(false)
-        return
-      }
+      const data = await response.json()
 
-      // Mock successful login
-      if (email && password) {
-        router.push('/admin/dashboard')
+      if (response.ok) {
+        router.push(data.redirectUrl)
+      } else {
+        setError(data.error || 'Login failed')
       }
     } catch (error) {
       setError('An error occurred. Please try again.')
@@ -68,10 +68,10 @@ export default function LoginPage() {
               <Lock className="h-8 w-8" style={{ color: '#7A4E2D' }} />
             </div>
             <h1 className="text-3xl font-bold mb-2" style={{ color: '#292522' }}>
-              Admin Login
+              {role === 'ADMIN' ? 'Admin Login' : 'Staff Login'}
             </h1>
             <p className="text-sm" style={{ color: '#756E68' }}>
-              Sign in to access the cafe management dashboard.
+              {role === 'ADMIN' ? 'Sign in to access your admin dashboard.' : 'Sign in to access your staff dashboard.'}
             </p>
           </div>
 
@@ -84,6 +84,47 @@ export default function LoginPage() {
 
           {/* Login Form */}
           <form onSubmit={handleLogin} className="space-y-6">
+            {/* Role Selector */}
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#292522' }}>
+                Login As
+              </label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setRole('STAFF')}
+                  className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    role === 'STAFF'
+                      ? 'border-2'
+                      : 'border border-gray-300'
+                  }`}
+                  style={
+                    role === 'STAFF'
+                      ? { backgroundColor: '#7A4E2D', color: '#FFFFFF', borderColor: '#7A4E2D' }
+                      : { backgroundColor: '#FFFFFF', color: '#292522' }
+                  }
+                >
+                  Staff
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('ADMIN')}
+                  className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    role === 'ADMIN'
+                      ? 'border-2'
+                      : 'border border-gray-300'
+                  }`}
+                  style={
+                    role === 'ADMIN'
+                      ? { backgroundColor: '#7A4E2D', color: '#FFFFFF', borderColor: '#7A4E2D' }
+                      : { backgroundColor: '#FFFFFF', color: '#292522' }
+                  }
+                >
+                  Admin
+                </button>
+              </div>
+            </div>
+
             {/* Email Input */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold mb-2" style={{ color: '#292522' }}>
@@ -179,7 +220,7 @@ export default function LoginPage() {
               CHERDUNG CAFE
             </p>
             <p className="text-xs mt-1" style={{ color: '#756E68' }}>
-              Admin Management Portal
+              {role === 'ADMIN' ? 'Admin Management Portal' : 'Staff Management Portal'}
             </p>
           </div>
         </div>

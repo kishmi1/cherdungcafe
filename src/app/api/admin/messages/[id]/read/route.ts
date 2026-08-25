@@ -3,12 +3,13 @@ import { prisma } from '@/lib/prisma'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const messageId = parseInt(id)
 
-    if (isNaN(id)) {
+    if (isNaN(messageId)) {
       return NextResponse.json(
         { error: 'Invalid message ID' },
         { status: 400 }
@@ -16,7 +17,7 @@ export async function PATCH(
     }
 
     const message = await prisma.message.update({
-      where: { id },
+      where: { id: messageId },
       data: { isRead: true },
     })
 
