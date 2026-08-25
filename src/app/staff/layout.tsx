@@ -137,7 +137,7 @@ export default function StaffLayout({
   const handleLogout = () => {
     // Clear staff session cookie
     document.cookie = 'staffSession=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-    router.push("/login")
+    router.push("/")
   }
 
   // Redirect if not authenticated
