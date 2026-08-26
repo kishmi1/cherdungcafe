@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { Utensils, Plus, Edit, Trash2, X, Image as ImageIcon, Upload } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -52,6 +53,7 @@ const emptyForm = (sortOrder = 0) => ({
 })
 
 export default function StaffMenuPage() {
+  const router = useRouter()
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [loading, setLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
@@ -59,6 +61,33 @@ export default function StaffMenuPage() {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
   const [formData, setFormData] = useState(emptyForm())
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [userPermissions, setUserPermissions] = useState<string[]>([])
+
+  useEffect(() => {
+    // Check if user has Menu permission
+    const checkPermission = async () => {
+      try {
+        const response = await fetch('/api/staff/session')
+        if (response.ok) {
+          const sessionData = await response.json()
+          const permissions = sessionData.permissions || []
+          setUserPermissions(permissions)
+          
+          if (!permissions.includes('Menu')) {
+            router.push('/staff/dashboard')
+            return
+          }
+        } else {
+          router.push('/login')
+        }
+      } catch (error) {
+        console.error('Failed to check permissions:', error)
+        router.push('/login')
+      }
+    }
+
+    checkPermission()
+  }, [router])
 
   useEffect(() => {
     fetchMenu()

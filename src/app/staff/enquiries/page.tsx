@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { 
   MessageSquare, 
   Mail, 
@@ -44,6 +45,7 @@ interface EnquiryReply {
 }
 
 export default function StaffEnquiriesPage() {
+  const router = useRouter()
   const [enquiries, setEnquiries] = useState<Enquiry[]>([])
   const [filteredEnquiries, setFilteredEnquiries] = useState<Enquiry[]>([])
   const [loading, setLoading] = useState(true)
@@ -55,9 +57,31 @@ export default function StaffEnquiriesPage() {
   const [isSendingReply, setIsSendingReply] = useState(false)
 
   useEffect(() => {
+    // Check if user has Enquiries permission
+    const checkPermission = async () => {
+      try {
+        const response = await fetch('/api/staff/session')
+        if (response.ok) {
+          const sessionData = await response.json()
+          const permissions = sessionData.permissions || []
+          
+          if (!permissions.includes('Enquiries')) {
+            router.push('/staff/dashboard')
+            return
+          }
+        } else {
+          router.push('/login')
+        }
+      } catch (error) {
+        console.error('Failed to check permissions:', error)
+        router.push('/login')
+      }
+    }
+
+    checkPermission()
     fetchEnquiries()
     resetNewEnquiryCount()
-  }, [])
+  }, [router])
 
   useEffect(() => {
     let filtered = enquiries

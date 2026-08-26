@@ -57,7 +57,8 @@ export async function POST(request: NextRequest) {
       email: user.email,
       name: user.name,
       role: user.role,
-      position: user.position
+      position: user.position,
+      permissions: user.permissions || []
     }
 
     // Create response with session cookie
@@ -68,7 +69,8 @@ export async function POST(request: NextRequest) {
         email: user.email,
         name: user.name,
         role: user.role,
-        position: user.position
+        position: user.position,
+        permissions: user.permissions || []
       },
       redirectUrl: '/staff/dashboard'
     })

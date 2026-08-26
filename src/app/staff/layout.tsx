@@ -7,10 +7,11 @@ import {
   X,
   LayoutDashboard,
   MessageSquare,
-  Mail,
   User,
   Bell,
   Utensils,
+  ShoppingCart,
+  Calendar,
 } from "lucide-react"
 
 import Link from "next/link"
@@ -29,26 +30,37 @@ const allSidebarItems = [
     icon: LayoutDashboard,
     label: "Dashboard",
     href: "/staff/dashboard",
+    permission: null, // Always visible
   },
   {
     icon: Utensils,
     label: "Menu",
     href: "/staff/menu",
+    permission: "Menu",
   },
   {
     icon: MessageSquare,
     label: "Enquiries",
     href: "/staff/enquiries",
+    permission: "Enquiries",
   },
   {
-    icon: Mail,
-    label: "Messages",
-    href: "/staff/messages",
+    icon: ShoppingCart,
+    label: "Orders",
+    href: "/staff/orders",
+    permission: "Orders",
+  },
+  {
+    icon: Calendar,
+    label: "Reservations",
+    href: "/staff/reservations",
+    permission: "Reservations",
   },
   {
     icon: User,
     label: "My Profile",
     href: "/staff/profile",
+    permission: null, // Always visible
   },
 ]
 
@@ -68,7 +80,7 @@ export default function StaffLayout({
   const [notificationCount, setNotificationCount] =
     useState(0)
 
-  const [userData, setUserData] = useState<{ name: string; email: string; role: string; position?: string } | null>(null)
+  const [userData, setUserData] = useState<{ name: string; email: string; role: string; position?: string; permissions?: string[] } | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
@@ -83,6 +95,7 @@ export default function StaffLayout({
             email: sessionData.email,
             role: sessionData.role,
             position: sessionData.position,
+            permissions: sessionData.permissions || [],
           })
           setIsAuthenticated(true)
         } else {
@@ -123,12 +136,26 @@ export default function StaffLayout({
 
   useEffect(() => {
 
-    if (pathname === "/staff/enquiries") {
+    if (pathname === "/staff/enquiries" && userData?.permissions?.includes('Enquiries')) {
       resetNewEnquiryCount()
     }
 
-  }, [pathname])
+  }, [pathname, userData?.permissions])
 
+
+  /* =====================================================
+     SIDEBAR ITEMS FILTERING
+  ===================================================== */
+
+  const filteredSidebarItems = allSidebarItems.filter((item) => {
+    // If no permission is required, always show the item
+    if (!item.permission) {
+      return true
+    }
+
+    // Check if the user has the required permission
+    return userData?.permissions?.includes(item.permission)
+  })
 
   /* =====================================================
      LOGOUT
@@ -274,7 +301,7 @@ export default function StaffLayout({
             "
           >
 
-            {allSidebarItems.map((item) => {
+            {filteredSidebarItems.map((item) => {
 
               const isActive =
                 pathname === item.href
@@ -502,9 +529,10 @@ export default function StaffLayout({
               "
             >
 
-              {/* Notification */}
+              {/* Notification - only show if user has Enquiries permission */}
 
-              <Link href="/staff/enquiries">
+              {userData?.permissions?.includes('Enquiries') && (
+                <Link href="/staff/enquiries">
 
                 <Button
                   variant="ghost"
@@ -552,6 +580,7 @@ export default function StaffLayout({
                 </Button>
 
               </Link>
+              )}
 
 
               {/* Staff Profile */}
