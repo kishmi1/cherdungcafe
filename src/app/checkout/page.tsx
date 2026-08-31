@@ -46,6 +46,13 @@ export default function CheckoutPage() {
       setError("Phone number is required")
       return false
     }
+    if (formData.email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.email)) {
+        setError("Please enter a valid email address")
+        return false
+      }
+    }
     if (formData.orderType === "DELIVERY" && !formData.address.trim()) {
       setError("Address is required for delivery orders")
       return false
@@ -72,7 +79,7 @@ export default function CheckoutPage() {
       const orderData = {
         customerName: formData.fullName,
         phone: formData.phone,
-        email: formData.email || null,
+        email: formData.email,
         orderType: formData.orderType,
         address: formData.orderType === "DELIVERY" ? formData.address : null,
         paymentMethod: formData.paymentMethod,

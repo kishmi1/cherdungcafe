@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, X, Lock, ShoppingCart } from "lucide-react"
+import { Menu, X, Lock, ShoppingCart, Search } from "lucide-react"
 import { useState } from "react"
 import { Settings } from "@/lib/use-settings"
 import { useCart } from "@/lib/cart-context"
@@ -70,6 +70,13 @@ export default function Navigation({ settings }: NavigationProps) {
               </span>
             </Link>
 
+            {/* Track Order Icon */}
+            <Link href="/track-order" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Track Order">
+              <span className="flex items-center">
+                <Search className="h-5 w-5" />
+              </span>
+            </Link>
+
             {/* Admin Login */}
             <Link href="/login" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Admin">
               <span className="flex items-center">
@@ -113,6 +120,13 @@ export default function Navigation({ settings }: NavigationProps) {
             >
               Enquiry
             </Link>
+            <Link 
+              href="/track-order"
+              className="block text-center px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-wider hover:bg-amber-200 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Track Order
+            </Link>
             <div className="flex items-center justify-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-800">
               <Link href="/cart" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors relative" aria-label="Shopping Cart">
                 <span className="flex items-center">
@@ -122,6 +136,11 @@ export default function Navigation({ settings }: NavigationProps) {
                       {cartItemCount > 9 ? '9+' : cartItemCount}
                     </span>
                   )}
+                </span>
+              </Link>
+              <Link href="/track-order" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Track Order">
+                <span className="flex items-center">
+                  <Search className="h-5 w-5" />
                 </span>
               </Link>
               <Link href="/login" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Admin">

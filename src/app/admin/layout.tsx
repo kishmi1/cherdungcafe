@@ -17,6 +17,7 @@ import {
   Bell,
   User,
   ShoppingCart,
+  Calendar,
 } from "lucide-react"
 
 import Link from "next/link"
@@ -73,6 +74,11 @@ const sidebarItems = [
     icon: MessageSquare,
     label: "Enquiries",
     href: "/admin/enquiries",
+  },
+  {
+    icon: Calendar,
+    label: "Reservations",
+    href: "/admin/reservations",
   },
   {
     icon: Mail,

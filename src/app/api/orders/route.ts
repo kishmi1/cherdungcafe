@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendOrderConfirmationEmail } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,6 +28,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate email format if provided
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(email)) {
+        return NextResponse.json(
+          { error: 'Please enter a valid email address' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Validate delivery address
     if (orderType === 'DELIVERY' && !address) {
       return NextResponse.json(
@@ -40,7 +52,7 @@ export async function POST(request: NextRequest) {
       data: {
         customerName,
         phone,
-        email: email || null,
+        email,
         orderType,
         address: orderType === 'DELIVERY' ? address : null,
         paymentMethod,
@@ -66,6 +78,26 @@ export async function POST(request: NextRequest) {
         },
       },
     })
+
+    // Send order confirmation email
+    try {
+      await sendOrderConfirmationEmail({
+        orderId: order.id,
+        customerName: order.customerName,
+        customerEmail: email,
+        items: order.items.map(item => ({
+          title: item.menuItem.title,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        totalAmount: order.totalAmount,
+        orderType: order.orderType,
+        status: order.status
+      })
+    } catch (emailError) {
+      console.error('Failed to send order confirmation email:', emailError)
+      // Don't fail the order creation if email fails
+    }
 
     return NextResponse.json({ orderId: order.id }, { status: 201 })
   } catch (error) {

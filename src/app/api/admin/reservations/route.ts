@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { requireStaffSession } from '@/lib/auth'
+import { requireAdminSession } from '@/lib/auth'
+import { sendReservationStatusUpdateEmail } from '@/lib/email'
 
 export async function GET(request: NextRequest) {
   try {
-    // Check staff session
-    const authResult = requireStaffSession(request)
+    // Check admin session
+    const authResult = requireAdminSession(request)
     
     if ('error' in authResult) {
       return NextResponse.json(
@@ -34,8 +35,8 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    // Check staff session
-    const authResult = requireStaffSession(request)
+    // Check admin session
+    const authResult = requireAdminSession(request)
     
     if ('error' in authResult) {
       return NextResponse.json(
@@ -59,6 +60,22 @@ export async function PATCH(request: NextRequest) {
       where: { id },
       data: { status }
     })
+
+    // Send email notification to customer about status update
+    try {
+      await sendReservationStatusUpdateEmail({
+        id: reservation.id,
+        name: reservation.name,
+        email: reservation.email,
+        numberOfGuests: reservation.numberOfGuests,
+        reservationDate: reservation.reservationDate,
+        reservationTime: reservation.reservationTime,
+        status: reservation.status
+      })
+    } catch (emailError) {
+      console.error('Failed to send reservation status update email:', emailError)
+      // Don't fail the request if email fails
+    }
 
     return NextResponse.json({ reservation })
   } catch (error) {

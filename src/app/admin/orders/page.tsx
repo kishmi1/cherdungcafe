@@ -107,6 +107,28 @@ export default function AdminOrdersPage() {
     }
   }
 
+  const updatePaymentStatus = async (orderId: number, newPaymentStatus: string) => {
+    setUpdatingOrderId(orderId)
+    try {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentStatus: newPaymentStatus })
+      })
+
+      if (response.ok) {
+        await fetchOrders()
+        if (selectedOrder?.id === orderId) {
+          setSelectedOrder(prev => prev ? { ...prev, paymentStatus: newPaymentStatus } : null)
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update payment status:', error)
+    } finally {
+      setUpdatingOrderId(null)
+    }
+  }
+
   const filteredOrders = orders.filter(order => {
     const matchesSearch = 
       order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -322,6 +344,31 @@ export default function AdminOrdersPage() {
                       <span style={{ color: '#292522' }}>Total</span>
                       <span style={{ color: '#7A4E2D' }}>Rs. {selectedOrder.totalAmount.toFixed(2)}</span>
                     </div>
+                  </div>
+
+                  {/* Payment Information */}
+                  <div className="space-y-2 pt-2 border-t" style={{ borderColor: '#E7DED4' }}>
+                    <h4 className="font-semibold text-sm" style={{ color: '#292522' }}>Payment Information</h4>
+                    <div className="text-sm" style={{ color: '#756E68' }}>
+                      <p><strong>Payment Method:</strong> {selectedOrder.paymentMethod === 'CASH' ? 'Cash on Delivery' : selectedOrder.paymentMethod}</p>
+                      <p>
+                        <strong>Payment Status:</strong> {selectedOrder.paymentStatus === 'PAID' ? 'Paid ✅' : 'Pending'}
+                      </p>
+                    </div>
+                    {selectedOrder.paymentMethod === 'CASH' && selectedOrder.paymentStatus === 'PENDING' && (
+                      <Button
+                        onClick={() => updatePaymentStatus(selectedOrder.id, 'PAID')}
+                        disabled={updatingOrderId === selectedOrder.id}
+                        className="w-full mt-2"
+                        style={{
+                          backgroundColor: '#6B8E23',
+                          color: 'white',
+                          opacity: updatingOrderId === selectedOrder.id ? 0.5 : 1
+                        }}
+                      >
+                        {updatingOrderId === selectedOrder.id ? 'Updating...' : 'Mark as Paid'}
+                      </Button>
+                    )}
                   </div>
 
                   {/* Status Actions */}

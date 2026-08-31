@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireStaffSession } from '@/lib/auth'
+import { sendOrderStatusUpdateEmail } from '@/lib/email'
 
 export async function PATCH(
   request: NextRequest,
@@ -19,19 +20,23 @@ export async function PATCH(
 
     const { id } = await params
     const orderId = parseInt(id)
-    const { status } = await request.json()
+    const { status, paymentStatus } = await request.json()
 
-    if (!status) {
+    if (!status && !paymentStatus) {
       return NextResponse.json(
-        { error: 'Status is required' },
+        { error: 'Status or paymentStatus is required' },
         { status: 400 }
       )
     }
 
-    // Update order status
+    // Update order status, payment status, or both
+    const updateData: any = {}
+    if (status) updateData.status = status
+    if (paymentStatus) updateData.paymentStatus = paymentStatus
+
     const order = await prisma.order.update({
       where: { id: orderId },
-      data: { status },
+      data: updateData,
       include: {
         items: {
           include: {
@@ -40,6 +45,21 @@ export async function PATCH(
         }
       }
     })
+
+    // Send status update email if customer email is provided and status was updated
+    if (order.email && status) {
+      try {
+        await sendOrderStatusUpdateEmail({
+          orderId: order.id,
+          customerName: order.customerName,
+          customerEmail: order.email,
+          newStatus: status
+        })
+      } catch (emailError) {
+        console.error('Failed to send order status update email:', emailError)
+        // Don't fail the status update if email fails
+      }
+    }
 
     return NextResponse.json({ order })
   } catch (error) {

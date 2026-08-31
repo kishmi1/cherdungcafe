@@ -56,6 +56,13 @@ enum PaymentStatus {
   FAILED
 }
 
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
 model User {
   id           Int           @id @default(autoincrement())
   name         String
@@ -234,4 +241,18 @@ model OrderItem {
   quantity   Int
   price      String
   createdAt  DateTime @default(now())
+}
+
+model Reservation {
+  id           Int               @id @default(autoincrement())
+  name         String
+  email        String
+  phone        String
+  numberOfGuests Int
+  reservationDate DateTime
+  reservationTime String
+  specialRequest String?
+  status       ReservationStatus @default(PENDING)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 }

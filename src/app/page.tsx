@@ -97,7 +97,7 @@ export default async function Home() {
             </Link>
 
             <Link
-              href="/enquiry"
+              href="/book-a-table"
               className="px-8 py-4 border-2 border-white text-white text-sm uppercase tracking-widest hover:bg-white hover:text-[#211C18] transition-colors"
             >
               Book a Table
@@ -770,7 +770,7 @@ export default async function Home() {
               </p>
 
               <Link
-                href="/enquiry"
+                href="/book-a-table"
                 className="inline-block px-8 py-4 bg-[#F3EDE2] text-[#29211C] text-sm uppercase tracking-widest hover:bg-[#E4DACC] transition-colors"
               >
                 Book a Table
