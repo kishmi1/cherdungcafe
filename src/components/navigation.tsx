@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, X, Lock } from "lucide-react"
+import { Menu, X, Lock, ShoppingCart } from "lucide-react"
 import { useState } from "react"
 import { Settings } from "@/lib/use-settings"
+import { useCart } from "@/lib/cart-context"
 
 interface NavigationProps {
   settings?: Settings
@@ -12,6 +13,8 @@ interface NavigationProps {
 export default function Navigation({ settings }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const siteName = settings?.siteName || "CHERDUNG CAFE"
+  const { getCartItemCount } = useCart()
+  const cartItemCount = getCartItemCount()
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -55,6 +58,18 @@ export default function Navigation({ settings }: NavigationProps) {
               Enquiry
             </Link>
             
+            {/* Cart Icon */}
+            <Link href="/cart" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors relative" aria-label="Shopping Cart">
+              <span className="flex items-center">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {cartItemCount > 9 ? '9+' : cartItemCount}
+                  </span>
+                )}
+              </span>
+            </Link>
+
             {/* Admin Login */}
             <Link href="/login" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Admin">
               <span className="flex items-center">
@@ -99,6 +114,16 @@ export default function Navigation({ settings }: NavigationProps) {
               Enquiry
             </Link>
             <div className="flex items-center justify-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+              <Link href="/cart" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors relative" aria-label="Shopping Cart">
+                <span className="flex items-center">
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                      {cartItemCount > 9 ? '9+' : cartItemCount}
+                    </span>
+                  )}
+                </span>
+              </Link>
               <Link href="/login" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Admin">
                 <span className="flex items-center">
                   <Lock className="h-5 w-5" />

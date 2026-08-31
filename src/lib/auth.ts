@@ -9,6 +9,13 @@ export interface StaffSession {
   permissions?: string[]
 }
 
+export interface AdminSession {
+  userId: number
+  email: string
+  name: string
+  role: string
+}
+
 export function getStaffSession(request: NextRequest): StaffSession | null {
   const sessionCookie = request.cookies.get('staffSession')
   
@@ -30,6 +37,27 @@ export function getStaffSession(request: NextRequest): StaffSession | null {
   }
 }
 
+export function getAdminSession(request: NextRequest): AdminSession | null {
+  const sessionCookie = request.cookies.get('adminSession')
+  
+  if (!sessionCookie) {
+    return null
+  }
+
+  try {
+    const sessionData = JSON.parse(sessionCookie.value)
+    
+    if (!sessionData.userId || !sessionData.email || !sessionData.role) {
+      return null
+    }
+
+    return sessionData as AdminSession
+  } catch (error) {
+    console.error('Failed to parse admin session:', error)
+    return null
+  }
+}
+
 export function requireStaffSession(request: NextRequest): { session: StaffSession } | { error: string; status: number } {
   const session = getStaffSession(request)
   
@@ -39,6 +67,20 @@ export function requireStaffSession(request: NextRequest): { session: StaffSessi
 
   if (session.role !== 'STAFF') {
     return { error: 'Access denied. Staff access only.', status: 403 }
+  }
+
+  return { session }
+}
+
+export function requireAdminSession(request: NextRequest): { session: AdminSession } | { error: string; status: number } {
+  const session = getAdminSession(request)
+  
+  if (!session) {
+    return { error: 'Unauthorized', status: 401 }
+  }
+
+  if (session.role !== 'ADMIN') {
+    return { error: 'Access denied. Admin access only.', status: 403 }
   }
 
   return { session }

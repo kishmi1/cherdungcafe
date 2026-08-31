@@ -4,6 +4,11 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
 
+  // Skip middleware for API routes - they handle their own authentication
+  if (path.startsWith('/api')) {
+    return NextResponse.next()
+  }
+
   // Protect admin routes
   if (path.startsWith('/admin') && path !== '/admin/login') {
     const sessionCookie = request.cookies.get('adminSession')

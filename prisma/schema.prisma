@@ -41,6 +41,21 @@ enum EnquiryStatus {
   RESOLVED
 }
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model User {
   id           Int           @id @default(autoincrement())
   name         String
@@ -102,17 +117,18 @@ model Service {
 }
 
 model MenuItem {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   title       String
   description String?
   image       String?
   price       String
   category    String?
-  isPopular   Boolean  @default(false)
-  isAvailable Boolean  @default(true)
-  sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isPopular   Boolean     @default(false)
+  isAvailable Boolean     @default(true)
+  sortOrder   Int         @default(0)
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model Offer {
@@ -188,4 +204,34 @@ model Settings {
   backgroundColor      String   @default("#F7F4EF")
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
+}
+
+model Order {
+  id            Int           @id @default(autoincrement())
+  customerName  String
+  phone         String
+  email         String?
+  orderType     String
+  address       String?
+  subtotal      Float
+  deliveryFee   Float
+  totalAmount   Float
+  paymentMethod String
+  paymentStatus PaymentStatus @default(PENDING)
+  status        OrderStatus   @default(PENDING)
+  notes         String?
+  items         OrderItem[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId Int
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity   Int
+  price      String
+  createdAt  DateTime @default(now())
 }

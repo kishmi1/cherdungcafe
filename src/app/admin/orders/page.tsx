@@ -61,7 +61,7 @@ const statusIcons: Record<OrderStatus, any> = {
   CANCELLED: XCircle
 }
 
-export default function StaffOrdersPage() {
+export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
@@ -75,7 +75,7 @@ export default function StaffOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('/api/staff/orders')
+      const response = await fetch('/api/admin/orders')
       const data = await response.json()
       setOrders(data.orders || [])
     } catch (error) {
@@ -88,7 +88,7 @@ export default function StaffOrdersPage() {
   const updateOrderStatus = async (orderId: number, newStatus: OrderStatus) => {
     setUpdatingOrderId(orderId)
     try {
-      const response = await fetch(`/api/staff/orders/${orderId}`, {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -117,6 +117,23 @@ export default function StaffOrdersPage() {
     
     return matchesSearch && matchesStatus
   })
+
+  const getStatusProgress = (status: OrderStatus): number => {
+    const statusOrder: OrderStatus[] = ["PENDING", "CONFIRMED", "PREPARING", "READY", "COMPLETED"]
+    if (status === "CANCELLED") return 0
+    return statusOrder.indexOf(status) + 1
+  }
+
+  const canTransitionTo = (currentStatus: OrderStatus, targetStatus: OrderStatus): boolean => {
+    if (currentStatus === "CANCELLED") return false
+    if (targetStatus === "CANCELLED") return true
+    
+    const statusOrder: OrderStatus[] = ["PENDING", "CONFIRMED", "PREPARING", "READY", "COMPLETED"]
+    const currentIndex = statusOrder.indexOf(currentStatus)
+    const targetIndex = statusOrder.indexOf(targetStatus)
+    
+    return targetIndex >= currentIndex
+  }
 
   const possibleTransitions: Record<OrderStatus, OrderStatus[]> = {
     PENDING: ["CONFIRMED", "CANCELLED"],
@@ -195,12 +212,13 @@ export default function StaffOrdersPage() {
                         onClick={() => setSelectedOrder(order)}
                         className={`p-4 rounded-lg border cursor-pointer transition-all ${
                           selectedOrder?.id === order.id
-                            ? 'ring-2 ring-[#B68A52]'
+                            ? 'ring-2'
                             : 'hover:shadow-md'
                         }`}
                         style={{
                           backgroundColor: '#F7F4EF',
-                          borderColor: selectedOrder?.id === order.id ? '#B68A52' : '#E7DED4'
+                          borderColor: selectedOrder?.id === order.id ? '#B68A52' : '#E7DED4',
+                          ringColor: selectedOrder?.id === order.id ? '#B68A52' : 'transparent'
                         }}
                       >
                         <div className="flex items-start justify-between gap-4">

@@ -16,6 +16,7 @@ import {
   Settings,
   Bell,
   User,
+  ShoppingCart,
 } from "lucide-react"
 
 import Link from "next/link"
@@ -23,9 +24,12 @@ import { useRouter, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 import {
-  subscribeToNotifications,
+  subscribeToEnquiryNotifications,
   resetNewEnquiryCount,
   initializeNotificationCount,
+  subscribeToOrderNotifications,
+  resetNewOrderCount,
+  initializeOrderNotificationCount,
 } from "@/lib/notifications"
 
 
@@ -59,6 +63,11 @@ const sidebarItems = [
     icon: FileText,
     label: "Blog",
     href: "/admin/blog",
+  },
+  {
+    icon: ShoppingCart,
+    label: "Orders",
+    href: "/admin/orders",
   },
   {
     icon: MessageSquare,
@@ -98,6 +107,9 @@ export default function AdminLayout({
   const [notificationCount, setNotificationCount] =
     useState(0)
 
+  const [orderNotificationCount, setOrderNotificationCount] =
+    useState(0)
+
   // Don't show sidebar and navbar for login page
   const isLoginPage = pathname === '/admin/login'
 
@@ -108,13 +120,22 @@ export default function AdminLayout({
   useEffect(() => {
 
     initializeNotificationCount()
+    initializeOrderNotificationCount()
 
-    const unsubscribe =
-      subscribeToNotifications((count) => {
+    const unsubscribeEnquiries =
+      subscribeToEnquiryNotifications((count) => {
         setNotificationCount(count)
       })
 
-    return unsubscribe
+    const unsubscribeOrders =
+      subscribeToOrderNotifications((count) => {
+        setOrderNotificationCount(count)
+      })
+
+    return () => {
+      unsubscribeEnquiries()
+      unsubscribeOrders()
+    }
 
   }, [])
 

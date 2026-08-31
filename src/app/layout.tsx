@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import { LocalBusinessSchema, OrganizationSchema } from "@/components/structured-data";
 import { ThemeProvider } from "@/components/theme-provider";
 import LayoutWrapper from "@/components/layout-wrapper";
+import { CartProvider } from "@/lib/cart-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,9 +42,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme="dark"
           enableSystem
         >
-          <LocalBusinessSchema />
-          <OrganizationSchema />
-          <LayoutWrapper>{children}</LayoutWrapper>
+          <CartProvider>
+            <LocalBusinessSchema />
+            <OrganizationSchema />
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>

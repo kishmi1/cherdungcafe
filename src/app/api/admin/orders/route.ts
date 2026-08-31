@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { requireStaffSession } from '@/lib/auth'
+import { requireAdminSession } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
-    // Check staff session
-    const authResult = requireStaffSession(request)
+    // Check admin session
+    const authResult = requireAdminSession(request)
     
     if ('error' in authResult) {
       return NextResponse.json(
