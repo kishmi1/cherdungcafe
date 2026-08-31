@@ -217,8 +217,7 @@ export default function AdminOrdersPage() {
                         }`}
                         style={{
                           backgroundColor: '#F7F4EF',
-                          borderColor: selectedOrder?.id === order.id ? '#B68A52' : '#E7DED4',
-                          ringColor: selectedOrder?.id === order.id ? '#B68A52' : 'transparent'
+                          borderColor: selectedOrder?.id === order.id ? '#B68A52' : '#E7DED4'
                         }}
                       >
                         <div className="flex items-start justify-between gap-4">
