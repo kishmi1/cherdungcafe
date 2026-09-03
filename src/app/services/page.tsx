@@ -47,7 +47,6 @@ export default async function ServicesPage() {
       title: "Specialty Coffee",
       description:
         "Freshly brewed coffee crafted by our baristas using quality beans.",
-      icon: "coffee",
       image: null,
       priceNote: "Starting from $3.50",
     },
@@ -56,7 +55,6 @@ export default async function ServicesPage() {
       title: "Dine-In Experience",
       description:
         "Enjoy delicious food and drinks in our warm and comfortable space.",
-      icon: "utensils",
       image: null,
       priceNote: "No minimum order",
     },
@@ -65,7 +63,6 @@ export default async function ServicesPage() {
       title: "Takeaway",
       description:
         "Freshly prepared meals and beverages, ready to enjoy wherever you go.",
-      icon: "shopping",
       image: null,
       priceNote: "Ready in 5 minutes",
     },
@@ -74,7 +71,6 @@ export default async function ServicesPage() {
       title: "Bakery & Fresh Bakes",
       description:
         "Fresh pastries, cakes, muffins and other delicious baked treats.",
-      icon: "cake",
       image: null,
       priceNote: "Daily from 7am",
     },
@@ -83,7 +79,6 @@ export default async function ServicesPage() {
       title: "Catering",
       description:
         "Food and beverage service for meetings, gatherings and special occasions.",
-      icon: "truck",
       image: null,
       priceNote: "Custom quotes available",
     },
@@ -92,7 +87,6 @@ export default async function ServicesPage() {
       title: "Private Events",
       description:
         "A cozy space for birthdays, celebrations, meetings and private gatherings.",
-      icon: "calendar",
       image: null,
       priceNote: "Requires booking",
     },
@@ -209,7 +203,7 @@ export default async function ServicesPage() {
                 >
 
                   {/* Image */}
-                  {service.image && (
+                  {service.image ? (
                     <div className="overflow-hidden">
                       <img
                         src={service.image}
@@ -223,6 +217,10 @@ export default async function ServicesPage() {
                           group-hover:scale-105
                         "
                       />
+                    </div>
+                  ) : (
+                    <div className="flex h-48 items-center justify-center bg-[#F3EADF]">
+                      <span className="text-sm text-[#76543C]">No image available</span>
                     </div>
                   )}
 
