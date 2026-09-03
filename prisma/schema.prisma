@@ -114,7 +114,6 @@ model Service {
   id          Int      @id @default(autoincrement())
   title       String
   description String
-  icon        String   @default("coffee")
   image       String?
   priceNote   String?
   sortOrder   Int      @default(0)

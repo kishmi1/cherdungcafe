@@ -43,7 +43,6 @@ export async function PUT(
     const {
       title,
       description,
-      icon,
       image,
       priceNote,
       sortOrder,
@@ -55,7 +54,6 @@ export async function PUT(
       data: {
         title,
         description,
-        icon,
         image,
         priceNote,
         sortOrder,

@@ -5,11 +5,6 @@ import {
   Plus, 
   Edit, 
   Trash2, 
-  Coffee, 
-  Utensils, 
-  Package, 
-  Calendar, 
-  Star,
   ChevronUp,
   ChevronDown,
   Eye,
@@ -25,7 +20,6 @@ interface Service {
   id: number
   title: string
   description: string
-  icon: string
   image?: string
   priceNote?: string
   sortOrder: number
@@ -33,14 +27,6 @@ interface Service {
   createdAt: string
   updatedAt: string
 }
-
-const iconOptions = [
-  { value: 'coffee', icon: Coffee, label: 'Coffee' },
-  { value: 'utensils', icon: Utensils, label: 'Dining' },
-  { value: 'package', icon: Package, label: 'Takeaway' },
-  { value: 'calendar', icon: Calendar, label: 'Events' },
-  { value: 'star', icon: Star, label: 'Premium' },
-]
 
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([])
@@ -51,7 +37,6 @@ export default function ServicesPage() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    icon: 'coffee',
     image: '',
     priceNote: '',
     sortOrder: 0,
@@ -64,11 +49,26 @@ export default function ServicesPage() {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch('/api/services')
+      const response = await fetch('/api/services', {
+        cache: 'no-store' // Disable caching
+      })
+      
+      console.log('Fetch response status:', response.status)
+      
       const data = await response.json()
-      setServices(data)
+      console.log('Fetch response data:', data)
+      console.log('Data is array:', Array.isArray(data))
+      
+      // Ensure data is an array before setting state
+      if (Array.isArray(data)) {
+        setServices(data)
+      } else {
+        console.error('API returned non-array data:', data)
+        setServices([])
+      }
     } catch (error) {
       console.error('Error fetching services:', error)
+      setServices([])
     } finally {
       setIsLoading(false)
     }
@@ -84,11 +84,18 @@ export default function ServicesPage() {
       
       const method = editingService ? 'PUT' : 'POST'
       
+      console.log('Submitting service:', formData)
+      
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
+
+      console.log('Response status:', response.status)
+      
+      const responseData = await response.json()
+      console.log('API response:', responseData)
 
       if (response.ok) {
         fetchServices()
@@ -97,15 +104,19 @@ export default function ServicesPage() {
         setFormData({
           title: '',
           description: '',
-          icon: 'coffee',
           image: '',
           priceNote: '',
           sortOrder: 0,
           isActive: true
         })
+      } else {
+        console.error('API error:', responseData)
+        const errorMessage = responseData.error || responseData.details || 'Failed to save service'
+        alert(errorMessage)
       }
     } catch (error) {
       console.error('Error saving service:', error)
+      alert('Failed to save service. Please try again.')
     }
   }
 
@@ -144,7 +155,6 @@ export default function ServicesPage() {
     setFormData({
       title: service.title,
       description: service.description,
-      icon: service.icon,
       image: service.image || '',
       priceNote: service.priceNote || '',
       sortOrder: service.sortOrder,
@@ -215,10 +225,7 @@ export default function ServicesPage() {
     }
   }
 
-  const getIconComponent = (iconName: string) => {
-    const icon = iconOptions.find(opt => opt.value === iconName)
-    return icon ? icon.icon : Coffee
-  }
+
 
   if (isLoading) {
     return (
@@ -241,7 +248,6 @@ export default function ServicesPage() {
             setFormData({
               title: '',
               description: '',
-              icon: 'coffee',
               image: '',
               priceNote: '',
               sortOrder: services.length,
@@ -258,14 +264,23 @@ export default function ServicesPage() {
 
       <div className="grid gap-4">
         {services.map((service, index) => {
-          const IconComponent = getIconComponent(service.icon)
           return (
             <Card key={service.id} style={{ backgroundColor: '#FFFFFF', border: '1px solid #E7DED4' }}>
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
-                  <div className="h-12 w-12 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F7F4EF', border: '1px solid #E7DED4' }}>
-                    <IconComponent className="h-6 w-6" style={{ color: '#7A4E2D' }} />
-                  </div>
+                  {service.image ? (
+                    <div className="h-12 w-12 rounded-lg overflow-hidden flex-shrink-0" style={{ border: '1px solid #E7DED4' }}>
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-12 w-12 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F7F4EF', border: '1px solid #E7DED4' }}>
+                      <span className="text-xs" style={{ color: '#756E68' }}>No image</span>
+                    </div>
+                  )}
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -340,7 +355,6 @@ export default function ServicesPage() {
         {services.length === 0 && (
           <Card style={{ backgroundColor: '#FFFFFF', border: '1px solid #E7DED4' }}>
             <CardContent className="p-8 text-center">
-              <Coffee className="h-12 w-12 mx-auto mb-4" style={{ color: '#E7DED4' }} />
               <p style={{ color: '#756E68' }}>No services yet. Click "Add Service" to create your first service.</p>
             </CardContent>
           </Card>
@@ -384,32 +398,6 @@ export default function ServicesPage() {
                     className="w-full px-3 py-2 rounded-lg border resize-none"
                     style={{ borderColor: '#E7DED4' }}
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#292522' }}>
-                    Icon
-                  </label>
-                  <div className="grid grid-cols-5 gap-2">
-                    {iconOptions.map((option) => {
-                      const IconComponent = option.icon
-                      return (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => setFormData({ ...formData, icon: option.value })}
-                          className="p-3 rounded-lg border-2 flex flex-col items-center gap-1 transition-all"
-                          style={{
-                            borderColor: formData.icon === option.value ? '#7A4E2D' : '#E7DED4',
-                            backgroundColor: formData.icon === option.value ? '#F7F4EF' : '#FFFFFF'
-                          }}
-                        >
-                          <IconComponent className="h-5 w-5" style={{ color: '#7A4E2D' }} />
-                          <span className="text-xs" style={{ color: '#756E68' }}>{option.label}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
                 </div>
 
                 <div>
