@@ -4,7 +4,6 @@ import {
   Utensils,
   Calendar,
   Users,
-  Wifi,
   MapPin,
   ArrowRight,
   ArrowDown,
@@ -54,15 +53,6 @@ export default async function Home() {
     orderBy: { publishedAt: "desc" },
     take: 3,
   })
-
-  // Map icon names to Lucide components
-  const iconMap: Record<string, any> = {
-    coffee: Coffee,
-    utensils: Utensils,
-    calendar: Calendar,
-    users: Users,
-    wifi: Wifi,
-  }
 
   return (
     <div className="flex flex-col">
@@ -167,14 +157,12 @@ export default async function Home() {
           {/* Only 4 Services */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.slice(0, 4).map((service) => {
-              const IconComponent = iconMap[service.icon] || Coffee
-
               return (
                 <div
                   key={service.id}
                   className="bg-[#FAFBF8] dark:bg-[#292D2A] p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  {/* Service Image / Icon */}
+                  {/* Service Image */}
                   {service.image ? (
                     <img
                       src={service.image}
@@ -183,7 +171,7 @@ export default async function Home() {
                     />
                   ) : (
                     <div className="bg-[#DDE5DC] dark:bg-[#374039] w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                      <IconComponent className="h-8 w-8 text-[#6D513C]" />
+                      <span className="text-xs text-[#6D513C]">No image</span>
                     </div>
                   )}
 

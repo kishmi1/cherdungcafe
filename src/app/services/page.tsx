@@ -1,12 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { Card, CardContent } from "@/components/ui/card"
 import {
-  Coffee,
-  Utensils,
-  Calendar,
-  CakeSlice,
-  Truck,
-  ShoppingBag,
   ArrowRight,
   Check,
 } from "lucide-react"
@@ -24,20 +18,6 @@ export const metadata: Metadata = {
     description:
       "From specialty coffee to private events, we offer everything you need for a perfect café experience.",
   },
-}
-
-const iconMap: Record<string, any> = {
-  coffee: Coffee,
-  utensils: Utensils,
-  calendar: Calendar,
-  cake: CakeSlice,
-  truck: Truck,
-  shopping: ShoppingBag,
-  takeaway: ShoppingBag,
-  bakery: CakeSlice,
-  events: Calendar,
-  users: Calendar,
-  wifi: Calendar,
 }
 
 async function getServices() {
@@ -210,9 +190,6 @@ export default async function ServicesPage() {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 
             {displayServices.map((service) => {
-              const IconComponent =
-                iconMap[service.icon as keyof typeof iconMap] || Coffee
-
               return (
                 <Card
                   key={service.id}
@@ -253,41 +230,8 @@ export default async function ServicesPage() {
 
                     <div className="flex flex-col">
 
-                      {/* Icon + Content */}
-                      <div className="mb-5 flex items-start gap-4">
-
-                        {!service.image && (
-                          <div
-                            className="
-                              flex
-                              h-14
-                              w-14
-                              flex-shrink-0
-                              items-center
-                              justify-center
-                              rounded-2xl
-                              border
-                              border-[#DCCBB8]
-                              bg-[#F3EADF]
-                              transition-all
-                              duration-300
-                              group-hover:bg-[#8B684A]
-                              group-hover:shadow-md
-                            "
-                          >
-                            <IconComponent
-                              className="
-                                h-6
-                                w-6
-                                text-[#7A4E2D]
-                                transition-colors
-                                duration-300
-                                group-hover:text-white
-                              "
-                            />
-                          </div>
-                        )}
-
+                      {/* Content */}
+                      <div className="mb-5">
                         <div className="flex-1">
 
                           <h3
