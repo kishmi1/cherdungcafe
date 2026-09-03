@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
 // GET single blog post
@@ -51,6 +52,37 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check authentication
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get('adminSession')
+
+    if (!sessionCookie) {
+      return NextResponse.json({ error: 'Please log in again to update a blog post' }, { status: 401 })
+    }
+
+    let sessionUserId: number
+    let sessionEmail: string
+    try {
+      const session = JSON.parse(sessionCookie.value)
+      sessionUserId = typeof session.userId === 'number' ? session.userId : 0
+      sessionEmail = typeof session.email === 'string' ? session.email : ''
+    } catch {
+      return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
+    }
+
+    if (!sessionUserId || !sessionEmail) {
+      return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
+    }
+
+    const authenticatedUser = await prisma.user.findUnique({
+      where: { id: sessionUserId },
+      select: { id: true, name: true, email: true },
+    })
+
+    if (!authenticatedUser) {
+      return NextResponse.json({ error: 'Your account could not be found. Please log in again.' }, { status: 401 })
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -144,6 +176,37 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check authentication
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get('adminSession')
+
+    if (!sessionCookie) {
+      return NextResponse.json({ error: 'Please log in again to delete a blog post' }, { status: 401 })
+    }
+
+    let sessionUserId: number
+    let sessionEmail: string
+    try {
+      const session = JSON.parse(sessionCookie.value)
+      sessionUserId = typeof session.userId === 'number' ? session.userId : 0
+      sessionEmail = typeof session.email === 'string' ? session.email : ''
+    } catch {
+      return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
+    }
+
+    if (!sessionUserId || !sessionEmail) {
+      return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
+    }
+
+    const authenticatedUser = await prisma.user.findUnique({
+      where: { id: sessionUserId },
+      select: { id: true, name: true, email: true },
+    })
+
+    if (!authenticatedUser) {
+      return NextResponse.json({ error: 'Your account could not be found. Please log in again.' }, { status: 401 })
+    }
+
     const { id } = await params;
 
     await prisma.blogPost.delete({

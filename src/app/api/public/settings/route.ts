@@ -29,8 +29,10 @@ export async function GET() {
           themeColor: '#B68A52',
           accentColor: '#7A4E2D',
           backgroundColor: '#F7F4EF',
-          socialWhatsApp: '',
-          socialTikTok: '',
+          socialLinkedIn: '',
+          logoUrl: '',
+          faviconUrl: '',
+          logoSize: 'medium',
         }
       })
     }

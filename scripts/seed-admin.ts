@@ -31,7 +31,8 @@ async function main() {
       name: 'Admin User',
       email: 'admin@cherdungcafe.com',
       passwordHash,
-      role: 'ADMIN'
+      role: 'ADMIN',
+      status: 'ACTIVE'
     }
   })
 

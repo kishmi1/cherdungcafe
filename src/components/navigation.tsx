@@ -13,8 +13,21 @@ interface NavigationProps {
 export default function Navigation({ settings }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const siteName = settings?.siteName || "CHERDUNG CAFE"
+  const logoUrl = settings?.logoUrl || ""
+  const logoSize = settings?.logoSize || "medium"
   const { getCartItemCount } = useCart()
   const cartItemCount = getCartItemCount()
+
+  // Get logo size in pixels
+  const getLogoHeight = () => {
+    switch (logoSize) {
+      case 'small': return 'h-8'
+      case 'medium': return 'h-12'
+      case 'large': return 'h-16'
+      case 'xlarge': return 'h-20'
+      default: return 'h-12'
+    }
+  }
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -32,8 +45,34 @@ export default function Navigation({ settings }: NavigationProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="text-black dark:text-white text-2xl font-bold tracking-wider">
-            {siteName}
+          <Link href="/" className="flex items-center group">
+            {logoUrl ? (
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <img 
+                    src={logoUrl} 
+                    alt={siteName} 
+                    className={`${getLogoHeight()} w-auto object-contain transition-all duration-300 group-hover:scale-105`}
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold tracking-wider italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-400 transition-all">
+                    cherdung
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="h-px bg-black dark:bg-white flex-1"></span>
+                    <span className="text-black dark:text-white text-xs font-medium tracking-widest">
+                      CAFE
+                    </span>
+                    <span className="h-px bg-black dark:bg-white flex-1"></span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <span className="text-black dark:text-white text-2xl font-bold tracking-wider group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                {siteName}
+              </span>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

@@ -12,6 +12,32 @@ async function main() {
   // Delete existing services
   await prisma.service.deleteMany()
 
+  // Create default settings if they don't exist
+  const existingSettings = await prisma.settings.findFirst()
+  if (!existingSettings) {
+    await prisma.settings.create({
+      data: {
+        siteName: 'Cherdung Café',
+        siteDescription: 'Your neighborhood café serving delicious coffee and more',
+        contactEmail: 'info@cherdungcafe.com',
+        contactPhone: '+977-1-1234567',
+        contactAddress: 'Sankhamul, Kathmandu 44600, Nepal',
+        openingHours: 'Mon-Sun: 7:00 AM - 9:00 PM',
+        businessHours: 'Mon-Sun: 7:00 AM - 9:00 PM',
+        seoTitle: 'Cherdung Café - Coffee & More',
+        seoDescription: 'Welcome to Cherdung Café, your neighborhood café serving delicious coffee, food, and more.',
+        themeColor: '#B68A52',
+        accentColor: '#7A4E2D',
+        backgroundColor: '#F7F4EF',
+        socialLinkedIn: '',
+        logoUrl: '',
+        faviconUrl: '',
+        logoSize: 'medium',
+      }
+    })
+    console.log('Default settings created!')
+  }
+
   // Create initial services
   const services = [
     {

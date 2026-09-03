@@ -86,20 +86,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Please log in again to create a blog post' }, { status: 401 })
     }
 
+    let sessionUserId: number
     let sessionEmail: string
     try {
       const session = JSON.parse(sessionCookie.value)
+      sessionUserId = typeof session.userId === 'number' ? session.userId : 0
       sessionEmail = typeof session.email === 'string' ? session.email : ''
     } catch {
       return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
     }
 
-    if (!sessionEmail) {
+    if (!sessionUserId || !sessionEmail) {
       return NextResponse.json({ error: 'Your session is invalid. Please log in again.' }, { status: 401 })
     }
 
     const author = await prisma.user.findUnique({
-      where: { email: sessionEmail },
+      where: { id: sessionUserId },
       select: { id: true, name: true, email: true },
     })
 

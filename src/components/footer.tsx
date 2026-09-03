@@ -9,6 +9,7 @@ interface FooterProps {
 
 export default function Footer({ settings }: FooterProps) {
   const siteName = settings?.siteName || "CHERDUNG CAFE"
+  const logoUrl = settings?.logoUrl || ""
   const siteDescription = settings?.siteDescription || "Your neighborhood café serving specialty coffee, delicious food, and memorable experiences."
   const contactAddress = settings?.contactAddress || "Sankhamul, Kathmandu"
   const contactPhone = settings?.contactPhone || "+1 (555) 123-4567"
@@ -21,7 +22,29 @@ export default function Footer({ settings }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
-            <h2 className="text-2xl font-light tracking-wider mb-4">{siteName}</h2>
+            {logoUrl ? (
+              <div className="flex items-center gap-3 mb-4">
+                <img 
+                  src={logoUrl} 
+                  alt={siteName} 
+                  className="h-16 w-auto object-contain"
+                />
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold tracking-wider italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                    cherdung
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="h-px bg-white flex-1"></span>
+                    <span className="text-white text-xs font-medium tracking-widest">
+                     CAFE
+                    </span>
+                    <span className="h-px bg-white flex-1"></span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <h2 className="text-2xl font-light tracking-wider mb-4">{siteName}</h2>
+            )}
             <p className="text-gray-400 text-sm leading-relaxed">
               {siteDescription}
             </p>

@@ -10,8 +10,7 @@ export interface Settings {
   socialFacebook?: string
   socialInstagram?: string
   socialTwitter?: string
-  socialWhatsApp?: string
-  socialTikTok?: string
+  socialLinkedIn?: string
   openingHours?: string
   businessHours?: string
   seoTitle?: string
@@ -22,6 +21,7 @@ export interface Settings {
   themeColor: string
   accentColor: string
   backgroundColor: string
+  logoSize?: string
   createdAt?: string
   updatedAt?: string
 }

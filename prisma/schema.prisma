@@ -197,8 +197,7 @@ model Settings {
   socialFacebook       String?
   socialInstagram      String?
   socialTwitter        String?
-  socialWhatsApp       String?
-  socialTikTok         String?
+  socialLinkedIn       String?
   openingHours         String?
   businessHours        String?
   seoTitle             String?
@@ -209,6 +208,7 @@ model Settings {
   themeColor           String   @default("#B68A52")
   accentColor          String   @default("#7A4E2D")
   backgroundColor      String   @default("#F7F4EF")
+  logoSize             String   @default("medium")
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 }
