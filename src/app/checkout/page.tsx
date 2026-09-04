@@ -94,23 +94,90 @@ export default function CheckoutPage() {
         totalAmount: getCartTotal() + (formData.orderType === "DELIVERY" ? 50 : 0),
       }
 
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      })
+      // For online payments, we need to initiate payment first
+      if (formData.paymentMethod === "ESEWA" || formData.paymentMethod === "KHALTI") {
+        // First create the order
+        const orderResponse = await fetch("/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        })
 
-      const data = await response.json()
+        const orderDataResponse = await orderResponse.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to place order")
+        if (!orderResponse.ok) {
+          throw new Error(orderDataResponse.error || "Failed to place order")
+        }
+
+        const orderId = orderDataResponse.orderId
+
+        // Then initiate payment
+        const paymentEndpoint = formData.paymentMethod === "ESEWA" 
+          ? "/api/payments/esewa/initiate" 
+          : "/api/payments/khalti/initiate"
+
+        const paymentResponse = await fetch(paymentEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderId,
+            amount: orderData.totalAmount
+          }),
+        })
+
+        const paymentData = await paymentResponse.json()
+
+        if (!paymentResponse.ok) {
+          throw new Error(paymentData.error || "Failed to initiate payment")
+        }
+
+        // Clear cart and redirect to payment gateway
+        clearCart()
+        
+        // For eSewa, we need to submit a form
+        if (formData.paymentMethod === "ESEWA") {
+          const form = document.createElement("form")
+          form.method = "POST"
+          form.action = paymentData.paymentUrl
+          
+          Object.entries(paymentData.paymentParams).forEach(([key, value]) => {
+            const input = document.createElement("input")
+            input.type = "hidden"
+            input.name = key
+            input.value = String(value)
+            form.appendChild(input)
+          })
+          
+          document.body.appendChild(form)
+          form.submit()
+        } else {
+          // For Khalti, redirect to payment URL
+          window.location.href = paymentData.paymentUrl
+        }
+      } else {
+        // For Cash payment, create order directly
+        const response = await fetch("/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to place order")
+        }
+
+        // Clear cart and redirect to success page
+        clearCart()
+        router.push(`/order-success/${data.orderId}`)
       }
-
-      // Clear cart and redirect to success page
-      clearCart()
-      router.push(`/order-success/${data.orderId}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred while placing your order")
     } finally {
@@ -326,37 +393,35 @@ export default function CheckoutPage() {
                     </div>
                   </label>
 
-                  <label className="flex items-center gap-3 rounded-lg border border-[#D7E0E5] bg-white p-4 transition-colors hover:border-[#9BAFBB] opacity-50">
+                  <label className="flex items-center gap-3 rounded-lg border border-[#D7E0E5] bg-white p-4 transition-colors hover:border-[#9BAFBB]">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="KHALTI"
                       checked={formData.paymentMethod === "KHALTI"}
                       onChange={handleInputChange}
-                      disabled
                       className="h-4 w-4 text-[#6F8494] focus:ring-[#6F8494]"
                     />
                     <CreditCard className="h-5 w-5 text-[#6F8494]" />
                     <div>
                       <span className="text-sm font-semibold text-[#292F33]">Khalti</span>
-                      <p className="text-xs text-[#737D83]">Coming soon</p>
+                      <p className="text-xs text-[#737D83]">Pay securely with Khalti</p>
                     </div>
                   </label>
 
-                  <label className="flex items-center gap-3 rounded-lg border border-[#D7E0E5] bg-white p-4 transition-colors hover:border-[#9BAFBB] opacity-50">
+                  <label className="flex items-center gap-3 rounded-lg border border-[#D7E0E5] bg-white p-4 transition-colors hover:border-[#9BAFBB]">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="ESEWA"
                       checked={formData.paymentMethod === "ESEWA"}
                       onChange={handleInputChange}
-                      disabled
                       className="h-4 w-4 text-[#6F8494] focus:ring-[#6F8494]"
                     />
                     <CreditCard className="h-5 w-5 text-[#6F8494]" />
                     <div>
                       <span className="text-sm font-semibold text-[#292F33]">eSewa</span>
-                      <p className="text-xs text-[#737D83]">Coming soon</p>
+                      <p className="text-xs text-[#737D83]">Pay securely with eSewa</p>
                     </div>
                   </label>
                 </div>

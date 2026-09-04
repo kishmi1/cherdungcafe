@@ -47,7 +47,65 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create order with items
+    // Validate payment method
+    const validPaymentMethods = ['CASH', 'ESEWA', 'KHALTI']
+    if (!validPaymentMethods.includes(paymentMethod)) {
+      return NextResponse.json(
+        { error: 'Invalid payment method' },
+        { status: 400 }
+      )
+    }
+
+    // SECURITY: Server-side price verification
+    // Calculate the actual total from database prices to prevent price manipulation
+    let calculatedSubtotal = 0
+    const validatedItems = []
+
+    for (const item of items) {
+      // Fetch the actual menu item from database
+      const menuItem = await prisma.menuItem.findUnique({
+        where: { id: item.menuItemId }
+      })
+
+      if (!menuItem) {
+        return NextResponse.json(
+          { error: `Menu item with ID ${item.menuItemId} not found` },
+          { status: 400 }
+        )
+      }
+
+      if (!menuItem.isAvailable) {
+        return NextResponse.json(
+          { error: `Menu item ${menuItem.title} is not available` },
+          { status: 400 }
+        )
+      }
+
+      // Parse the price from string to float
+      const actualPrice = parseFloat(menuItem.price.replace(/[^0-9.]/g, ''))
+      const itemSubtotal = actualPrice * item.quantity
+      calculatedSubtotal += itemSubtotal
+
+      validatedItems.push({
+        menuItemId: item.menuItemId,
+        quantity: item.quantity,
+        price: menuItem.price, // Use the actual price from database
+      })
+    }
+
+    // Calculate expected delivery fee
+    const expectedDeliveryFee = orderType === 'DELIVERY' ? 50 : 0
+    const expectedTotal = calculatedSubtotal + expectedDeliveryFee
+
+    // Verify the total amount matches (with small tolerance for floating point)
+    if (Math.abs(totalAmount - expectedTotal) > 0.01) {
+      return NextResponse.json(
+        { error: 'Amount mismatch. Please refresh and try again.' },
+        { status: 400 }
+      )
+    }
+
+    // Create order with validated items and prices
     const order = await prisma.order.create({
       data: {
         customerName,
@@ -58,16 +116,12 @@ export async function POST(request: NextRequest) {
         paymentMethod,
         notes: notes || null,
         status: 'PENDING',
-        paymentStatus: 'PENDING',
-        subtotal,
-        deliveryFee,
-        totalAmount,
+        paymentStatus: paymentMethod === 'CASH' ? 'PENDING' : 'PENDING', // Online payments start as PENDING
+        subtotal: calculatedSubtotal,
+        deliveryFee: expectedDeliveryFee,
+        totalAmount: expectedTotal,
         items: {
-          create: items.map((item: any) => ({
-            menuItemId: item.menuItemId,
-            quantity: item.quantity,
-            price: item.price,
-          })),
+          create: validatedItems,
         },
       },
       include: {

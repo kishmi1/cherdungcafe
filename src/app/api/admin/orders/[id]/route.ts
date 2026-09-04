@@ -29,6 +29,49 @@ export async function PATCH(
       )
     }
 
+    // Fetch the order first to check current state
+    const existingOrder = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        items: {
+          include: {
+            menuItem: true
+          }
+        }
+      }
+    })
+
+    if (!existingOrder) {
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      )
+    }
+
+    // Admins have full permissions, but we should still prevent marking online payments as PAID
+    // without proper verification for security
+    if (paymentStatus === 'PAID' && existingOrder.paymentMethod !== 'CASH') {
+      return NextResponse.json(
+        { error: 'Online payments can only be marked as paid through payment gateway verification' },
+        { status: 403 }
+      )
+    }
+
+    // Validate status transitions
+    if (status) {
+      const statusOrder = ['PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'COMPLETED']
+      const currentIndex = statusOrder.indexOf(existingOrder.status)
+      const targetIndex = statusOrder.indexOf(status)
+
+      // Can only move forward or cancel
+      if (status !== 'CANCELLED' && targetIndex < currentIndex) {
+        return NextResponse.json(
+          { error: 'Cannot revert order status' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Update order status, payment status, or both
     const updateData: any = {}
     if (status) updateData.status = status

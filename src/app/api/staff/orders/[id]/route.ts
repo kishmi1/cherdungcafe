@@ -3,6 +3,45 @@ import { prisma } from '@/lib/prisma'
 import { requireStaffSession } from '@/lib/auth'
 import { sendOrderStatusUpdateEmail } from '@/lib/email'
 
+// Role-based permission matrix
+const rolePermissions = {
+  SUPERVISOR: {
+    canViewAllOrders: true,
+    canUpdateOrderStatus: true,
+    canViewPaymentInfo: true,
+    canUpdatePaymentStatus: true,
+    allowedStatusTransitions: ['PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'COMPLETED', 'CANCELLED']
+  },
+  CASHIER: {
+    canViewAllOrders: true,
+    canUpdateOrderStatus: true,
+    canViewPaymentInfo: true,
+    canUpdatePaymentStatus: true, // Only for CASH payments
+    allowedStatusTransitions: ['PENDING', 'CONFIRMED', 'CANCELLED']
+  },
+  KITCHEN_STAFF: {
+    canViewAllOrders: true,
+    canUpdateOrderStatus: true,
+    canViewPaymentInfo: false,
+    canUpdatePaymentStatus: false,
+    allowedStatusTransitions: ['PREPARING', 'READY']
+  },
+  BARISTA: {
+    canViewAllOrders: true,
+    canUpdateOrderStatus: true,
+    canViewPaymentInfo: false,
+    canUpdatePaymentStatus: false,
+    allowedStatusTransitions: ['PREPARING', 'READY']
+  },
+  WAITER: {
+    canViewAllOrders: true,
+    canUpdateOrderStatus: true,
+    canViewPaymentInfo: false,
+    canUpdatePaymentStatus: false,
+    allowedStatusTransitions: ['READY', 'COMPLETED']
+  }
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -18,6 +57,12 @@ export async function PATCH(
       )
     }
 
+    const session = authResult.session
+    const userPosition = session.position as keyof typeof rolePermissions
+    
+    // Get permissions for user's position
+    const permissions = rolePermissions[userPosition] || rolePermissions.WAITER // Default to WAITER if unknown
+
     const { id } = await params
     const orderId = parseInt(id)
     const { status, paymentStatus } = await request.json()
@@ -27,6 +72,81 @@ export async function PATCH(
         { error: 'Status or paymentStatus is required' },
         { status: 400 }
       )
+    }
+
+    // Fetch the order first to check current state
+    const existingOrder = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        items: {
+          include: {
+            menuItem: true
+          }
+        }
+      }
+    })
+
+    if (!existingOrder) {
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      )
+    }
+
+    // Check status update permissions
+    if (status) {
+      if (!permissions.canUpdateOrderStatus) {
+        return NextResponse.json(
+          { error: 'You do not have permission to update order status' },
+          { status: 403 }
+        )
+      }
+
+      if (!permissions.allowedStatusTransitions.includes(status)) {
+        return NextResponse.json(
+          { error: `You are not allowed to change order status to ${status}` },
+          { status: 403 }
+        )
+      }
+
+      // Validate status transitions
+      const statusOrder = ['PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'COMPLETED']
+      const currentIndex = statusOrder.indexOf(existingOrder.status)
+      const targetIndex = statusOrder.indexOf(status)
+
+      // Can only move forward or cancel
+      if (status !== 'CANCELLED' && targetIndex < currentIndex) {
+        return NextResponse.json(
+          { error: 'Cannot revert order status' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Check payment status update permissions
+    if (paymentStatus) {
+      if (!permissions.canUpdatePaymentStatus) {
+        return NextResponse.json(
+          { error: 'You do not have permission to update payment status' },
+          { status: 403 }
+        )
+      }
+
+      // Only CASHIER and SUPERVISOR can update payment status, and only for CASH payments
+      if (existingOrder.paymentMethod !== 'CASH' && userPosition !== 'SUPERVISOR') {
+        return NextResponse.json(
+          { error: 'Cannot update payment status for online payments' },
+          { status: 403 }
+        )
+      }
+
+      // Prevent marking online payments as PAID without proper verification
+      if (paymentStatus === 'PAID' && existingOrder.paymentMethod !== 'CASH') {
+        return NextResponse.json(
+          { error: 'Online payments can only be marked as paid through payment gateway verification' },
+          { status: 403 }
+        )
+      }
     }
 
     // Update order status, payment status, or both

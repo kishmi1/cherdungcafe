@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma"
-import { CheckCircle, Clock, Coffee, ArrowRight, Home } from "lucide-react"
+import { CheckCircle, Clock, Coffee, ArrowRight, Home, CreditCard, XCircle } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
 type OrderStatus = "PENDING" | "CONFIRMED" | "PREPARING" | "READY" | "COMPLETED" | "CANCELLED"
+type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED"
 
 const statusSteps: OrderStatus[] = ["PENDING", "CONFIRMED", "PREPARING", "READY", "COMPLETED"]
 
@@ -31,6 +32,26 @@ const getStatusLabel = (status: OrderStatus): string => {
   return labels[status]
 }
 
+const getPaymentStatusLabel = (status: PaymentStatus): string => {
+  const labels: Record<PaymentStatus, string> = {
+    PENDING: "Pending",
+    PAID: "Paid",
+    FAILED: "Failed",
+    REFUNDED: "Refunded"
+  }
+  return labels[status]
+}
+
+const getPaymentStatusColor = (status: PaymentStatus): string => {
+  const colors: Record<PaymentStatus, string> = {
+    PENDING: "#B68A52",
+    PAID: "#6B8E23",
+    FAILED: "#B94A48",
+    REFUNDED: "#6F8494"
+  }
+  return colors[status]
+}
+
 export default async function OrderSuccessPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const orderId = parseInt(id)
@@ -42,6 +63,12 @@ export default async function OrderSuccessPage({ params }: { params: Promise<{ i
         include: {
           menuItem: true
         }
+      },
+      payments: {
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 1
       }
     }
   })
@@ -51,6 +78,8 @@ export default async function OrderSuccessPage({ params }: { params: Promise<{ i
   }
 
   const currentStatus = order.status as OrderStatus
+  const currentPaymentStatus = order.paymentStatus as PaymentStatus
+  const latestPayment = order.payments[0]
 
   return (
     <div className="min-h-screen bg-[#F8FAFB]">
@@ -98,7 +127,9 @@ export default async function OrderSuccessPage({ params }: { params: Promise<{ i
                   </div>
                   <div>
                     <p className="text-sm text-[#737D83]">Payment Method</p>
-                    <p className="font-semibold text-[#292F33]">{order.paymentMethod}</p>
+                    <p className="font-semibold text-[#292F33]">
+                      {order.paymentMethod === 'CASH' ? 'Cash on Delivery' : order.paymentMethod}
+                    </p>
                   </div>
                   {order.email && (
                     <div className="md:col-span-2">
@@ -196,6 +227,64 @@ export default async function OrderSuccessPage({ params }: { params: Promise<{ i
                       </div>
                     )
                   })}
+                </div>
+              </div>
+
+              {/* Payment Information */}
+              <div className="rounded-2xl border border-[#DDE5E9] bg-white p-6 shadow-sm">
+                <h2 className="mb-4 text-lg font-semibold text-[#292F33]">
+                  Payment Information
+                </h2>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#737D83]">Payment Method</span>
+                    <span className="font-semibold text-[#292F33]">
+                      {order.paymentMethod === 'CASH' ? 'Cash on Delivery' : order.paymentMethod}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#737D83]">Payment Status</span>
+                    <div className="flex items-center gap-2">
+                      {currentPaymentStatus === 'PAID' ? (
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                      ) : currentPaymentStatus === 'FAILED' ? (
+                        <XCircle className="h-4 w-4 text-red-600" />
+                      ) : (
+                        <Clock className="h-4 w-4 text-yellow-600" />
+                      )}
+                      <span 
+                        className="font-semibold text-white px-2 py-1 rounded-full text-xs"
+                        style={{ backgroundColor: getPaymentStatusColor(currentPaymentStatus) }}
+                      >
+                        {getPaymentStatusLabel(currentPaymentStatus)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {latestPayment && latestPayment.transactionId && (
+                    <div className="pt-2 border-t border-[#E8EEF1]">
+                      <p className="text-xs text-[#737D83]">Transaction ID</p>
+                      <p className="text-sm font-mono text-[#292F33]">{latestPayment.transactionId}</p>
+                    </div>
+                  )}
+
+                  {latestPayment && latestPayment.reference && (
+                    <div>
+                      <p className="text-xs text-[#737D83]">Reference</p>
+                      <p className="text-sm font-mono text-[#292F33]">{latestPayment.reference}</p>
+                    </div>
+                  )}
+
+                  {latestPayment && latestPayment.paidAt && (
+                    <div>
+                      <p className="text-xs text-[#737D83]">Paid At</p>
+                      <p className="text-sm text-[#292F33]">
+                        {new Date(latestPayment.paidAt).toLocaleString()}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 

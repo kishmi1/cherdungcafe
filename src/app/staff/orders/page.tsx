@@ -335,7 +335,7 @@ export default function StaffOrdersPage() {
                     <div className="text-sm" style={{ color: '#756E68' }}>
                       <p><strong>Payment Method:</strong> {selectedOrder.paymentMethod === 'CASH' ? 'Cash on Delivery' : selectedOrder.paymentMethod}</p>
                       <p>
-                        <strong>Payment Status:</strong> {selectedOrder.paymentStatus === 'PAID' ? 'Paid ✅' : 'Pending'}
+                        <strong>Payment Status:</strong> {selectedOrder.paymentStatus === 'PAID' ? 'Paid ✅' : selectedOrder.paymentStatus === 'FAILED' ? 'Failed ❌' : 'Pending ⏳'}
                       </p>
                     </div>
                     {selectedOrder.paymentMethod === 'CASH' && selectedOrder.paymentStatus === 'PENDING' && (
@@ -351,6 +351,11 @@ export default function StaffOrdersPage() {
                       >
                         {updatingOrderId === selectedOrder.id ? 'Updating...' : 'Mark as Paid'}
                       </Button>
+                    )}
+                    {selectedOrder.paymentMethod !== 'CASH' && selectedOrder.paymentStatus === 'PAID' && (
+                      <div className="mt-2 p-2 rounded bg-green-50 border border-green-200">
+                        <p className="text-xs text-green-800">✓ Online payment verified</p>
+                      </div>
                     )}
                   </div>
 
