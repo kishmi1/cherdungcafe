@@ -92,7 +92,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify payment with Khalti using the verification API
-    const isProduction = process.env.NODE_ENV === 'production'
+    // Use production URL for Vercel deployments or if explicitly set
+    const isProduction = process.env.NODE_ENV === 'production' || 
+                        process.env.VERCEL_ENV === 'production' ||
+                        process.env.KHALTI_ENV === 'production'
     const verificationUrl = isProduction 
       ? 'https://khalti.com/api/v2/epayment/lookup/' 
       : 'https://a.khalti.com/api/v2/epayment/lookup/'

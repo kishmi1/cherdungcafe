@@ -32,6 +32,13 @@ export async function POST(request: NextRequest) {
     // Get Khalti credentials from environment variables
     const secretKey = process.env.KHALTI_SECRET_KEY
 
+    console.log('Khalti Configuration Debug:')
+    console.log('NODE_ENV:', process.env.NODE_ENV)
+    console.log('VERCEL_ENV:', process.env.VERCEL_ENV)
+    console.log('Secret Key set:', !!secretKey)
+    console.log('Secret Key length:', secretKey?.length)
+    console.log('Secret Key prefix:', secretKey?.substring(0, 8))
+
     if (!secretKey) {
       console.error('Khalti credentials not configured')
       return NextResponse.json(
@@ -114,7 +121,10 @@ export async function POST(request: NextRequest) {
     })
 
     // Khalti payment initiation
-    const isProduction = process.env.NODE_ENV === 'production'
+    // Use production URL for Vercel deployments or if explicitly set
+    const isProduction = process.env.NODE_ENV === 'production' || 
+                        process.env.VERCEL_ENV === 'production' ||
+                        process.env.KHALTI_ENV === 'production'
     const khaltiUrl = isProduction 
       ? 'https://khalti.com/api/v2/epayment/initiate/' 
       : 'https://a.khalti.com/api/v2/epayment/initiate/'
