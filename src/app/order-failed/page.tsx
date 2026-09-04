@@ -1,15 +1,15 @@
-"use client"
-
-import { useSearchParams } from "next/navigation"
 import { XCircle, RefreshCw, Home, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 
-export default function OrderFailedPage() {
-  const searchParams = useSearchParams()
-  const orderId = searchParams.get("orderId")
-  const reason = searchParams.get("reason")
+export default function OrderFailedPage({
+  searchParams,
+}: {
+  searchParams: { orderId?: string; reason?: string }
+}) {
+  const orderId = searchParams.orderId
+  const reason = searchParams.reason
 
-  const getErrorMessage = (reason: string | null) => {
+  const getErrorMessage = (reason: string | null | undefined) => {
     switch (reason) {
       case "payment_cancelled":
         return "Your payment was cancelled. You can try again or choose a different payment method."
