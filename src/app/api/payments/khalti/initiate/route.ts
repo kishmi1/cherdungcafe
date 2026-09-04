@@ -147,7 +147,22 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(paymentData)
     })
 
-    const khaltiData = await khaltiResponse.json()
+    let khaltiData
+    try {
+      khaltiData = await khaltiResponse.json()
+    } catch (jsonError) {
+      console.error('Khalti API returned non-JSON response:', jsonError)
+      // Update payment status to failed
+      await prisma.payment.update({
+        where: { id: payment.id },
+        data: { paymentStatus: 'FAILED' }
+      })
+
+      return NextResponse.json(
+        { error: 'Khalti gateway returned invalid response. Please try again.' },
+        { status: 500 }
+      )
+    }
 
     if (!khaltiResponse.ok) {
       // Update payment status to failed

@@ -252,14 +252,11 @@ export default function StaffLayout({
             }}
           >
 
-            <div
-              className="h-6 w-6 rounded-full flex items-center justify-center"
-              style={{
-                backgroundColor: "#B68A52",
-              }}
-            >
-              <span className="text-white text-xs font-bold">C</span>
-            </div>
+            <img
+              src="/logo.png"
+              alt="Cherdung Cafe Logo"
+              className="h-8 w-8 object-contain"
+            />
 
             <div>
 

@@ -105,7 +105,15 @@ export default function CheckoutPage() {
           body: JSON.stringify(orderData),
         })
 
-        const orderDataResponse = await orderResponse.json()
+        let orderDataResponse
+        try {
+          orderDataResponse = await orderResponse.json()
+        } catch (jsonError) {
+          // Response is not JSON, might be HTML error page
+          const textResponse = await orderResponse.text()
+          console.error('Order API returned non-JSON response:', textResponse.substring(0, 200))
+          throw new Error(`Server error: ${orderResponse.status} ${orderResponse.statusText}`)
+        }
 
         if (!orderResponse.ok) {
           throw new Error(orderDataResponse.error || "Failed to place order")
@@ -129,7 +137,15 @@ export default function CheckoutPage() {
           }),
         })
 
-        const paymentData = await paymentResponse.json()
+        let paymentData
+        try {
+          paymentData = await paymentResponse.json()
+        } catch (jsonError) {
+          // Response is not JSON, might be HTML error page
+          const textResponse = await paymentResponse.text()
+          console.error('Payment API returned non-JSON response:', textResponse.substring(0, 200))
+          throw new Error(`Payment gateway error: ${paymentResponse.status} ${paymentResponse.statusText}`)
+        }
 
         if (!paymentResponse.ok) {
           throw new Error(paymentData.error || "Failed to initiate payment")
@@ -168,7 +184,15 @@ export default function CheckoutPage() {
           body: JSON.stringify(orderData),
         })
 
-        const data = await response.json()
+        let data
+        try {
+          data = await response.json()
+        } catch (jsonError) {
+          // Response is not JSON, might be HTML error page
+          const textResponse = await response.text()
+          console.error('Order API returned non-JSON response:', textResponse.substring(0, 200))
+          throw new Error(`Server error: ${response.status} ${response.statusText}`)
+        }
 
         if (!response.ok) {
           throw new Error(data.error || "Failed to place order")

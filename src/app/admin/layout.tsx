@@ -252,11 +252,10 @@ export default function AdminLayout({
             }}
           >
 
-            <Coffee
-              className="h-6 w-6"
-              style={{
-                color: "#B68A52",
-              }}
+            <img
+              src="/logo.png"
+              alt="Cherdung Cafe Logo"
+              className="h-8 w-8 object-contain"
             />
 
             <div>

@@ -109,7 +109,28 @@ export async function GET(request: NextRequest) {
       body: JSON.stringify({ pidx })
     })
 
-    const verificationData = await verificationResponse.json()
+    let verificationData
+    try {
+      verificationData = await verificationResponse.json()
+    } catch (jsonError) {
+      console.error('Khalti verification API returned non-JSON response:', jsonError)
+      console.error('Response text:', await verificationResponse.text())
+      
+      // Payment verification failed
+      await prisma.payment.updateMany({
+        where: {
+          transactionId,
+          orderId: parsedOrderId
+        },
+        data: {
+          paymentStatus: 'FAILED'
+        }
+      })
+
+      return NextResponse.redirect(
+        new URL(`/order-failed?orderId=${orderId}&reason=verification_failed`, request.url)
+      )
+    }
 
     console.log('Khalti verification response status:', verificationResponse.status)
     console.log('Khalti verification response data:', JSON.stringify(verificationData, null, 2))

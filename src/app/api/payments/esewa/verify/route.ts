@@ -48,7 +48,9 @@ async function handleEsewaCallback(request: NextRequest) {
     let decodedData
     try {
       const decodedBuffer = Buffer.from(data, 'base64')
-      decodedData = JSON.parse(decodedBuffer.toString('utf-8'))
+      const decodedString = decodedBuffer.toString('utf-8')
+      console.log('Decoded eSewa string:', decodedString)
+      decodedData = JSON.parse(decodedString)
       console.log('Decoded eSewa response:', JSON.stringify(decodedData, null, 2))
     } catch (error) {
       console.error('Failed to decode eSewa response:', error)
