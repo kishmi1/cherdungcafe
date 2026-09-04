@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
       : 'https://a.khalti.com/api/v2/epayment/initiate/'
 
     // Ensure APP_URL has proper protocol
-    let appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    let appUrl = process.env.APP_URL || 'http://localhost:3000'
     if (!appUrl.startsWith('http://') && !appUrl.startsWith('https://')) {
       appUrl = `http://${appUrl}`
     }

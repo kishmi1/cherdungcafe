@@ -34,10 +34,14 @@ export async function POST(request: NextRequest) {
     const productCode = process.env.ESEWA_PRODUCT_CODE
     const secretKey = process.env.ESEWA_SECRET_KEY
 
-    console.log('eSewa credentials check:')
+    console.log('eSewa Configuration Debug:')
+    console.log('NODE_ENV:', process.env.NODE_ENV)
+    console.log('VERCEL_ENV:', process.env.VERCEL_ENV)
     console.log('Product code:', productCode)
     console.log('Secret key configured:', !!secretKey)
     console.log('Secret key length:', secretKey?.length)
+    console.log('Secret key prefix:', secretKey?.substring(0, 8))
+    console.log('APP_URL:', process.env.APP_URL)
 
     if (!productCode || !secretKey) {
       console.error('eSewa credentials not configured')
@@ -148,7 +152,7 @@ export async function POST(request: NextRequest) {
     const esewaUrl = 'https://rc-epay.esewa.com.np/api/epay/main/v2/form'
 
     // Ensure APP_URL has proper protocol
-    let appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    let appUrl = process.env.APP_URL || 'http://localhost:3000'
     if (!appUrl.startsWith('http://') && !appUrl.startsWith('https://')) {
       appUrl = `http://${appUrl}`
     }

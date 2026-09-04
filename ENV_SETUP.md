@@ -46,7 +46,10 @@ KHALTI_SECRET_KEY="your_khalti_secret_key"
 
 **Required:**
 ```bash
-# Application URL (used for payment callbacks)
+# Application URL (used for payment callbacks - server-side only)
+APP_URL="http://localhost:3000"  # Change to your production domain
+
+# Application URL (used for email links - client-side)
 NEXT_PUBLIC_APP_URL="http://localhost:3000"  # Change to your production domain
 
 # Environment
@@ -100,7 +103,8 @@ RESEND_FROM_EMAIL="noreply@cherdungcafe.com"
 
 ## Production Deployment Checklist
 
-- [ ] Update `NEXT_PUBLIC_APP_URL` to production domain
+- [ ] Update `APP_URL` to production domain (for payment callbacks)
+- [ ] Update `NEXT_PUBLIC_APP_URL` to production domain (for email links)
 - [ ] Set `NODE_ENV=production`
 - [ ] Use production payment gateway credentials
 - [ ] Configure SSL/HTTPS for your domain
@@ -113,7 +117,8 @@ RESEND_FROM_EMAIL="noreply@cherdungcafe.com"
 
 ### Payment initiation fails
 - Check that payment gateway credentials are correctly set
-- Verify `NEXT_PUBLIC_APP_URL` is accessible
+- Verify `APP_URL` is accessible (for payment callbacks)
+- Verify `NEXT_PUBLIC_APP_URL` is accessible (for email links)
 - Check browser console for JavaScript errors
 - Verify payment gateway API status
 

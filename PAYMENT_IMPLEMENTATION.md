@@ -275,7 +275,8 @@ KHALTI_SECRET_KEY="your_khalti_secret_key"
 
 ### Application Configuration
 ```bash
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+APP_URL="http://localhost:3000"  # For payment callbacks (server-side)
+NEXT_PUBLIC_APP_URL="http://localhost:3000"  # For email links (client-side)
 NODE_ENV="development"
 ```
 
@@ -286,7 +287,8 @@ NODE_ENV="development"
 1. **Set up environment variables:**
    - Create `.env` file in project root
    - Add payment gateway sandbox credentials
-   - Set `NEXT_PUBLIC_APP_URL=http://localhost:3000`
+   - Set `APP_URL=http://localhost:3000` (for payment callbacks)
+   - Set `NEXT_PUBLIC_APP_URL=http://localhost:3000` (for email links)
 
 2. **Run database migration:**
    ```bash
@@ -407,7 +409,8 @@ NODE_ENV="development"
 
 ## Production Deployment Checklist
 
-- [ ] Update `NEXT_PUBLIC_APP_URL` to production domain
+- [ ] Update `APP_URL` to production domain (for payment callbacks)
+- [ ] Update `NEXT_PUBLIC_APP_URL` to production domain (for email links)
 - [ ] Set `NODE_ENV=production`
 - [ ] Use production payment gateway credentials
 - [ ] Configure SSL/HTTPS for domain
@@ -444,7 +447,8 @@ NODE_ENV="development"
 
 **Payment initiation fails:**
 - Check payment gateway credentials
-- Verify `NEXT_PUBLIC_APP_URL` is correct
+- Verify `APP_URL` is correct (for payment callbacks)
+- Verify `NEXT_PUBLIC_APP_URL` is correct (for email links)
 - Check browser console for errors
 - Verify payment gateway API status
 
