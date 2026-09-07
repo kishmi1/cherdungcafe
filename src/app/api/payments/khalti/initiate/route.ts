@@ -176,20 +176,33 @@ export async function POST(request: NextRequest) {
     })
 
     // =========================
-    // 12. Khalti Sandbox URL
+    // 12. Khalti API URL
     // =========================
-    // IMPORTANT:
-    // This is fixed to Sandbox because
-    // you are currently using Sandbox credentials.
-
-    const khaltiUrl =
-      'https://a.khalti.com/api/v2/epayment/initiate/'
+    // Use production URL for Vercel deployments or if explicitly set
+    const isProduction = process.env.NODE_ENV === 'production' || 
+                        process.env.VERCEL_ENV === 'production' ||
+                        process.env.KHALTI_ENV === 'production'
+    
+    const khaltiUrl = isProduction
+      ? 'https://khalti.com/api/v2/epayment/initiate/'
+      : 'https://a.khalti.com/api/v2/epayment/initiate/'
 
     // =========================
     // 13. App URL
     // =========================
-    let appUrl =
-      process.env.APP_URL || 'http://localhost:3000'
+    let appUrl = process.env.APP_URL
+
+    // For Vercel deployments, use the host from the request
+    if (!appUrl && process.env.VERCEL) {
+      const host = request.headers.get('host') || 'localhost:3000'
+      const protocol = request.headers.get('x-forwarded-proto') || 'https'
+      appUrl = `${protocol}://${host}`
+    }
+
+    // Fallback to localhost for development
+    if (!appUrl) {
+      appUrl = 'http://localhost:3000'
+    }
 
     // Remove trailing slash
     appUrl = appUrl.replace(/\/+$/, '')

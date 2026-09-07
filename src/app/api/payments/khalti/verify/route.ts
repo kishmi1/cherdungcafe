@@ -18,6 +18,8 @@ export async function GET(request: NextRequest) {
     console.log('Amount:', amount)
     console.log('Status:', status)
     console.log('Full URL:', request.url)
+    console.log('Request host:', request.headers.get('host'))
+    console.log('Request protocol:', request.headers.get('x-forwarded-proto'))
 
     // Validate required parameters
     if (!orderId || !transactionId || !pidx || !amount || !status) {
@@ -93,11 +95,17 @@ export async function GET(request: NextRequest) {
 
     // Verify payment with Khalti using the verification API
     // Use production URL for Vercel deployments or if explicitly set
-    const isProduction = process.env.NODE_ENV === 'production' || 
+    const isProduction = process.env.NODE_ENV === 'production' ||
                         process.env.VERCEL_ENV === 'production' ||
                         process.env.KHALTI_ENV === 'production'
-    const verificationUrl = isProduction 
-      ? 'https://khalti.com/api/v2/epayment/lookup/' 
+    
+    console.log('Environment check - NODE_ENV:', process.env.NODE_ENV)
+    console.log('Environment check - VERCEL_ENV:', process.env.VERCEL_ENV)
+    console.log('Environment check - KHALTI_ENV:', process.env.KHALTI_ENV)
+    console.log('Is production mode:', isProduction)
+    
+    const verificationUrl = isProduction
+      ? 'https://khalti.com/api/v2/epayment/lookup/'
       : 'https://a.khalti.com/api/v2/epayment/lookup/'
     
     console.log('Khalti verification URL:', verificationUrl)
