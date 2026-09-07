@@ -5,51 +5,75 @@ export async function POST(request: NextRequest) {
   try {
     const { orderId, amount, return_url } = await request.json()
 
-    // Validate required fields
-    if (!orderId || !amount) {
+    // =========================
+    // 1. Validate required fields
+    // =========================
+    if (!orderId || amount === undefined || amount === null) {
       return NextResponse.json(
         { error: 'Order ID and amount are required' },
         { status: 400 }
       )
     }
 
-    // Validate order ID is a number
-    if (typeof orderId !== 'number' || isNaN(orderId)) {
+    // =========================
+    // 2. Validate Order ID
+    // =========================
+    if (typeof orderId !== 'number' || Number.isNaN(orderId)) {
       return NextResponse.json(
         { error: 'Invalid order ID' },
         { status: 400 }
       )
     }
 
-    // Validate amount is a positive number
-    if (typeof amount !== 'number' || isNaN(amount) || amount <= 0) {
+    // =========================
+    // 3. Validate Amount
+    // =========================
+    if (
+      typeof amount !== 'number' ||
+      Number.isNaN(amount) ||
+      amount <= 0
+    ) {
       return NextResponse.json(
         { error: 'Invalid amount' },
         { status: 400 }
       )
     }
 
-    // Get Khalti credentials from environment variables
+    // =========================
+    // 4. Get Khalti Secret Key
+    // =========================
     const secretKey = process.env.KHALTI_SECRET_KEY
 
-    console.log('Khalti Configuration Debug:')
+    console.log('========== KHALTI DEBUG ==========')
     console.log('NODE_ENV:', process.env.NODE_ENV)
     console.log('VERCEL_ENV:', process.env.VERCEL_ENV)
-    console.log('Secret Key set:', !!secretKey)
-    console.log('Secret Key length:', secretKey?.length)
-    console.log('Secret Key prefix:', secretKey?.substring(0, 8))
+    console.log('Secret Key exists:', Boolean(secretKey))
+    console.log('Secret Key length:', secretKey?.length || 0)
+    console.log(
+      'Secret Key prefix:',
+      secretKey ? secretKey.substring(0, 8) + '...' : 'NOT SET'
+    )
+    console.log('===================================')
 
     if (!secretKey) {
-      console.error('Khalti credentials not configured')
+      console.error('KHALTI_SECRET_KEY is not configured')
+
       return NextResponse.json(
-        { error: 'Payment gateway not configured. Please contact support.' },
+        {
+          error:
+            'Khalti payment gateway is not configured. Please contact support.'
+        },
         { status: 500 }
       )
     }
 
-    // Fetch order to validate
+    // =========================
+    // 5. Find Order
+    // =========================
     const order = await prisma.order.findUnique({
-      where: { id: orderId },
+      where: {
+        id: orderId
+      },
       include: {
         items: {
           include: {
@@ -67,49 +91,80 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if order already has a successful payment
-    const existingPayment = order.payments.find(p => p.paymentStatus === 'PAID')
-    if (existingPayment) {
+    // =========================
+    // 6. Check if already paid
+    // =========================
+    const existingPaidPayment = order.payments.find(
+      (payment) => payment.paymentStatus === 'PAID'
+    )
+
+    if (existingPaidPayment) {
       return NextResponse.json(
         { error: 'Order already paid' },
         { status: 400 }
       )
     }
 
-    // Check if order is cancelled
+    // =========================
+    // 7. Check cancelled order
+    // =========================
     if (order.status === 'CANCELLED') {
       return NextResponse.json(
-        { error: 'Cannot process payment for cancelled order' },
+        {
+          error:
+            'Cannot process payment for a cancelled order'
+        },
         { status: 400 }
       )
     }
 
-    // Validate amount matches order total
-    if (Math.abs(amount - order.totalAmount) > 0.01) {
+    // =========================
+    // 8. Check amount
+    // =========================
+    const orderTotal = Number(order.totalAmount)
+
+    if (Math.abs(amount - orderTotal) > 0.01) {
       return NextResponse.json(
-        { error: 'Amount mismatch. Please refresh and try again.' },
+        {
+          error:
+            'Amount mismatch. Please refresh the page and try again.'
+        },
         { status: 400 }
       )
     }
 
-    // Check for existing pending payment (prevent duplicate payment initiation)
-    const existingPendingPayment = order.payments.find(p => 
-      p.paymentStatus === 'PENDING' && 
-      p.paymentMethod === 'KHALTI' &&
-      p.createdAt > new Date(Date.now() - 15 * 60 * 1000) // Within last 15 minutes
+    // =========================
+    // 9. Check existing pending payment
+    // =========================
+    const fifteenMinutesAgo = new Date(
+      Date.now() - 15 * 60 * 1000
+    )
+
+    const existingPendingPayment = order.payments.find(
+      (payment) =>
+        payment.paymentStatus === 'PENDING' &&
+        payment.paymentMethod === 'KHALTI' &&
+        payment.createdAt > fifteenMinutesAgo
     )
 
     if (existingPendingPayment) {
       return NextResponse.json(
-        { error: 'Payment already initiated. Please complete or cancel the existing payment.' },
+        {
+          error:
+            'Payment already initiated. Please complete or cancel the existing payment.'
+        },
         { status: 400 }
       )
     }
 
-    // Generate unique transaction ID
+    // =========================
+    // 10. Generate transaction ID
+    // =========================
     const transactionId = `ORD-${orderId}-${Date.now()}`
 
-    // Create pending payment record
+    // =========================
+    // 11. Create pending payment
+    // =========================
     const payment = await prisma.payment.create({
       data: {
         orderId,
@@ -120,27 +175,55 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Khalti payment initiation
-    // Use production URL for Vercel deployments or if explicitly set
-    const isProduction = process.env.NODE_ENV === 'production' || 
-                        process.env.VERCEL_ENV === 'production' ||
-                        process.env.KHALTI_ENV === 'production'
-    const khaltiUrl = isProduction 
-      ? 'https://khalti.com/api/v2/epayment/initiate/' 
-      : 'https://a.khalti.com/api/v2/epayment/initiate/'
+    // =========================
+    // 12. Khalti Sandbox URL
+    // =========================
+    // IMPORTANT:
+    // This is fixed to Sandbox because
+    // you are currently using Sandbox credentials.
 
-    // Ensure APP_URL has proper protocol
-    let appUrl = process.env.APP_URL || 'http://localhost:3000'
-    if (!appUrl.startsWith('http://') && !appUrl.startsWith('https://')) {
-      appUrl = `http://${appUrl}`
+    const khaltiUrl =
+      'https://a.khalti.com/api/v2/epayment/initiate/'
+
+    // =========================
+    // 13. App URL
+    // =========================
+    let appUrl =
+      process.env.APP_URL || 'http://localhost:3000'
+
+    // Remove trailing slash
+    appUrl = appUrl.replace(/\/+$/, '')
+
+    // Add protocol if missing
+    if (
+      !appUrl.startsWith('http://') &&
+      !appUrl.startsWith('https://')
+    ) {
+      appUrl = `https://${appUrl}`
     }
 
+    // =========================
+    // 14. Return URL
+    // =========================
+    const finalReturnUrl =
+      return_url ||
+      `${appUrl}/api/payments/khalti/verify?orderId=${orderId}&transactionId=${transactionId}`
+
+    // =========================
+    // 15. Khalti Payment Data
+    // =========================
     const paymentData = {
-      return_url: return_url || `${appUrl}/api/payments/khalti/verify?orderId=${orderId}&transactionId=${transactionId}`,
+      return_url: finalReturnUrl,
+
       website_url: appUrl,
-      amount: Math.round(amount * 100), // Khalti uses paisa (amount * 100)
+
+      // Khalti expects amount in paisa
+      amount: Math.round(amount * 100),
+
       purchase_order_id: transactionId,
+
       purchase_order_name: `Order #${orderId}`,
+
       customer_info: {
         name: order.customerName,
         email: order.email || '',
@@ -148,55 +231,157 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    console.log('========== KHALTI REQUEST ==========')
+    console.log('Khalti URL:', khaltiUrl)
+    console.log('Website URL:', appUrl)
+    console.log('Return URL:', finalReturnUrl)
+    console.log('Amount:', paymentData.amount)
+    console.log('Purchase Order ID:', transactionId)
+    console.log('Customer Name:', order.customerName)
+    console.log('Customer Phone:', order.phone)
+    console.log('=====================================')
+
+    // =========================
+    // 16. Send request to Khalti
+    // =========================
     const khaltiResponse = await fetch(khaltiUrl, {
       method: 'POST',
+
       headers: {
-        'Authorization': `Key ${secretKey}`,
+        Authorization: `Key ${secretKey.trim()}`,
         'Content-Type': 'application/json'
       },
+
       body: JSON.stringify(paymentData)
     })
 
-    let khaltiData
+    // =========================
+    // 17. Get Khalti response
+    // =========================
+    const responseText = await khaltiResponse.text()
+
+    console.log('========== KHALTI RESPONSE ==========')
+    console.log('Status:', khaltiResponse.status)
+    console.log('Response:', responseText)
+    console.log('======================================')
+
+    let khaltiData: any
+
     try {
-      khaltiData = await khaltiResponse.json()
-    } catch (jsonError) {
-      console.error('Khalti API returned non-JSON response:', jsonError)
-      // Update payment status to failed
+      khaltiData = JSON.parse(responseText)
+    } catch {
+      console.error(
+        'Khalti returned non-JSON response:',
+        responseText
+      )
+
+      // Mark payment failed
       await prisma.payment.update({
-        where: { id: payment.id },
-        data: { paymentStatus: 'FAILED' }
+        where: {
+          id: payment.id
+        },
+        data: {
+          paymentStatus: 'FAILED'
+        }
       })
 
       return NextResponse.json(
-        { error: 'Khalti gateway returned invalid response. Please try again.' },
+        {
+          error:
+            'Khalti gateway returned an invalid response. Please try again.'
+        },
         { status: 500 }
       )
     }
 
+    // =========================
+    // 18. Handle Khalti error
+    // =========================
     if (!khaltiResponse.ok) {
-      // Update payment status to failed
+      console.error(
+        'Khalti API Error:',
+        khaltiData
+      )
+
+      // Mark payment failed
       await prisma.payment.update({
-        where: { id: payment.id },
-        data: { paymentStatus: 'FAILED' }
+        where: {
+          id: payment.id
+        },
+        data: {
+          paymentStatus: 'FAILED'
+        }
       })
 
       return NextResponse.json(
-        { error: khaltiData.detail || 'Failed to initiate Khalti payment' },
+        {
+          error:
+            khaltiData?.detail ||
+            khaltiData?.message ||
+            khaltiData?.error_key ||
+            'Failed to initiate Khalti payment',
+
+          khaltiError:
+            process.env.NODE_ENV === 'development'
+              ? khaltiData
+              : undefined
+        },
         { status: 500 }
       )
     }
 
+    // =========================
+    // 19. Validate payment URL
+    // =========================
+    if (!khaltiData?.payment_url) {
+      console.error(
+        'Khalti response does not contain payment_url:',
+        khaltiData
+      )
+
+      await prisma.payment.update({
+        where: {
+          id: payment.id
+        },
+        data: {
+          paymentStatus: 'FAILED'
+        }
+      })
+
+      return NextResponse.json(
+        {
+          error:
+            'Khalti did not return a payment URL. Please try again.'
+        },
+        { status: 500 }
+      )
+    }
+
+    // =========================
+    // 20. Success response
+    // =========================
     return NextResponse.json({
+      success: true,
+
       paymentUrl: khaltiData.payment_url,
+
       paymentId: payment.id,
+
       transactionId,
-      pidx: khaltiData.pidx // Khalti payment index
+
+      pidx: khaltiData.pidx || null
     })
   } catch (error) {
-    console.error('Error initiating Khalti payment:', error)
+    console.error(
+      'Error initiating Khalti payment:',
+      error
+    )
+
     return NextResponse.json(
-      { error: 'An error occurred while initiating payment. Please try again.' },
+      {
+        error:
+          'An error occurred while initiating payment. Please try again.'
+      },
       { status: 500 }
     )
   }
