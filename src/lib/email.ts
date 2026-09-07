@@ -1,7 +1,12 @@
-import { Resend } from 'resend'
+import { BrevoClient } from '@getbrevo/brevo'
 
-// Initialize Resend with API key from environment variable
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+// Initialize Brevo with API key from environment variable
+let brevo: BrevoClient | null = null
+if (process.env.BREVO_API_KEY) {
+  brevo = new BrevoClient({
+    apiKey: process.env.BREVO_API_KEY
+  })
+}
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@cherdungcafe.com'
 const CAFE_EMAIL = process.env.CAFE_EMAIL || 'info@cherdungcafe.com'
@@ -14,22 +19,27 @@ export interface EmailData {
 }
 
 export async function sendEmail({ to, subject, html, text }: EmailData): Promise<boolean> {
-  if (!resend) {
-    console.warn('Email service not configured. Email sending is disabled.')
+  if (!brevo) {
+    console.warn('Brevo service not configured. Email sending is disabled.')
     return false
   }
 
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
-      to,
-      subject,
-      html,
-      text: text || html.replace(/<[^>]*>/g, '') // Strip HTML for plain text version
-    })
+    console.log('Attempting to send email to:', to, 'from:', FROM_EMAIL)
+    
+    const sendSmtpEmail = {
+      to: [{ email: to }],
+      sender: { email: FROM_EMAIL, name: 'Cherdung Café' },
+      subject: subject,
+      htmlContent: html,
+      textContent: text || html.replace(/<[^>]*>/g, '') // Strip HTML for plain text version
+    }
+
+    const result = await brevo.transactionalEmails.sendTransacEmail(sendSmtpEmail)
+    console.log('Email sent successfully to:', to, 'Result:', result)
     return true
   } catch (error) {
-    console.error('Failed to send email:', error)
+    console.error('Failed to send email to:', to, 'Error:', error)
     return false
   }
 }

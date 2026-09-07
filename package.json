@@ -12,6 +12,7 @@
     "seed:settings": "tsx scripts/seed-settings.ts"
   },
   "dependencies": {
+    "@getbrevo/brevo": "^6.0.3",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "@tiptap/react": "^3.30.2",

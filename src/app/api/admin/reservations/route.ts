@@ -15,6 +15,41 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Check if this is a debug request
+    const { searchParams } = new URL(request.url)
+    const debug = searchParams.get('debug')
+
+    if (debug === 'emails') {
+      // Debug: Return all email addresses in reservations
+      const reservations = await prisma.reservation.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          status: true
+        }
+      })
+
+      const emailCounts: Record<string, number> = {}
+
+      // Count emails
+      reservations.forEach(r => {
+        emailCounts[r.email] = (emailCounts[r.email] || 0) + 1
+      })
+
+      const emailStats = {
+        total: reservations.length,
+        uniqueEmails: [...new Set(reservations.map(r => r.email))],
+        emailCounts
+      }
+
+      return NextResponse.json({
+        debug: true,
+        reservations,
+        stats: emailStats
+      })
+    }
+
     // Fetch reservations from database
     const reservations = await prisma.reservation.findMany({
       orderBy: [
@@ -55,6 +90,21 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
+    // First, get the current reservation to check email
+    const currentReservation = await prisma.reservation.findUnique({
+      where: { id }
+    })
+
+    if (!currentReservation) {
+      return NextResponse.json(
+        { error: 'Reservation not found' },
+        { status: 404 }
+      )
+    }
+
+    console.log('Current reservation email:', currentReservation.email)
+    console.log('Updating reservation ID:', id, 'from status:', currentReservation.status, 'to:', status)
+
     // Update reservation status
     const reservation = await prisma.reservation.update({
       where: { id },
@@ -63,6 +113,7 @@ export async function PATCH(request: NextRequest) {
 
     // Send email notification to customer about status update
     try {
+      console.log('Sending status update email to:', reservation.email, 'for reservation:', reservation.id)
       await sendReservationStatusUpdateEmail({
         id: reservation.id,
         name: reservation.name,
@@ -72,6 +123,7 @@ export async function PATCH(request: NextRequest) {
         reservationTime: reservation.reservationTime,
         status: reservation.status
       })
+      console.log('Status update email sent successfully to:', reservation.email)
     } catch (emailError) {
       console.error('Failed to send reservation status update email:', emailError)
       // Don't fail the request if email fails
