@@ -134,8 +134,8 @@ export default function EnquiryPage() {
       <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Make an Enquiry</h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-serif">Make an Enquiry</h1>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto font-sans">
               Have a question or want to learn more about our services? We'd love to hear from you!
             </p>
           </div>
@@ -173,7 +173,7 @@ export default function EnquiryPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
                     Name *
                   </label>
                   <input
@@ -190,7 +190,7 @@ export default function EnquiryPage() {
                   {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
                     Email *
                   </label>
                   <input
@@ -209,7 +209,7 @@ export default function EnquiryPage() {
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
                   Phone (Optional)
                 </label>
                 <input
@@ -227,7 +227,7 @@ export default function EnquiryPage() {
               </div>
 
               <div>
-                <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
                   Enquiry Type *
                 </label>
                 <select
@@ -250,7 +250,7 @@ export default function EnquiryPage() {
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
                   Subject *
                 </label>
                 <input
@@ -268,7 +268,7 @@ export default function EnquiryPage() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
                   Message *
                 </label>
                 <textarea
@@ -296,7 +296,7 @@ export default function EnquiryPage() {
                     errors.consent ? "border-red-500" : ""
                   }`}
                 />
-                <label htmlFor="consent" className="text-sm text-gray-600">
+                <label htmlFor="consent" className="text-sm text-gray-600 font-sans">
                   I consent to Cherdung Café storing my enquiry details and contacting me regarding my enquiry. I understand my data will be processed according to the privacy policy. *
                 </label>
               </div>
@@ -317,7 +317,7 @@ export default function EnquiryPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-amber-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-amber-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-sans"
               >
                 {isSubmitting ? (
                   <>
@@ -334,8 +334,8 @@ export default function EnquiryPage() {
             </form>
 
             <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-3">What happens next?</h3>
-              <ul className="text-sm text-gray-600 space-y-2">
+              <h3 className="font-semibold text-gray-900 mb-3 font-serif">What happens next?</h3>
+              <ul className="text-sm text-gray-600 space-y-2 font-sans">
                 <li>• We'll review your enquiry within 24 hours</li>
                 <li>• You'll receive an email confirmation of your submission</li>
                 <li>• Our team will respond to your enquiry via email or phone</li>
@@ -343,7 +343,7 @@ export default function EnquiryPage() {
               </ul>
             </div>
 
-            <p className="text-center text-sm text-gray-500 mt-6">
+            <p className="text-center text-sm text-gray-500 mt-6 font-sans">
               Prefer to <Link href="/contact" className="text-amber-600 hover:text-amber-700">contact us directly</Link> or visit our café?
             </p>
           </div>

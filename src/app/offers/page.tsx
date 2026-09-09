@@ -170,6 +170,7 @@ export default function OffersPage() {
               text-[#3B2A20]
               md:text-5xl
               lg:text-6xl
+              font-serif
             "
           >
             Special Offers
@@ -184,6 +185,7 @@ export default function OffersPage() {
               leading-relaxed
               text-[#756E68]
               md:text-lg
+              font-sans
             "
           >
             Discover amazing deals and exclusive promotions
@@ -206,6 +208,7 @@ export default function OffersPage() {
                 font-semibold
                 transition-all
                 duration-300
+                font-sans
                 ${
                   filter === "all"
                     ? `
@@ -286,6 +289,7 @@ export default function OffersPage() {
                 uppercase
                 tracking-[0.18em]
                 text-[#C28A4A]
+                font-sans
               "
             >
               Limited Time
@@ -298,6 +302,7 @@ export default function OffersPage() {
                 tracking-tight
                 text-[#3B2A20]
                 md:text-4xl
+                font-serif
               "
             >
               Enjoy More, Pay Less
@@ -312,6 +317,7 @@ export default function OffersPage() {
                 leading-relaxed
                 text-[#756E68]
                 md:text-base
+                font-sans
               "
             >
               Take advantage of our special café offers and promotions.
@@ -415,6 +421,7 @@ export default function OffersPage() {
                           font-semibold
                           leading-snug
                           text-[#3B2A20]
+                          font-serif
                         "
                       >
                         {offer.title}
@@ -441,6 +448,7 @@ export default function OffersPage() {
                         text-sm
                         leading-6
                         text-[#756E68]
+                        font-sans
                       "
                     >
                       {offer.description}
@@ -481,6 +489,7 @@ export default function OffersPage() {
                             text-sm
                             font-bold
                             text-[#8B5438]
+                            font-sans
                           "
                         >
                           {offer.discount}
@@ -502,6 +511,7 @@ export default function OffersPage() {
                             uppercase
                             tracking-wider
                             text-[#9A7450]
+                            font-sans
                           "
                         >
                           Promo Code
@@ -544,6 +554,7 @@ export default function OffersPage() {
                               font-bold
                               tracking-wide
                               text-[#7A4E2D]
+                              font-sans
                             "
                           >
                             {offer.promoCode}
@@ -602,7 +613,7 @@ export default function OffersPage() {
 
                         <Clock className="h-4 w-4 text-[#B85C38]" />
 
-                        <span className="font-semibold text-[#8B5438]">
+                        <span className="font-semibold text-[#8B5438] font-sans">
                           {getTimeRemaining(offer.endsAt)}
                         </span>
 
@@ -624,7 +635,7 @@ export default function OffersPage() {
                         "
                       >
 
-                        <strong className="font-semibold text-[#4B3A30]">
+                        <strong className="font-semibold text-[#4B3A30] font-serif">
                           Terms:
                         </strong>{" "}
 
@@ -680,6 +691,7 @@ export default function OffersPage() {
                     text-xl
                     font-semibold
                     text-[#3B2A20]
+                    font-serif
                   "
                 >
                   No Active Offers
@@ -693,6 +705,7 @@ export default function OffersPage() {
                     text-sm
                     leading-6
                     text-[#756E68]
+                    font-sans
                   "
                 >
                   {filter === "featured"

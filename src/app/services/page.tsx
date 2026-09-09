@@ -117,6 +117,7 @@ export default async function ServicesPage() {
                 text-[#3B2A20]
                 md:text-5xl
                 lg:text-6xl
+                font-serif
               "
             >
               Our Services
@@ -130,6 +131,7 @@ export default async function ServicesPage() {
                 leading-relaxed
                 text-[#756E68]
                 md:text-lg
+                font-sans
               "
             >
               More than just coffee — an experience crafted for you.
@@ -147,7 +149,7 @@ export default async function ServicesPage() {
           {/* Section Heading */}
           <div className="mb-10 text-center">
 
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#9A7450]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#9A7450] font-sans">
               What We Offer
             </p>
 
@@ -158,6 +160,7 @@ export default async function ServicesPage() {
                 tracking-tight
                 text-[#3B2A20]
                 md:text-4xl
+                font-serif
               "
             >
               All Services
@@ -172,6 +175,7 @@ export default async function ServicesPage() {
                 leading-relaxed
                 text-[#756E68]
                 md:text-base
+                font-sans
               "
             >
               Everything you need for the perfect café experience
@@ -238,6 +242,7 @@ export default async function ServicesPage() {
                               text-lg
                               font-semibold
                               text-[#3B2A20]
+                              font-serif
                             "
                           >
                             {service.title}
@@ -248,6 +253,7 @@ export default async function ServicesPage() {
                               text-sm
                               leading-6
                               text-[#756E68]
+                              font-sans
                             "
                           >
                             {service.description}
@@ -260,6 +266,7 @@ export default async function ServicesPage() {
                                 text-xs
                                 font-semibold
                                 text-[#8B684A]
+                                font-sans
                               "
                             >
                               {service.priceNote}
@@ -289,6 +296,7 @@ export default async function ServicesPage() {
                           transition-colors
                           duration-300
                           hover:text-[#4F321F]
+                          font-sans
                         "
                       >
                         Learn More
@@ -323,7 +331,7 @@ export default async function ServicesPage() {
 
           <div className="mb-10 text-center">
 
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#68745F]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#68745F] font-sans">
               The Café Experience
             </p>
 
@@ -334,6 +342,7 @@ export default async function ServicesPage() {
                 tracking-tight
                 text-[#34402F]
                 md:text-4xl
+                font-serif
               "
             >
               Made for Every Moment
@@ -348,6 +357,7 @@ export default async function ServicesPage() {
                 leading-relaxed
                 text-[#697267]
                 md:text-base
+                font-sans
               "
             >
               A welcoming place for coffee, food, work, conversations,
@@ -394,6 +404,7 @@ export default async function ServicesPage() {
                   leading-7
                   text-[#697267]
                   md:text-lg
+                  font-sans
                 "
               >
                 Whether you're meeting friends, working remotely,
@@ -409,7 +420,7 @@ export default async function ServicesPage() {
                     <Check className="h-4 w-4 text-[#5F6E55]" />
                   </div>
 
-                  <span className="text-sm font-medium text-[#3F493B]">
+                  <span className="text-sm font-medium text-[#3F493B] font-sans">
                     Freshly prepared food
                   </span>
                 </div>
@@ -420,7 +431,7 @@ export default async function ServicesPage() {
                     <Check className="h-4 w-4 text-[#5F6E55]" />
                   </div>
 
-                  <span className="text-sm font-medium text-[#3F493B]">
+                  <span className="text-sm font-medium text-[#3F493B] font-sans">
                     Quality coffee
                   </span>
                 </div>
@@ -431,7 +442,7 @@ export default async function ServicesPage() {
                     <Check className="h-4 w-4 text-[#5F6E55]" />
                   </div>
 
-                  <span className="text-sm font-medium text-[#3F493B]">
+                  <span className="text-sm font-medium text-[#3F493B] font-sans">
                     Comfortable atmosphere
                   </span>
                 </div>
@@ -442,7 +453,7 @@ export default async function ServicesPage() {
                     <Check className="h-4 w-4 text-[#5F6E55]" />
                   </div>
 
-                  <span className="text-sm font-medium text-[#3F493B]">
+                  <span className="text-sm font-medium text-[#3F493B] font-sans">
                     Friendly service
                   </span>
                 </div>
@@ -464,7 +475,7 @@ export default async function ServicesPage() {
 
           <div className="mb-10 text-center">
 
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#9A7450]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#9A7450] font-sans">
               Simple & Comfortable
             </p>
 
@@ -475,6 +486,7 @@ export default async function ServicesPage() {
                 tracking-tight
                 text-[#3B2A20]
                 md:text-4xl
+                font-serif
               "
             >
               How We Serve You
@@ -485,6 +497,7 @@ export default async function ServicesPage() {
                 mt-3
                 text-sm
                 text-[#756E68]
+                font-sans
               "
             >
               Simple, comfortable, and made for you.
@@ -512,7 +525,7 @@ export default async function ServicesPage() {
               "
             >
 
-              <div className="mb-3 text-4xl font-light text-[#9A7450]">
+              <div className="mb-3 text-4xl font-light text-[#9A7450] font-serif">
                 01
               </div>
 
@@ -522,12 +535,13 @@ export default async function ServicesPage() {
                   text-lg
                   font-semibold
                   text-[#3B2A20]
+                  font-serif
                 "
               >
                 Choose
               </h3>
 
-              <p className="text-sm leading-6 text-[#756E68]">
+              <p className="text-sm leading-6 text-[#756E68] font-sans">
                 Explore our food, coffee and services.
               </p>
 
@@ -551,7 +565,7 @@ export default async function ServicesPage() {
               "
             >
 
-              <div className="mb-3 text-4xl font-light text-[#9A7450]">
+              <div className="mb-3 text-4xl font-light text-[#9A7450] font-serif">
                 02
               </div>
 
@@ -561,12 +575,13 @@ export default async function ServicesPage() {
                   text-lg
                   font-semibold
                   text-[#3B2A20]
+                  font-serif
                 "
               >
                 Enjoy
               </h3>
 
-              <p className="text-sm leading-6 text-[#756E68]">
+              <p className="text-sm leading-6 text-[#756E68] font-sans">
                 Relax and enjoy your time at Cherdung Cafe.
               </p>
 
@@ -590,7 +605,7 @@ export default async function ServicesPage() {
               "
             >
 
-              <div className="mb-3 text-4xl font-light text-[#9A7450]">
+              <div className="mb-3 text-4xl font-light text-[#9A7450] font-serif">
                 03
               </div>
 
@@ -600,12 +615,13 @@ export default async function ServicesPage() {
                   text-lg
                   font-semibold
                   text-[#3B2A20]
+                  font-serif
                 "
               >
                 Experience
               </h3>
 
-              <p className="text-sm leading-6 text-[#756E68]">
+              <p className="text-sm leading-6 text-[#756E68] font-sans">
                 Make your visit memorable.
               </p>
 
@@ -625,11 +641,11 @@ export default async function ServicesPage() {
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
 
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#C6A77D]">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#C6A77D] font-sans">
             Cherdung Café
           </p>
 
-          <h2 className="mb-4 text-3xl font-semibold md:text-4xl">
+          <h2 className="mb-4 text-3xl font-semibold md:text-4xl font-serif">
             Planning Something Special?
           </h2>
 
@@ -641,6 +657,7 @@ export default async function ServicesPage() {
               text-base
               leading-7
               text-[#DED3C8]
+              font-sans
             "
           >
             Let us make your next gathering memorable with delicious food,
@@ -666,6 +683,7 @@ export default async function ServicesPage() {
               hover:bg-[#7D5A3C]
               hover:shadow-xl
               hover:-translate-y-0.5
+              font-sans
             "
           >
             Enquire Now

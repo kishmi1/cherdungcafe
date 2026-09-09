@@ -103,6 +103,7 @@ export default function GalleryContent({
                 text-[#292522]
                 md:text-5xl
                 lg:text-6xl
+                font-serif
               "
             >
               Our Gallery
@@ -117,6 +118,7 @@ export default function GalleryContent({
                 leading-relaxed
                 text-[#756E68]
                 md:text-lg
+                font-sans
               "
             >
               Take a visual tour of our cozy ambiance,
@@ -245,6 +247,7 @@ export default function GalleryContent({
                 uppercase
                 tracking-[0.2em]
                 text-[#B8784F]
+                font-sans
               "
             >
               Moments & Memories
@@ -257,6 +260,7 @@ export default function GalleryContent({
                 tracking-tight
                 text-[#292522]
                 md:text-4xl
+                font-serif
               "
             >
               A Glimpse of Cherdung
@@ -270,6 +274,7 @@ export default function GalleryContent({
                 leading-relaxed
                 text-[#756E68]
                 md:text-base
+                font-sans
               "
             >
               Explore our café, food, coffee, events,
@@ -506,6 +511,7 @@ export default function GalleryContent({
                   text-xl
                   font-semibold
                   text-[#292522]
+                  font-serif
                 "
               >
                 No Images Yet
@@ -518,6 +524,7 @@ export default function GalleryContent({
                   text-sm
                   leading-relaxed
                   text-[#756E68]
+                  font-sans
                 "
               >
                 No images in this category yet.
@@ -556,6 +563,7 @@ export default function GalleryContent({
               uppercase
               tracking-[0.2em]
               text-[#B8784F]
+              font-sans
             "
           >
             Experience It Yourself
@@ -568,6 +576,7 @@ export default function GalleryContent({
               font-semibold
               text-[#292522]
               md:text-4xl
+              font-serif
             "
           >
             Come Experience Cherdung Café
@@ -581,6 +590,7 @@ export default function GalleryContent({
               leading-relaxed
               text-[#756E68]
               md:text-base
+              font-sans
             "
           >
             Great coffee, delicious food, and a warm

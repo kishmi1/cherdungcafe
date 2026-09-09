@@ -70,25 +70,25 @@ export default async function Home() {
 
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-6 tracking-wide">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-6 tracking-wide font-serif">
             A Taste of Warmth,<br />A Place to Belong.
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl">
+          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl font-sans">
             Fresh coffee. Good food. Warm moments.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/menu"
-              className="px-8 py-4 bg-[#F3EDE2] text-[#211C18] text-sm uppercase tracking-widest hover:bg-[#E6DCCD] transition-colors"
+              className="px-8 py-4 bg-[#F3EDE2] text-[#211C18] text-sm uppercase tracking-widest hover:bg-[#E6DCCD] transition-colors font-sans"
             >
               Explore Menu
             </Link>
 
             <Link
               href="/book-a-table"
-              className="px-8 py-4 border-2 border-white text-white text-sm uppercase tracking-widest hover:bg-white hover:text-[#211C18] transition-colors"
+              className="px-8 py-4 border-2 border-white text-white text-sm uppercase tracking-widest hover:bg-white hover:text-[#211C18] transition-colors font-sans"
             >
               Book a Table
             </Link>
@@ -119,17 +119,17 @@ export default async function Home() {
 
             {/* Right: Content */}
             <div>
-              <h2 className="text-4xl md:text-5xl font-light text-[#302923] dark:text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-light text-[#302923] dark:text-white mb-6 font-serif">
                 Welcome to Cherdung Cafe
               </h2>
 
-              <p className="text-lg text-[#766C63] dark:text-gray-300 mb-8 leading-relaxed">
+              <p className="text-lg text-[#766C63] dark:text-gray-300 mb-8 leading-relaxed font-sans">
                 More than just a café, Cherdung Cafe is your community space where quality coffee meets culinary excellence. We're passionate about creating moments that matter – from your morning espresso to evening gatherings with friends.
               </p>
 
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#E8DED0] text-[#302923] text-sm uppercase tracking-widest hover:bg-[#DCCFBE] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#E8DED0] text-[#302923] text-sm uppercase tracking-widest hover:bg-[#DCCFBE] transition-colors font-sans"
               >
                 Our Story
                 <ArrowRight className="h-4 w-4" />
@@ -145,11 +145,11 @@ export default async function Home() {
 
           {/* Section Heading */}
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#292E2A] dark:text-white mb-4">
+            <h2 className="text-4xl font-light text-[#292E2A] dark:text-white mb-4 font-serif">
               Our Services
             </h2>
 
-            <p className="text-[#69736B] dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#69736B] dark:text-gray-300 max-w-2xl mx-auto font-sans">
               Everything you need for the perfect café experience
             </p>
           </div>
@@ -176,18 +176,18 @@ export default async function Home() {
                   )}
 
                   {/* Title */}
-                  <h3 className="text-xl font-semibold text-[#292E2A] dark:text-white mb-3">
+                  <h3 className="text-xl font-semibold text-[#292E2A] dark:text-white mb-3 font-serif">
                     {service.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-[#69736B] dark:text-gray-300 line-clamp-3">
+                  <p className="text-[#69736B] dark:text-gray-300 line-clamp-3 font-sans">
                     {service.description}
                   </p>
 
                   {/* Price Note */}
                   {service.priceNote && (
-                    <p className="text-[#7A4E2D] text-sm mt-3 font-medium">
+                    <p className="text-[#7A4E2D] text-sm mt-3 font-medium font-sans">
                       {service.priceNote}
                     </p>
                   )}
@@ -200,7 +200,7 @@ export default async function Home() {
           <div className="flex justify-center mt-12">
             <a
               href="/services"
-              className="group inline-flex items-center gap-2 bg-[#76543C] hover:bg-[#5F422F] text-white px-7 py-3 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+              className="group inline-flex items-center gap-2 bg-[#76543C] hover:bg-[#5F422F] text-white px-7 py-3 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-lg font-sans"
             >
               View All Services
 
@@ -218,11 +218,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
               Popular Menu
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
               Customer favorites you'll love
             </p>
           </div>
@@ -242,17 +242,17 @@ export default async function Home() {
                   </div>
                 )}
 
-                <h3 className="mb-1 text-lg font-semibold text-[#302923] dark:text-white">
+                <h3 className="mb-1 text-lg font-semibold text-[#302923] dark:text-white font-serif">
                   {menuItem.title}
                 </h3>
 
                 {menuItem.description && (
-                  <p className="mb-2 text-sm text-[#766C63] dark:text-gray-300">
+                  <p className="mb-2 text-sm text-[#766C63] dark:text-gray-300 font-sans">
                     {menuItem.description}
                   </p>
                 )}
 
-                <p className="mb-2 font-semibold text-[#76543C]">
+                <p className="mb-2 font-semibold text-[#76543C] font-sans">
                   {menuItem.price}
                 </p>
               </div>
@@ -260,7 +260,7 @@ export default async function Home() {
           </div>
 
           {popularMenuItems.length === 0 && (
-            <p className="py-8 text-center text-[#766C63] dark:text-gray-300">
+            <p className="py-8 text-center text-[#766C63] dark:text-gray-300 font-sans">
               No popular menu items are available right now.
             </p>
           )}
@@ -268,7 +268,7 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link
               href="/menu"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-[#76543C] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#76543C] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors font-sans"
             >
               View Full Menu
               <ArrowRight className="h-4 w-4" />
@@ -282,11 +282,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light mb-4">
+            <h2 className="text-4xl font-light mb-4 font-serif">
               Today's Special
             </h2>
 
-            <p className="text-[#E8D9C8] max-w-2xl mx-auto">
+            <p className="text-[#E8D9C8] max-w-2xl mx-auto font-sans">
               Limited time offers you don't want to miss
             </p>
           </div>
@@ -299,18 +299,18 @@ export default async function Home() {
                   className="bg-white/10 backdrop-blur-sm p-8 rounded-lg border border-white/20"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-semibold">
+                    <h3 className="text-2xl font-semibold font-serif">
                       {offer.title}
                     </h3>
 
                     {offer.discount && (
-                      <span className="bg-white text-[#76503A] px-3 py-1 rounded-full text-sm font-bold">
+                      <span className="bg-white text-[#76503A] px-3 py-1 rounded-full text-sm font-bold font-sans">
                         {offer.discount}
                       </span>
                     )}
                   </div>
 
-                  <p className="text-[#E8D9C8] mb-4">
+                  <p className="text-[#E8D9C8] mb-4 font-sans">
                     {offer.description}
                   </p>
 
@@ -322,7 +322,7 @@ export default async function Home() {
                     </div>
                   )}
 
-                  <p className="text-sm text-[#E8D9C8]">
+                  <p className="text-sm text-[#E8D9C8] font-sans">
                     Valid until:{" "}
                     {new Date(offer.endsAt).toLocaleDateString("en-US", {
                       month: "short",
@@ -335,7 +335,7 @@ export default async function Home() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-[#E8D9C8] text-lg">
+              <p className="text-[#E8D9C8] text-lg font-sans">
                 No featured offers at the moment. Check back soon!
               </p>
             </div>
@@ -344,7 +344,7 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link
               href="/offers"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white text-[#76503A] text-sm uppercase tracking-widest hover:bg-[#F3EDE2] transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-white text-[#76503A] text-sm uppercase tracking-widest hover:bg-[#F3EDE2] transition-colors font-sans"
             >
               View All Offers
               <ArrowRight className="h-4 w-4" />
@@ -358,11 +358,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
               Why Choose Cherdung Cafe
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
               What makes us different
             </p>
           </div>
@@ -374,11 +374,11 @@ export default async function Home() {
                 <Coffee className="h-10 w-10 text-[#76503A]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                 Quality Coffee
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans">
                 Premium beans, expert baristas
               </p>
             </div>
@@ -388,11 +388,11 @@ export default async function Home() {
                 <Utensils className="h-10 w-10 text-[#76503A]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                 Fresh Ingredients
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans">
                 Locally sourced, organic when possible
               </p>
             </div>
@@ -402,11 +402,11 @@ export default async function Home() {
                 <Users className="h-10 w-10 text-[#76503A]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                 Cozy Atmosphere
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans">
                 Warm, welcoming environment
               </p>
             </div>
@@ -416,11 +416,11 @@ export default async function Home() {
                 <Star className="h-10 w-10 text-[#A47D45]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                 Friendly Service
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans">
                 Attentive, personalized care
               </p>
             </div>
@@ -434,11 +434,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
               Our Gallery
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
               A glimpse into our world
             </p>
           </div>
@@ -491,7 +491,7 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link
               href="/gallery"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-[#F5F0E8] text-[#302923] text-sm uppercase tracking-widest hover:bg-[#E4DCCF] transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#F5F0E8] text-[#302923] text-sm uppercase tracking-widest hover:bg-[#E4DCCF] transition-colors font-sans"
             >
               View Gallery
               <ArrowRight className="h-4 w-4" />
@@ -505,11 +505,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
               What Our Customers Say
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
               Real reviews from real people
             </p>
           </div>
@@ -526,21 +526,21 @@ export default async function Home() {
                 ))}
               </div>
 
-              <p className="text-[#766C63] dark:text-gray-300 mb-4 italic">
+              <p className="text-[#766C63] dark:text-gray-300 mb-4 italic font-sans">
                 "Amazing coffee, beautiful atmosphere and excellent service. This is my go-to spot for meetings and relaxation."
               </p>
 
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-[#DED1C2] rounded-full flex items-center justify-center mr-4">
-                  <span className="text-[#76503A] font-semibold">SM</span>
+                  <span className="text-[#76503A] font-semibold font-sans">SM</span>
                 </div>
 
                 <div>
-                  <p className="font-semibold text-[#302923] dark:text-white">
+                  <p className="font-semibold text-[#302923] dark:text-white font-serif">
                     Sarah Mitchell
                   </p>
 
-                  <p className="text-sm text-[#766C63] dark:text-gray-400">
+                  <p className="text-sm text-[#766C63] dark:text-gray-400 font-sans">
                     Regular Customer
                   </p>
                 </div>
@@ -557,21 +557,21 @@ export default async function Home() {
                 ))}
               </div>
 
-              <p className="text-[#766C63] dark:text-gray-300 mb-4 italic">
+              <p className="text-[#766C63] dark:text-gray-300 mb-4 italic font-sans">
                 "The best latte I've ever had. The staff is always friendly and the ambiance is perfect for both work and social."
               </p>
 
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-[#DED1C2] rounded-full flex items-center justify-center mr-4">
-                  <span className="text-[#76503A] font-semibold">JD</span>
+                  <span className="text-[#76503A] font-semibold font-sans">JD</span>
                 </div>
 
                 <div>
-                  <p className="font-semibold text-[#302923] dark:text-white">
+                  <p className="font-semibold text-[#302923] dark:text-white font-serif">
                     John Davis
                   </p>
 
-                  <p className="text-sm text-[#766C63] dark:text-gray-400">
+                  <p className="text-sm text-[#766C63] dark:text-gray-400 font-sans">
                     Remote Worker
                   </p>
                 </div>
@@ -588,21 +588,21 @@ export default async function Home() {
                 ))}
               </div>
 
-              <p className="text-[#766C63] dark:text-gray-300 mb-4 italic">
+              <p className="text-[#766C63] dark:text-gray-300 mb-4 italic font-sans">
                 "Great food, reasonable prices, and the team makes you feel like family. Highly recommend their weekend brunch!"
               </p>
 
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-[#DED1C2] rounded-full flex items-center justify-center mr-4">
-                  <span className="text-[#76503A] font-semibold">AK</span>
+                  <span className="text-[#76503A] font-semibold font-sans">AK</span>
                 </div>
 
                 <div>
-                  <p className="font-semibold text-[#302923] dark:text-white">
+                  <p className="font-semibold text-[#302923] dark:text-white font-serif">
                     Emily Chen
                   </p>
 
-                  <p className="text-sm text-[#766C63] dark:text-gray-400">
+                  <p className="text-sm text-[#766C63] dark:text-gray-400 font-sans">
                     Food Blogger
                   </p>
                 </div>
@@ -618,11 +618,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
               Latest Updates
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
               Stay connected with our latest news and stories
             </p>
           </div>
@@ -645,17 +645,17 @@ export default async function Home() {
                     </div>
                   )}
 
-                  <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                  <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                     {post.title}
                   </h3>
 
-                  <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                  <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4 line-clamp-2 font-sans">
                     {post.excerpt || "Discover our latest stories and updates..."}
                   </p>
 
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                    className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm font-sans"
                   >
                     Read More →
                   </Link>
@@ -669,17 +669,17 @@ export default async function Home() {
                   <Coffee className="h-12 w-12 text-[#76503A]" />
                 </div>
 
-                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                   New Summer Menu Launch
                 </h3>
 
-                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
+                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4 font-sans">
                   Discover our refreshing seasonal offerings...
                 </p>
 
                 <Link
                   href="/blog"
-                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm font-sans"
                 >
                   Read More →
                 </Link>
@@ -690,17 +690,17 @@ export default async function Home() {
                   <Coffee className="h-12 w-12 text-[#76503A]" />
                 </div>
 
-                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                   Coffee Brewing Tips
                 </h3>
 
-                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
+                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4 font-sans">
                   Learn the art of perfect pour-over at home...
                 </p>
 
                 <Link
                   href="/blog"
-                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm font-sans"
                 >
                   Read More →
                 </Link>
@@ -711,17 +711,17 @@ export default async function Home() {
                   <Calendar className="h-12 w-12 text-[#76503A]" />
                 </div>
 
-                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2">
+                <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
                   Community Events
                 </h3>
 
-                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4">
+                <p className="text-[#766C63] dark:text-gray-300 text-sm mb-4 font-sans">
                   Join us for music nights and art shows...
                 </p>
 
                 <Link
                   href="/blog"
-                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm"
+                  className="text-[#76503A] hover:text-[#5F422F] font-medium text-sm font-sans"
                 >
                   Read More →
                 </Link>
@@ -732,7 +732,7 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-[#76543C] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#76543C] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors font-sans"
             >
               View Latest Updates
               <ArrowRight className="h-4 w-4" />
@@ -749,17 +749,17 @@ export default async function Home() {
 
             {/* Reservation */}
             <div className="text-center">
-              <h2 className="text-4xl font-light mb-4">
+              <h2 className="text-4xl font-light mb-4 font-serif">
                 Your Table Is Waiting
               </h2>
 
-              <p className="text-gray-400 mb-8">
+              <p className="text-gray-400 mb-8 font-sans">
                 Reserve your spot for the perfect dining experience
               </p>
 
               <Link
                 href="/book-a-table"
-                className="inline-block px-8 py-4 bg-[#F3EDE2] text-[#29211C] text-sm uppercase tracking-widest hover:bg-[#E4DACC] transition-colors"
+                className="inline-block px-8 py-4 bg-[#F3EDE2] text-[#29211C] text-sm uppercase tracking-widest hover:bg-[#E4DACC] transition-colors font-sans"
               >
                 Book a Table
               </Link>
@@ -767,17 +767,17 @@ export default async function Home() {
 
             {/* Enquiry */}
             <div className="text-center">
-              <h2 className="text-4xl font-light mb-4">
+              <h2 className="text-4xl font-light mb-4 font-serif">
                 Have a Question?
               </h2>
 
-              <p className="text-gray-400 mb-8">
+              <p className="text-gray-400 mb-8 font-sans">
                 We'd love to hear from you. Send us an enquiry anytime.
               </p>
 
               <Link
                 href="/enquiry"
-                className="inline-block px-8 py-4 border-2 border-white text-white text-sm uppercase tracking-widest hover:bg-white hover:text-[#29211C] transition-colors"
+                className="inline-block px-8 py-4 border-2 border-white text-white text-sm uppercase tracking-widest hover:bg-white hover:text-[#29211C] transition-colors font-sans"
               >
                 Send Enquiry
               </Link>
@@ -792,11 +792,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
               Visit Us
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
               Visit us at our cozy location
             </p>
           </div>
@@ -822,7 +822,7 @@ export default async function Home() {
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <MapPin className="h-5 w-5 text-[#76503A]" />
 
-                <p className="text-lg text-[#302923] dark:text-white font-medium">
+                <p className="text-lg text-[#302923] dark:text-white font-medium font-sans">
                   Sankhamul, Kathmandu
                 </p>
               </div>
@@ -831,7 +831,7 @@ export default async function Home() {
                 href="https://maps.google.com/?q=Sankhamul,Kathmandu"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-[#76503A] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-[#76503A] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors font-sans"
               >
                 Get Directions
                 <ArrowRight className="h-4 w-4" />

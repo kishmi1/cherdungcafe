@@ -56,12 +56,12 @@ export default function Navigation({ settings }: NavigationProps) {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xl font-bold tracking-wider italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-400 transition-all">
+                  <span className="text-xl font-bold tracking-wider italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-400 transition-all font-serif">
                     cherdung
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="h-px bg-black dark:bg-white flex-1"></span>
-                    <span className="text-black dark:text-white text-xs font-medium tracking-widest">
+                    <span className="text-black dark:text-white text-xs font-medium tracking-widest font-sans">
                       CAFE
                     </span>
                     <span className="h-px bg-black dark:bg-white flex-1"></span>
@@ -81,7 +81,7 @@ export default function Navigation({ settings }: NavigationProps) {
               <div key={item.href} className="relative group">
                 <Link
                   href={item.href}
-                  className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-sm uppercase tracking-wider"
+                  className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-sm uppercase tracking-wider font-sans"
                 >
                   {item.label}
                   {item.hasDropdown && <span className="ml-1">▾</span>}
@@ -90,9 +90,9 @@ export default function Navigation({ settings }: NavigationProps) {
             ))}
             
             {/* Enquiry Button */}
-            <Link 
+            <Link
               href="/enquiry"
-              className="px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-wider hover:bg-amber-200 transition-colors"
+              className="px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-wider hover:bg-amber-200 transition-colors font-sans"
             >
               Enquiry
             </Link>
@@ -102,7 +102,7 @@ export default function Navigation({ settings }: NavigationProps) {
               <span className="flex items-center">
                 <ShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                  <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold font-sans">
                     {cartItemCount > 9 ? '9+' : cartItemCount}
                   </span>
                 )}
@@ -145,23 +145,23 @@ export default function Navigation({ settings }: NavigationProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-sm uppercase tracking-wider"
+                className="block text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-sm uppercase tracking-wider font-sans"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
                 {item.hasDropdown && <span className="ml-1">▾</span>}
               </Link>
             ))}
-            <Link 
+            <Link
               href="/enquiry"
-              className="block text-center px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-wider hover:bg-amber-200 transition-colors"
+              className="block text-center px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-wider hover:bg-amber-200 transition-colors font-sans"
               onClick={() => setIsMenuOpen(false)}
             >
               Enquiry
             </Link>
-            <Link 
+            <Link
               href="/track-order"
-              className="block text-center px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-wider hover:bg-amber-200 transition-colors"
+              className="block text-center px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-wider hover:bg-amber-200 transition-colors font-sans"
               onClick={() => setIsMenuOpen(false)}
             >
               Track Order
@@ -171,7 +171,7 @@ export default function Navigation({ settings }: NavigationProps) {
                 <span className="flex items-center">
                   <ShoppingCart className="h-5 w-5" />
                   {cartItemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold font-sans">
                       {cartItemCount > 9 ? '9+' : cartItemCount}
                     </span>
                   )}

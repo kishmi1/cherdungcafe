@@ -9,8 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "Arial", "Helvetica", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
+        serif: ["var(--font-cormorant)", "Georgia", "serif"],
+        sans: ["var(--font-poppins)", "Arial", "Helvetica", "sans-serif"],
+        mono: ["var(--font-poppins)", "monospace"],
       },
       fontWeight: {
         light: "300",

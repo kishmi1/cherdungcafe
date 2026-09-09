@@ -152,7 +152,20 @@ export async function POST(request: NextRequest) {
     const esewaUrl = 'https://rc-epay.esewa.com.np/api/epay/main/v2/form'
 
     // Ensure APP_URL has proper protocol
-    let appUrl = process.env.APP_URL || 'http://localhost:3000'
+    let appUrl = process.env.APP_URL
+
+    // For Vercel deployments, use the host from the request
+    if (!appUrl && process.env.VERCEL) {
+      const host = request.headers.get('host') || 'localhost:3000'
+      const protocol = request.headers.get('x-forwarded-proto') || 'https'
+      appUrl = `${protocol}://${host}`
+    }
+
+    // Fallback to localhost for development
+    if (!appUrl) {
+      appUrl = 'http://localhost:3000'
+    }
+
     if (!appUrl.startsWith('http://') && !appUrl.startsWith('https://')) {
       appUrl = `http://${appUrl}`
     }

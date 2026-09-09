@@ -20,7 +20,9 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { cart, getCartTotal, clearCart } = useCart()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [paymentStep, setPaymentStep] = useState<string>("idle")
   const [error, setError] = useState("")
+  const [failedOrderId, setFailedOrderId] = useState<number | null>(null)
 
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
@@ -74,6 +76,9 @@ export default function CheckoutPage() {
     }
 
     setIsSubmitting(true)
+    setPaymentStep("creating_order")
+    setError("")
+    setFailedOrderId(null)
 
     try {
       const orderData = {
@@ -120,22 +125,32 @@ export default function CheckoutPage() {
         }
 
         const orderId = orderDataResponse.orderId
+        setFailedOrderId(orderId) // Store for retry if payment fails
+        setPaymentStep("initiating_payment")
 
-        // Then initiate payment
-        const paymentEndpoint = formData.paymentMethod === "ESEWA" 
-          ? "/api/payments/esewa/initiate" 
+        // Then initiate payment with timeout
+        const paymentEndpoint = formData.paymentMethod === "ESEWA"
+          ? "/api/payments/esewa/initiate"
           : "/api/payments/khalti/initiate"
 
-        const paymentResponse = await fetch(paymentEndpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId,
-            amount: orderData.totalAmount
+        const paymentResponse = await Promise.race([
+          fetch(paymentEndpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderId,
+              amount: orderData.totalAmount
+            }),
           }),
-        })
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Payment gateway timeout. The eSewa server is taking too long to respond. Please try Khalti instead or check your internet connection.")), 30000)
+          // Increased timeout to 30 seconds for eSewa
+          // eSewa's test server can be slow
+          // Note: If eSewa is having connectivity issues, suggest using Khalti
+          )
+        ]) as Response
 
         let paymentData
         try {
@@ -151,15 +166,17 @@ export default function CheckoutPage() {
           throw new Error(paymentData.error || "Failed to initiate payment")
         }
 
+        setPaymentStep("redirecting")
+
         // Clear cart and redirect to payment gateway
         clearCart()
-        
+
         // For eSewa, we need to submit a form
         if (formData.paymentMethod === "ESEWA") {
           const form = document.createElement("form")
           form.method = "POST"
           form.action = paymentData.paymentUrl
-          
+
           Object.entries(paymentData.paymentParams).forEach(([key, value]) => {
             const input = document.createElement("input")
             input.type = "hidden"
@@ -167,7 +184,7 @@ export default function CheckoutPage() {
             input.value = String(value)
             form.appendChild(input)
           })
-          
+
           document.body.appendChild(form)
           form.submit()
         } else {
@@ -204,6 +221,7 @@ export default function CheckoutPage() {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred while placing your order")
+      setPaymentStep("idle")
     } finally {
       setIsSubmitting(false)
     }
@@ -215,6 +233,85 @@ export default function CheckoutPage() {
 
   const getItemSubtotal = (price: string, quantity: number) => {
     return getItemPrice(price) * quantity
+  }
+
+  const retryPayment = async (orderId: number) => {
+    if (!formData.paymentMethod || formData.paymentMethod === "CASH") {
+      setError("Cannot retry cash payments")
+      return
+    }
+
+    setIsSubmitting(true)
+    setPaymentStep("initiating_payment")
+    setError("")
+
+    try {
+      const paymentEndpoint = formData.paymentMethod === "ESEWA"
+        ? "/api/payments/esewa/initiate"
+        : "/api/payments/khalti/initiate"
+
+      const totalAmount = getCartTotal() + (formData.orderType === "DELIVERY" ? 50 : 0)
+
+      const paymentResponse = await Promise.race([
+        fetch(paymentEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderId,
+            amount: totalAmount
+          }),
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Payment gateway timeout. The eSewa server is taking too long to respond. Please try Khalti instead or check your internet connection.")), 30000)
+        // Increased timeout to 30 seconds for eSewa
+        // eSewa's test server can be slow
+        // Note: If eSewa is having connectivity issues, suggest using Khalti
+        )
+      ]) as Response
+
+      let paymentData
+      try {
+        paymentData = await paymentResponse.json()
+      } catch (jsonError) {
+        const textResponse = await paymentResponse.text()
+        console.error('Payment API returned non-JSON response:', textResponse.substring(0, 200))
+        throw new Error(`Payment gateway error: ${paymentResponse.status} ${paymentResponse.statusText}`)
+      }
+
+      if (!paymentResponse.ok) {
+        throw new Error(paymentData.error || "Failed to initiate payment")
+      }
+
+      setPaymentStep("redirecting")
+
+      // For eSewa, we need to submit a form
+      if (formData.paymentMethod === "ESEWA") {
+        const form = document.createElement("form")
+        form.method = "POST"
+        form.action = paymentData.paymentUrl
+
+        Object.entries(paymentData.paymentParams).forEach(([key, value]) => {
+          const input = document.createElement("input")
+          input.type = "hidden"
+          input.name = key
+          input.value = String(value)
+          form.appendChild(input)
+        })
+
+        document.body.appendChild(form)
+        form.submit()
+      } else {
+        // For Khalti, redirect to payment URL
+        window.location.href = paymentData.paymentUrl
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to retry payment")
+      setPaymentStep("idle")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const deliveryFee = formData.orderType === "DELIVERY" ? 50 : 0
@@ -446,6 +543,7 @@ export default function CheckoutPage() {
                     <div>
                       <span className="text-sm font-semibold text-[#292F33]">eSewa</span>
                       <p className="text-xs text-[#737D83]">Pay securely with eSewa</p>
+                      <p className="text-xs text-amber-600 mt-1">⚠️ May have connectivity issues</p>
                     </div>
                   </label>
                 </div>
@@ -471,7 +569,31 @@ export default function CheckoutPage() {
               {/* ERROR MESSAGE */}
               {error && (
                 <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-                  {error}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-start gap-2">
+                      <span className="flex-1">{error}</span>
+                      {failedOrderId && (formData.paymentMethod === "ESEWA" || formData.paymentMethod === "KHALTI") && (
+                        <button
+                          type="button"
+                          onClick={() => retryPayment(failedOrderId)}
+                          className="text-xs font-semibold text-red-700 underline hover:text-red-900 whitespace-nowrap"
+                        >
+                          Retry Payment
+                        </button>
+                      )}
+                    </div>
+                    {error.includes("timeout") || error.includes("timed out") || error.includes("took too long") ? (
+                      <div className="text-xs text-red-700 mt-1">
+                        <p className="font-semibold">Possible solutions:</p>
+                        <ul className="list-disc list-inside mt-1 space-y-1">
+                          <li>Check your internet connection</li>
+                          <li>Try using Khalti instead of eSewa</li>
+                          <li>Contact eSewa support if issue persists</li>
+                          <li>Try again in a few minutes</li>
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               )}
 
@@ -481,7 +603,16 @@ export default function CheckoutPage() {
                 disabled={isSubmitting}
                 className="w-full rounded-xl border border-[#6F8494] bg-[#6F8494] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#5C7282] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? "Placing Order..." : "Place Order"}
+                {isSubmitting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    {paymentStep === "creating_order" && "Creating Order..."}
+                    {paymentStep === "initiating_payment" && "Connecting to Payment Gateway..."}
+                    {paymentStep === "redirecting" && "Redirecting to Payment..."}
+                    {paymentStep === "idle" && "Processing..."}
+                  </span>
+                ) : (
+                  "Place Order"
+                )}
               </button>
             </div>
 

@@ -35,8 +35,8 @@ export default function ContactPage() {
       <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-serif">Contact Us</h1>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto font-sans">
               Get in touch with us for questions, feedback, or just to say hello
             </p>
           </div>
@@ -49,7 +49,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Contact Details */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">Get in Touch</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-8 font-serif">Get in Touch</h2>
               
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
@@ -57,8 +57,8 @@ export default function ContactPage() {
                     <MapPin className="h-6 w-6 text-amber-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
-                    <p className="text-gray-600 whitespace-pre-line">
+                    <h3 className="font-semibold text-gray-900 mb-1 font-serif">Address</h3>
+                    <p className="text-gray-600 whitespace-pre-line font-sans">
                       {settings?.contactAddress || "Sankhamul\nKathmandu 44600\nNepal"}
                     </p>
                   </div>
@@ -67,7 +67,7 @@ export default function ContactPage() {
 
               {/* Social Media */}
               <div className="mt-8">
-                <h3 className="font-semibold text-gray-900 mb-4">Follow Us</h3>
+                <h3 className="font-semibold text-gray-900 mb-4 font-serif">Follow Us</h3>
                 <SocialMediaIcons 
                   settings={settings} 
                   variant="boxed"
@@ -78,7 +78,7 @@ export default function ContactPage() {
 
             {/* Map */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">Visit Us</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-8 font-serif">Visit Us</h2>
               <div className="rounded-lg overflow-hidden h-96 shadow-lg mb-6">
                 <iframe
                   src={settings?.googleMapsEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.047940368783!2d85.3123859!3d27.6919288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb18f8c8a0e3eb%3A0x5e4b9c8a5e4b9c8a!2sSankhamul%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1700000000000!5m2!1sen!2snp"}
@@ -114,15 +114,15 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Us a Message</h2>
-              <p className="text-gray-600">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 font-serif">Send Us a Message</h2>
+              <p className="text-gray-600 font-sans">
                 Have a question or feedback? Fill out the form below and we'll get back to you soon.
               </p>
             </div>
 
             <ContactForm />
 
-            <p className="text-center text-sm text-gray-500 mt-6">
+            <p className="text-center text-sm text-gray-500 mt-6 font-sans">
               Or use our <Link href="/enquiry" className="text-amber-600 hover:text-amber-700">detailed enquiry form</Link> for more comprehensive requests.
             </p>
           </div>
@@ -133,33 +133,33 @@ export default function ContactPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center font-serif">Frequently Asked Questions</h2>
             
             <div className="space-y-4">
               <div className="border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Do you take reservations?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 font-serif">Do you take reservations?</h3>
+                <p className="text-gray-600 text-sm font-sans">
                   We don't take reservations for regular dining, but you can book our private event space for special occasions. Contact us for more details.
                 </p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Do you offer Wi-Fi?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 font-serif">Do you offer Wi-Fi?</h3>
+                <p className="text-gray-600 text-sm font-sans">
                   Yes! We offer free Wi-Fi for all customers. Perfect for working remotely or studying.
                 </p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Are you wheelchair accessible?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 font-serif">Are you wheelchair accessible?</h3>
+                <p className="text-gray-600 text-sm font-sans">
                   Yes, our café is fully wheelchair accessible with accessible seating and restrooms.
                 </p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Do you cater to dietary restrictions?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 font-serif">Do you cater to dietary restrictions?</h3>
+                <p className="text-gray-600 text-sm font-sans">
                   We offer vegetarian, vegan, and gluten-free options. Please inform our staff of any allergies or dietary requirements.
                 </p>
               </div>

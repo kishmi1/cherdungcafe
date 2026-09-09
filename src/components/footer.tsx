@@ -30,12 +30,12 @@ export default function Footer({ settings }: FooterProps) {
                   className="h-16 w-auto object-contain"
                 />
                 <div className="flex flex-col">
-                  <span className="text-xl font-bold tracking-wider italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                  <span className="text-xl font-bold tracking-wider italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent font-serif">
                     cherdung
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="h-px bg-white flex-1"></span>
-                    <span className="text-white text-xs font-medium tracking-widest">
+                    <span className="text-white text-xs font-medium tracking-widest font-sans">
                      CAFE
                     </span>
                     <span className="h-px bg-white flex-1"></span>
@@ -43,60 +43,60 @@ export default function Footer({ settings }: FooterProps) {
                 </div>
               </div>
             ) : (
-              <h2 className="text-2xl font-light tracking-wider mb-4">{siteName}</h2>
+              <h2 className="text-2xl font-light tracking-wider mb-4 font-serif">{siteName}</h2>
             )}
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p className="text-gray-400 text-sm leading-relaxed font-sans">
               {siteDescription}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400">Quick Links</h3>
+            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400 font-sans">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link href="/services" className="text-gray-400 hover:text-white transition-colors text-sm">Services</Link></li>
-              <li><Link href="/offers" className="text-gray-400 hover:text-white transition-colors text-sm">Offers</Link></li>
-              <li><Link href="/gallery" className="text-gray-400 hover:text-white transition-colors text-sm">Gallery</Link></li>
-              <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors text-sm">Blog</Link></li>
-              <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm">About</Link></li>
-              <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">Contact</Link></li>
+              <li><Link href="/services" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Services</Link></li>
+              <li><Link href="/offers" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Offers</Link></li>
+              <li><Link href="/gallery" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Gallery</Link></li>
+              <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Blog</Link></li>
+              <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">About</Link></li>
+              <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Contact</Link></li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400">Contact</h3>
+            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400 font-sans">Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 text-amber-400 mt-0.5" />
-                <span className="text-gray-400 text-sm">{contactAddress}</span>
+                <span className="text-gray-400 text-sm font-sans">{contactAddress}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-amber-400" />
-                <span className="text-gray-400 text-sm">{contactPhone}</span>
+                <span className="text-gray-400 text-sm font-sans">{contactPhone}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-amber-400" />
-                <span className="text-gray-400 text-sm">{contactEmail}</span>
+                <span className="text-gray-400 text-sm font-sans">{contactEmail}</span>
               </li>
               <li className="flex items-start space-x-3">
                 <Clock className="h-4 w-4 text-amber-400 mt-0.5" />
-                <span className="text-gray-400 text-sm" dangerouslySetInnerHTML={{ __html: openingHours }}></span>
+                <span className="text-gray-400 text-sm font-sans" dangerouslySetInnerHTML={{ __html: openingHours }}></span>
               </li>
             </ul>
           </div>
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400">Newsletter</h3>
-            <p className="text-gray-400 text-sm mb-4">Subscribe for updates and special offers.</p>
+            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400 font-sans">Newsletter</h3>
+            <p className="text-gray-400 text-sm mb-4 font-sans">Subscribe for updates and special offers.</p>
             <form className="flex">
               <input
                 type="email"
                 placeholder="Your email"
-                className="flex-1 px-4 py-2 bg-gray-800 text-white text-sm border border-gray-700 focus:border-amber-400 focus:outline-none"
+                className="flex-1 px-4 py-2 bg-gray-800 text-white text-sm border border-gray-700 focus:border-amber-400 focus:outline-none font-sans"
               />
-              <button className="px-4 py-2 bg-amber-400 text-black text-sm uppercase tracking-wider hover:bg-amber-300 transition-colors">
+              <button className="px-4 py-2 bg-amber-400 text-black text-sm uppercase tracking-wider hover:bg-amber-300 transition-colors font-sans">
                 Join
               </button>
             </form>
@@ -109,7 +109,7 @@ export default function Footer({ settings }: FooterProps) {
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
-          <p>&copy; 2026 {siteName}. All rights reserved.</p>
+          <p className="font-sans">&copy; 2026 {siteName}. All rights reserved.</p>
         </div>
       </div>
     </footer>
