@@ -47,13 +47,13 @@ export default async function MenuPage() {
          
 
           <h1
-            className="mb-4 text-4xl font-light tracking-tight text-[#29343A] md:text-5xl lg:text-6xl font-serif"
+            className="mb-4 text-4xl font-light tracking-[0.03em] text-[#29343A] md:text-5xl lg:text-6xl font-serif leading-tight"
           >
             Our Menu
           </h1>
 
           <p
-            className="mx-auto max-w-2xl text-base leading-relaxed text-[#68767D] md:text-lg font-sans"
+            className="mx-auto max-w-2xl text-base leading-relaxed text-[#68767D] md:text-lg font-sans tracking-wide"
           >
             Freshly prepared café favorites,
             made for every moment.
@@ -72,19 +72,19 @@ export default async function MenuPage() {
           <div className="mb-10 text-center">
 
             <p
-              className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#8096A3] font-sans"
+              className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#8096A3] font-sans"
             >
               Taste Something Special
             </p>
 
             <h2
-              className="text-3xl font-semibold tracking-tight text-[#29343A] md:text-4xl font-serif"
+              className="text-3xl font-semibold tracking-[0.03em] text-[#29343A] md:text-4xl font-serif leading-tight"
             >
               Our Favorites
             </h2>
 
             <p
-              className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[#737D83] md:text-base font-sans"
+              className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[#737D83] md:text-base font-sans tracking-wide"
             >
               Explore our freshly prepared menu
             </p>
@@ -110,7 +110,7 @@ export default async function MenuPage() {
               </div>
 
               <p
-                className="text-sm leading-6 text-[#737D83] md:text-base font-sans"
+                className="text-sm leading-6 text-[#737D83] md:text-base font-sans tracking-wide"
               >
                 Our menu is being prepared.
                 Please check back soon.
@@ -131,7 +131,7 @@ export default async function MenuPage() {
         <div className="mx-auto max-w-4xl px-4 text-center">
 
           <p
-            className="text-sm font-medium text-[#65747C] font-sans"
+            className="text-sm font-medium text-[#65747C] font-sans tracking-wide"
           >
             Fresh ingredients · Quality coffee · Made with care
           </p>

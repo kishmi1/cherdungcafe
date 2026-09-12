@@ -185,6 +185,9 @@ export default function BlogPage() {
                 text-4xl
                 font-light
                 md:text-5xl
+                tracking-[0.03em]
+                leading-tight
+                font-serif
               "
               style={{
                 color: "#292522",
@@ -202,6 +205,8 @@ export default function BlogPage() {
                 text-base
                 leading-relaxed
                 md:text-lg
+                tracking-wide
+                font-sans
               "
               style={{
                 color: "#756E68",
@@ -284,6 +289,8 @@ export default function BlogPage() {
                     transition-all
                     duration-200
                     hover:-translate-y-0.5
+                    tracking-wide
+                    font-sans
                   "
                   style={
                     categoryFilter === category
@@ -500,7 +507,8 @@ export default function BlogPage() {
                             text-xs
                             font-semibold
                             uppercase
-                            tracking-wide
+                            tracking-[0.15em]
+                            font-sans
                           "
                           style={{
                             color: "#7A4E2D",
@@ -566,6 +574,9 @@ export default function BlogPage() {
                           line-clamp-2
                           text-xl
                           font-semibold
+                          tracking-wide
+                          leading-tight
+                          font-serif
                         "
                         style={{
                           color: "#292522",
@@ -583,6 +594,8 @@ export default function BlogPage() {
                           line-clamp-3
                           flex-1
                           leading-relaxed
+                          tracking-wide
+                          font-sans
                         "
                         style={{
                           color: "#756E68",
@@ -644,6 +657,8 @@ export default function BlogPage() {
                             gap-1
                             font-medium
                             transition-colors
+                            tracking-wide
+                            font-sans
                           "
                           style={{
                             color: "#7A4E2D",

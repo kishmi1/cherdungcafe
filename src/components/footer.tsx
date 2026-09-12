@@ -30,12 +30,12 @@ export default function Footer({ settings }: FooterProps) {
                   className="h-16 w-auto object-contain"
                 />
                 <div className="flex flex-col">
-                  <span className="text-xl font-bold tracking-wider italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent font-serif">
+                  <span className="text-xl font-bold tracking-[0.12em] italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent font-serif">
                     cherdung
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="h-px bg-white flex-1"></span>
-                    <span className="text-white text-xs font-medium tracking-widest font-sans">
+                    <span className="text-white text-xs font-medium tracking-[0.2em] font-sans">
                      CAFE
                     </span>
                     <span className="h-px bg-white flex-1"></span>
@@ -43,60 +43,60 @@ export default function Footer({ settings }: FooterProps) {
                 </div>
               </div>
             ) : (
-              <h2 className="text-2xl font-light tracking-wider mb-4 font-serif">{siteName}</h2>
+              <h2 className="text-2xl font-light tracking-[0.12em] mb-4 font-serif">{siteName}</h2>
             )}
-            <p className="text-gray-400 text-sm leading-relaxed font-sans">
+            <p className="text-gray-400 text-sm leading-relaxed font-sans tracking-wide">
               {siteDescription}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400 font-sans">Quick Links</h3>
+            <h3 className="text-sm uppercase tracking-[0.2em] mb-4 text-amber-400 font-sans font-medium">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link href="/services" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Services</Link></li>
-              <li><Link href="/offers" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Offers</Link></li>
-              <li><Link href="/gallery" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Gallery</Link></li>
-              <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Blog</Link></li>
-              <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">About</Link></li>
-              <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm font-sans">Contact</Link></li>
+              <li><Link href="/services" className="text-gray-400 hover:text-white transition-colors text-sm font-sans tracking-wide">Services</Link></li>
+              <li><Link href="/offers" className="text-gray-400 hover:text-white transition-colors text-sm font-sans tracking-wide">Offers</Link></li>
+              <li><Link href="/gallery" className="text-gray-400 hover:text-white transition-colors text-sm font-sans tracking-wide">Gallery</Link></li>
+              <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors text-sm font-sans tracking-wide">Blog</Link></li>
+              <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm font-sans tracking-wide">About</Link></li>
+              <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm font-sans tracking-wide">Contact</Link></li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400 font-sans">Contact</h3>
+            <h3 className="text-sm uppercase tracking-[0.2em] mb-4 text-amber-400 font-sans font-medium">Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 text-amber-400 mt-0.5" />
-                <span className="text-gray-400 text-sm font-sans">{contactAddress}</span>
+                <span className="text-gray-400 text-sm font-sans tracking-wide">{contactAddress}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-amber-400" />
-                <span className="text-gray-400 text-sm font-sans">{contactPhone}</span>
+                <span className="text-gray-400 text-sm font-sans tracking-wide">{contactPhone}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-amber-400" />
-                <span className="text-gray-400 text-sm font-sans">{contactEmail}</span>
+                <span className="text-gray-400 text-sm font-sans tracking-wide">{contactEmail}</span>
               </li>
               <li className="flex items-start space-x-3">
                 <Clock className="h-4 w-4 text-amber-400 mt-0.5" />
-                <span className="text-gray-400 text-sm font-sans" dangerouslySetInnerHTML={{ __html: openingHours }}></span>
+                <span className="text-gray-400 text-sm font-sans tracking-wide" dangerouslySetInnerHTML={{ __html: openingHours }}></span>
               </li>
             </ul>
           </div>
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-sm uppercase tracking-widest mb-4 text-amber-400 font-sans">Newsletter</h3>
-            <p className="text-gray-400 text-sm mb-4 font-sans">Subscribe for updates and special offers.</p>
+            <h3 className="text-sm uppercase tracking-[0.2em] mb-4 text-amber-400 font-sans font-medium">Newsletter</h3>
+            <p className="text-gray-400 text-sm mb-4 font-sans tracking-wide">Subscribe for updates and special offers.</p>
             <form className="flex">
               <input
                 type="email"
                 placeholder="Your email"
-                className="flex-1 px-4 py-2 bg-gray-800 text-white text-sm border border-gray-700 focus:border-amber-400 focus:outline-none font-sans"
+                className="flex-1 px-4 py-2 bg-gray-800 text-white text-sm border border-gray-700 focus:border-amber-400 focus:outline-none font-sans tracking-wide"
               />
-              <button className="px-4 py-2 bg-amber-400 text-black text-sm uppercase tracking-wider hover:bg-amber-300 transition-colors font-sans">
+              <button className="px-4 py-2 bg-amber-400 text-black text-sm uppercase tracking-[0.12em] hover:bg-amber-300 transition-colors font-sans font-medium">
                 Join
               </button>
             </form>

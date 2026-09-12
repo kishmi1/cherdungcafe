@@ -27,9 +27,9 @@ export default async function AboutPage() {
           }}
         />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-light text-white mb-6 tracking-wide font-serif">About Cherdung Cafe</h1>
-          <p className="text-2xl md:text-3xl text-gray-200 mb-4 max-w-3xl font-sans">Where great coffee, delicious food, and warm moments come together.</p>
-          <p className="text-lg text-gray-300 max-w-2xl font-sans">हाम्रो कफेमा राम्रो कफी, स्वादिष्ट खाना र मनको गहिराइसम्म पुग्ने अनुभवहरू।</p>
+          <h1 className="text-5xl md:text-7xl font-light text-white mb-6 tracking-[0.05em] leading-tight font-serif">About Cherdung Cafe</h1>
+          <p className="text-2xl md:text-3xl text-gray-200 mb-4 max-w-3xl font-sans leading-relaxed tracking-wide">Where great coffee, delicious food, and warm moments come together.</p>
+          <p className="text-lg text-gray-300 max-w-2xl font-sans leading-relaxed tracking-wide">हाम्रो कफेमा राम्रो कफी, स्वादिष्ट खाना र मनको गहिराइसम्म पुग्ने अनुभवहरू।</p>
         </div>
       </section>
 
@@ -37,28 +37,28 @@ export default async function AboutPage() {
       <section className="bg-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-4 font-serif">Our Story</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-sans">Cherdung Cafe कसरी सुरु भयो? किन सुरु गरियो?</p>
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-4 tracking-[0.03em] leading-tight font-serif">Our Story</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-sans tracking-wide">Cherdung Cafe कसरी सुरु भयो? किन सुरु गरियो?</p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-serif">कसरी सुरु भयो?</h3>
-                <p className="text-gray-600 leading-relaxed mb-4 font-sans">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4 tracking-wide leading-tight font-serif">कसरी सुरु भयो?</h3>
+                <p className="text-gray-600 leading-relaxed mb-4 font-sans tracking-wide">
                   Cherdung Cafe was created as a welcoming space where people can enjoy quality coffee, delicious food, and meaningful moments. Starting from a simple idea to bring people together, we transformed our passion for great coffee and warm hospitality into a reality.
                 </p>
-                <p className="text-gray-600 leading-relaxed font-sans">
+                <p className="text-gray-600 leading-relaxed font-sans tracking-wide">
                   हाम्रो सुरुवात सानो अनुभवबाट भयो - मानिसहरूलाई एउटा यस्तो ठाउँ दिने जहाँ तिनीहरू राम्रो कफी, स्वादिष्ट खाना र मनको गहिराइसम्म पुग्ने अनुभवहरू पाउन सक्छन्।
                 </p>
               </div>
 
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-serif">किन सुरु गरियो?</h3>
-                <p className="text-gray-600 leading-relaxed mb-4 font-sans">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4 tracking-wide leading-tight font-serif">किन सुरु गरियो?</h3>
+                <p className="text-gray-600 leading-relaxed mb-4 font-sans tracking-wide">
                   We started Cherdung Cafe because we believe that everyone deserves a space where they can relax, connect, and enjoy life's simple pleasures. We wanted to create more than just a café – we wanted to build a community hub where memories are made and relationships flourish.
                 </p>
-                <p className="text-gray-600 leading-relaxed font-sans">
+                <p className="text-gray-600 leading-relaxed font-sans tracking-wide">
                   हामीले यो कफे सुरु गर्यौं किनकि हामी विश्वास गर्छौं कि हरेक मानिसलाई एउटा यस्तो ठाउँ चाहिन्छ जहाँ तिनीहरू आराम गर्न, जोड्न र जीवनका साना खुशीहरू मनाउन सक्छन्।
                 </p>
               </div>
@@ -66,21 +66,21 @@ export default async function AboutPage() {
             
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-serif">Our Vision</h3>
-                <p className="text-gray-600 leading-relaxed mb-4 font-sans">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4 tracking-wide leading-tight font-serif">Our Vision</h3>
+                <p className="text-gray-600 leading-relaxed mb-4 font-sans tracking-wide">
                   Our vision is to become the heart of our community – a place where people from all walks of life come together to share moments, ideas, and warmth. We strive to set the standard for quality coffee and exceptional hospitality while maintaining our commitment to sustainability and local partnerships.
                 </p>
-                <p className="text-gray-600 leading-relaxed font-sans">
+                <p className="text-gray-600 leading-relaxed font-sans tracking-wide">
                   हाम्रो दृष्टि हाम्रो समुदायको मुटु बन्नु हो - एउटा ठाउँ जहाँ सबै तहका मानिसहरू भेला हुन्छन्, अनुभवहरू साझा गर्छन्, र एक-अर्कालाई समर्थन गर्छन्।
                 </p>
               </div>
 
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-serif">Local Community Connection</h3>
-                <p className="text-gray-600 leading-relaxed mb-4 font-sans">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4 tracking-wide leading-tight font-serif">Local Community Connection</h3>
+                <p className="text-gray-600 leading-relaxed mb-4 font-sans tracking-wide">
                   Cherdung Cafe is deeply rooted in our local community. We source ingredients from nearby farmers, support local artisans, and create a space where neighbors become friends. From hosting small events to providing a cozy spot for students and professionals, we're proud to be part of the fabric that makes our community special.
                 </p>
-                <p className="text-gray-600 leading-relaxed font-sans">
+                <p className="text-gray-600 leading-relaxed font-sans tracking-wide">
                   Cherdung Cafe हाम्रो स्थानीय समुदायसँग गहिरो रूपमा जोडिएको छ। हामी नजिकैका किसानहरूबाट सामग्रीहरू ल्याउँछौं, स्थानीय कारीगरहरूलाई समर्थन गर्छौं, र छिमेकीहरू मित्र बन्ने ठाउँ सिर्जना गर्छौं।
                 </p>
               </div>
@@ -93,8 +93,8 @@ export default async function AboutPage() {
       <section className="bg-amber-50 py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-4 font-serif">Our Philosophy</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-sans">What drives us every day</p>
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-4 tracking-[0.03em] leading-tight font-serif">Our Philosophy</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-sans tracking-wide">What drives us every day</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

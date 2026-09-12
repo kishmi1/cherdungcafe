@@ -58,45 +58,76 @@ export default async function Home() {
     <div className="flex flex-col">
 
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[700px] bg-[#211C18]">
+      <section className="relative h-screen min-h-[800px] bg-[#1a1815] overflow-hidden">
         {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(33,28,24,0.58), rgba(33,28,24,0.38)), url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=90")',
+              'linear-gradient(to right, rgba(26,24,21,0.75) 0%, rgba(26,24,21,0.4) 50%, rgba(26,24,21,0.55) 100%), url("https://images.unsplash.com/photo-1759271062515-d966b78d652e?w=1920&q=90")',
+          }}
+        />
+        {/* Warm Overlay */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            background: 'linear-gradient(135deg, rgba(212,196,168,0.15) 0%, rgba(196,180,152,0.1) 100%)',
           }}
         />
 
         {/* Hero Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-6 tracking-wide font-serif">
-            A Taste of Warmth,<br />A Place to Belong.
-          </h1>
+        <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
+          <div className="text-center max-w-4xl">
+            {/* Eyebrow Text */}
+            <p className="text-sm md:text-base text-[#D4C4A8] mb-6 tracking-[0.2em] uppercase font-sans font-medium">
+              GOOD FOOD • GREAT COFFEE • WARM MOMENTS
+            </p>
 
-          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl font-sans">
-            Fresh coffee. Good food. Warm moments.
-          </p>
+            {/* Main Heading */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-8 tracking-[0.05em] leading-[1.1] font-serif">
+              A Taste of Warmth,<br />A Place to Belong.
+            </h1>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/menu"
-              className="px-8 py-4 bg-[#F3EDE2] text-[#211C18] text-sm uppercase tracking-widest hover:bg-[#E6DCCD] transition-colors font-sans"
-            >
-              Explore Menu
-            </Link>
+            {/* Supporting Text */}
+            <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-sans leading-relaxed tracking-wide">
+              At Cherdung Café, we serve more than just coffee and food —<br className="hidden md:block" />
+              we serve cozy corners, meaningful conversations and moments<br className="hidden md:block" />
+              that feel like home.
+            </p>
 
-            <Link
-              href="/book-a-table"
-              className="px-8 py-4 border-2 border-white text-white text-sm uppercase tracking-widest hover:bg-white hover:text-[#211C18] transition-colors font-sans"
-            >
-              Book a Table
-            </Link>
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/menu"
+                className="px-10 py-4 bg-[#D4C4A8] text-[#1a1815] text-sm uppercase tracking-[0.2em] hover:bg-[#C4B498] transition-colors font-sans font-medium"
+              >
+                EXPLORE MENU →
+              </Link>
+
+              <Link
+                href="/book-a-table"
+                className="px-10 py-4 border-2 border-[#D4C4A8] text-[#D4C4A8] text-sm uppercase tracking-[0.2em] hover:bg-[#D4C4A8] hover:text-[#1a1815] transition-colors font-sans font-medium"
+              >
+                BOOK A TABLE
+              </Link>
+            </div>
+          </div>
+
+          {/* Subtle Text - More than just a café */}
+          <div className="absolute bottom-32 right-8 md:right-16 hidden lg:block">
+            <p className="text-[#D4C4A8] text-sm tracking-[0.15em] font-light italic font-serif">
+              More than just a café
+            </p>
           </div>
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-8 animate-bounce">
-            <ArrowDown className="h-8 w-8 text-white" />
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+            <p className="text-[#D4C4A8] text-xs tracking-[0.2em] uppercase mb-3 font-sans">
+              SCROLL DOWN
+            </p>
+            <div className="w-6 h-10 border-2 border-[#D4C4A8] rounded-full flex justify-center">
+              <div className="w-1 h-3 bg-[#D4C4A8] rounded-full mt-2 animate-bounce"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -119,17 +150,17 @@ export default async function Home() {
 
             {/* Right: Content */}
             <div>
-              <h2 className="text-4xl md:text-5xl font-light text-[#302923] dark:text-white mb-6 font-serif">
+              <h2 className="text-4xl md:text-5xl font-light text-[#302923] dark:text-white mb-6 tracking-[0.03em] leading-tight font-serif">
                 Welcome to Cherdung Cafe
               </h2>
 
-              <p className="text-lg text-[#766C63] dark:text-gray-300 mb-8 leading-relaxed font-sans">
+              <p className="text-lg text-[#766C63] dark:text-gray-300 mb-8 leading-relaxed font-sans tracking-wide">
                 More than just a café, Cherdung Cafe is your community space where quality coffee meets culinary excellence. We're passionate about creating moments that matter – from your morning espresso to evening gatherings with friends.
               </p>
 
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#E8DED0] text-[#302923] text-sm uppercase tracking-widest hover:bg-[#DCCFBE] transition-colors font-sans"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#E8DED0] text-[#302923] text-sm uppercase tracking-[0.15em] hover:bg-[#DCCFBE] transition-colors font-sans font-medium"
               >
                 Our Story
                 <ArrowRight className="h-4 w-4" />
@@ -145,11 +176,11 @@ export default async function Home() {
 
           {/* Section Heading */}
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#292E2A] dark:text-white mb-4 font-serif">
+            <h2 className="text-4xl font-light text-[#292E2A] dark:text-white mb-4 tracking-[0.03em] leading-tight font-serif">
               Our Services
             </h2>
 
-            <p className="text-[#69736B] dark:text-gray-300 max-w-2xl mx-auto font-sans">
+            <p className="text-[#69736B] dark:text-gray-300 max-w-2xl mx-auto font-sans tracking-wide">
               Everything you need for the perfect café experience
             </p>
           </div>
@@ -176,18 +207,18 @@ export default async function Home() {
                   )}
 
                   {/* Title */}
-                  <h3 className="text-xl font-semibold text-[#292E2A] dark:text-white mb-3 font-serif">
+                  <h3 className="text-xl font-semibold text-[#292E2A] dark:text-white mb-3 tracking-wide leading-tight font-serif">
                     {service.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-[#69736B] dark:text-gray-300 line-clamp-3 font-sans">
+                  <p className="text-[#69736B] dark:text-gray-300 line-clamp-3 font-sans leading-relaxed">
                     {service.description}
                   </p>
 
                   {/* Price Note */}
                   {service.priceNote && (
-                    <p className="text-[#7A4E2D] text-sm mt-3 font-medium font-sans">
+                    <p className="text-[#7A4E2D] text-sm mt-3 font-medium font-sans tracking-wide">
                       {service.priceNote}
                     </p>
                   )}
@@ -200,7 +231,7 @@ export default async function Home() {
           <div className="flex justify-center mt-12">
             <a
               href="/services"
-              className="group inline-flex items-center gap-2 bg-[#76543C] hover:bg-[#5F422F] text-white px-7 py-3 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-lg font-sans"
+              className="group inline-flex items-center gap-2 bg-[#76543C] hover:bg-[#5F422F] text-white px-7 py-3 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-lg font-sans tracking-[0.1em]"
             >
               View All Services
 
@@ -218,11 +249,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 tracking-[0.03em] leading-tight font-serif">
               Popular Menu
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans tracking-wide">
               Customer favorites you'll love
             </p>
           </div>
@@ -242,17 +273,17 @@ export default async function Home() {
                   </div>
                 )}
 
-                <h3 className="mb-1 text-lg font-semibold text-[#302923] dark:text-white font-serif">
+                <h3 className="mb-1 text-lg font-semibold text-[#302923] dark:text-white tracking-wide leading-tight font-serif">
                   {menuItem.title}
                 </h3>
 
                 {menuItem.description && (
-                  <p className="mb-2 text-sm text-[#766C63] dark:text-gray-300 font-sans">
+                  <p className="mb-2 text-sm text-[#766C63] dark:text-gray-300 font-sans leading-relaxed">
                     {menuItem.description}
                   </p>
                 )}
 
-                <p className="mb-2 font-semibold text-[#76543C] font-sans">
+                <p className="mb-2 font-semibold text-[#76543C] font-sans tracking-wide">
                   {menuItem.price}
                 </p>
               </div>
@@ -268,7 +299,7 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link
               href="/menu"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-[#76543C] text-white text-sm uppercase tracking-widest hover:bg-[#5F422F] transition-colors font-sans"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#76543C] text-white text-sm uppercase tracking-[0.15em] hover:bg-[#5F422F] transition-colors font-sans font-medium"
             >
               View Full Menu
               <ArrowRight className="h-4 w-4" />
@@ -282,11 +313,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light mb-4 font-serif">
+            <h2 className="text-4xl font-light mb-4 tracking-[0.03em] leading-tight font-serif">
               Today's Special
             </h2>
 
-            <p className="text-[#E8D9C8] max-w-2xl mx-auto font-sans">
+            <p className="text-[#E8D9C8] max-w-2xl mx-auto font-sans tracking-wide">
               Limited time offers you don't want to miss
             </p>
           </div>
@@ -299,18 +330,18 @@ export default async function Home() {
                   className="bg-white/10 backdrop-blur-sm p-8 rounded-lg border border-white/20"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-semibold font-serif">
+                    <h3 className="text-2xl font-semibold tracking-wide leading-tight font-serif">
                       {offer.title}
                     </h3>
 
                     {offer.discount && (
-                      <span className="bg-white text-[#76503A] px-3 py-1 rounded-full text-sm font-bold font-sans">
+                      <span className="bg-white text-[#76503A] px-3 py-1 rounded-full text-sm font-bold font-sans tracking-wide">
                         {offer.discount}
                       </span>
                     )}
                   </div>
 
-                  <p className="text-[#E8D9C8] mb-4 font-sans">
+                  <p className="text-[#E8D9C8] mb-4 font-sans leading-relaxed">
                     {offer.description}
                   </p>
 
@@ -344,7 +375,7 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link
               href="/offers"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white text-[#76503A] text-sm uppercase tracking-widest hover:bg-[#F3EDE2] transition-colors font-sans"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-white text-[#76503A] text-sm uppercase tracking-[0.15em] hover:bg-[#F3EDE2] transition-colors font-sans font-medium"
             >
               View All Offers
               <ArrowRight className="h-4 w-4" />
@@ -358,11 +389,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 tracking-[0.03em] leading-tight font-serif">
               Why Choose Cherdung Cafe
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans tracking-wide">
               What makes us different
             </p>
           </div>
@@ -374,11 +405,11 @@ export default async function Home() {
                 <Coffee className="h-10 w-10 text-[#76503A]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 tracking-wide leading-tight font-serif">
                 Quality Coffee
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300 font-sans">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans leading-relaxed">
                 Premium beans, expert baristas
               </p>
             </div>
@@ -388,11 +419,11 @@ export default async function Home() {
                 <Utensils className="h-10 w-10 text-[#76503A]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 tracking-wide leading-tight font-serif">
                 Fresh Ingredients
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300 font-sans">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans leading-relaxed">
                 Locally sourced, organic when possible
               </p>
             </div>
@@ -402,11 +433,11 @@ export default async function Home() {
                 <Users className="h-10 w-10 text-[#76503A]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 tracking-wide leading-tight font-serif">
                 Cozy Atmosphere
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300 font-sans">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans leading-relaxed">
                 Warm, welcoming environment
               </p>
             </div>
@@ -416,11 +447,11 @@ export default async function Home() {
                 <Star className="h-10 w-10 text-[#A47D45]" />
               </div>
 
-              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 font-serif">
+              <h3 className="text-xl font-semibold text-[#302923] dark:text-white mb-2 tracking-wide leading-tight font-serif">
                 Friendly Service
               </h3>
 
-              <p className="text-[#766C63] dark:text-gray-300 font-sans">
+              <p className="text-[#766C63] dark:text-gray-300 font-sans leading-relaxed">
                 Attentive, personalized care
               </p>
             </div>
@@ -434,11 +465,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 tracking-[0.03em] leading-tight font-serif">
               Our Gallery
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans tracking-wide">
               A glimpse into our world
             </p>
           </div>
@@ -491,7 +522,7 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link
               href="/gallery"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-[#F5F0E8] text-[#302923] text-sm uppercase tracking-widest hover:bg-[#E4DCCF] transition-colors font-sans"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#F5F0E8] text-[#302923] text-sm uppercase tracking-[0.15em] hover:bg-[#E4DCCF] transition-colors font-sans font-medium"
             >
               View Gallery
               <ArrowRight className="h-4 w-4" />
@@ -505,11 +536,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 font-serif">
+            <h2 className="text-4xl font-light text-[#302923] dark:text-white mb-4 tracking-[0.03em] leading-tight font-serif">
               What Our Customers Say
             </h2>
 
-            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans">
+            <p className="text-[#766C63] dark:text-gray-300 max-w-2xl mx-auto font-sans tracking-wide">
               Real reviews from real people
             </p>
           </div>
