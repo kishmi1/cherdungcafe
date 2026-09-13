@@ -14,6 +14,9 @@ import { prisma } from "@/lib/prisma"
 export const dynamic = "force-dynamic"
 
 export default async function Home() {
+  // Fetch settings from database for hero section
+  const settings = await prisma.settings.findFirst()
+
   // Fetch services from database
   const services = await prisma.service.findMany({
     where: { isActive: true },
@@ -54,59 +57,78 @@ export default async function Home() {
     take: 3,
   })
 
+  // Hero section settings with fallbacks
+  const heroSettings = {
+    imageUrl: settings?.heroImageUrl as string || "/hero-cafe.jpg",
+    overlayOpacity: (settings?.heroOverlayOpacity as number) || 0.85,
+    gradientLeft: (settings?.heroGradientLeft as string) || "rgba(26,24,21,0.88)",
+    gradientRight: (settings?.heroGradientRight as string) || "rgba(26,24,21,0.55)",
+    gradientBottom: (settings?.heroGradientBottom as string) || "rgba(26,24,21,0.75)",
+    warmOverlayColor: (settings?.heroWarmOverlayColor as string) || "rgba(212,196,168,0.15)",
+    warmOverlayOpacity: (settings?.heroWarmOverlayOpacity as number) || 0.25,
+    enabled: (settings?.heroEnabled as boolean) ?? true,
+  }
+
   return (
     <div className="flex flex-col">
 
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[800px] bg-[#1a1815] overflow-hidden">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, rgba(26,24,21,0.75) 0%, rgba(26,24,21,0.4) 50%, rgba(26,24,21,0.55) 100%), url("https://images.unsplash.com/photo-1759271062515-d966b78d652e?w=1920&q=90")',
-          }}
-        />
-        {/* Warm Overlay */}
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            background: 'linear-gradient(135deg, rgba(212,196,168,0.15) 0%, rgba(196,180,152,0.1) 100%)',
-          }}
-        />
+      {heroSettings.enabled && (
+        <section className="relative h-screen min-h-[800px] bg-[#1a1815] overflow-hidden">
+          {/* 
+            HERO BACKGROUND IMAGE - Managed from Settings Database
+            Image URL and overlay settings can be changed from Admin Panel
+          */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              // Premium gradient overlay for luxury aesthetic - optimized for text readability
+              backgroundImage: `linear-gradient(to right, ${heroSettings.gradientLeft} 0%, ${heroSettings.gradientRight} 35%, ${heroSettings.gradientBottom} 100%), 
+                               linear-gradient(to bottom, rgba(26,24,21,0.4) 0%, rgba(26,24,21,0.6) 50%, rgba(26,24,21,0.75) 100%),
+                               url("${heroSettings.imageUrl}")`,
+            }}
+          />
+          {/* Luxury warm overlay for elegant classic aesthetic */}
+          <div
+            className="absolute inset-0"
+            style={{
+              opacity: heroSettings.warmOverlayOpacity,
+              background: `linear-gradient(135deg, ${heroSettings.warmOverlayColor} 0%, rgba(196,180,152,0.1) 50%, rgba(184,168,140,0.18) 100%)`,
+            }}
+          />
 
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
           <div className="text-center max-w-4xl">
-            {/* Eyebrow Text */}
-            <p className="text-sm md:text-base text-[#D4C4A8] mb-6 tracking-[0.2em] uppercase font-sans font-medium">
+            {/* Eyebrow Text - Luxury Classic */}
+            <p className="text-sm md:text-base text-[#D4C4A8] mb-8 tracking-[0.35em] uppercase font-sans font-light opacity-90">
               GOOD FOOD • GREAT COFFEE • WARM MOMENTS
             </p>
 
-            {/* Main Heading */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-8 tracking-[0.05em] leading-[1.1] font-serif">
+            {/* Main Heading - Elegant Serif */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-10 tracking-[0.08em] leading-[1.15] font-serif" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.3)' }}>
               A Taste of Warmth,<br />A Place to Belong.
             </h1>
 
-            {/* Supporting Text */}
-            <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-sans leading-relaxed tracking-wide">
+            {/* Supporting Text - Clean Sans */}
+            <p className="text-lg md:text-xl text-gray-100 mb-12 max-w-2xl mx-auto font-sans leading-relaxed tracking-[0.05em] font-light" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.4)' }}>
               At Cherdung Café, we serve more than just coffee and food —<br className="hidden md:block" />
               we serve cozy corners, meaningful conversations and moments<br className="hidden md:block" />
               that feel like home.
             </p>
 
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* Buttons - Luxury Classic Style */}
+            <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Link
                 href="/menu"
-                className="px-10 py-4 bg-[#D4C4A8] text-[#1a1815] text-sm uppercase tracking-[0.2em] hover:bg-[#C4B498] transition-colors font-sans font-medium"
+                className="px-12 py-4 bg-[#D4C4A8] text-[#1a1815] text-sm uppercase tracking-[0.25em] hover:bg-[#C4B498] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20"
               >
                 EXPLORE MENU →
               </Link>
 
               <Link
                 href="/book-a-table"
-                className="px-10 py-4 border-2 border-[#D4C4A8] text-[#D4C4A8] text-sm uppercase tracking-[0.2em] hover:bg-[#D4C4A8] hover:text-[#1a1815] transition-colors font-sans font-medium"
+                className="px-12 py-4 border-2 border-[#D4C4A8] text-[#D4C4A8] text-sm uppercase tracking-[0.25em] hover:bg-[#D4C4A8] hover:text-[#1a1815] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20"
               >
                 BOOK A TABLE
               </Link>
@@ -115,22 +137,23 @@ export default async function Home() {
 
           {/* Subtle Text - More than just a café */}
           <div className="absolute bottom-32 right-8 md:right-16 hidden lg:block">
-            <p className="text-[#D4C4A8] text-sm tracking-[0.15em] font-light italic font-serif">
+            <p className="text-[#D4C4A8] text-sm tracking-[0.2em] font-light italic font-serif opacity-80" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>
               More than just a café
             </p>
           </div>
 
-          {/* Scroll Indicator */}
+          {/* Scroll Indicator - Elegant */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-            <p className="text-[#D4C4A8] text-xs tracking-[0.2em] uppercase mb-3 font-sans">
+            <p className="text-[#D4C4A8] text-xs tracking-[0.25em] uppercase mb-4 font-sans font-light opacity-70">
               SCROLL DOWN
             </p>
-            <div className="w-6 h-10 border-2 border-[#D4C4A8] rounded-full flex justify-center">
+            <div className="w-5 h-10 border-2 border-[#D4C4A8] rounded-full flex justify-center opacity-80">
               <div className="w-1 h-3 bg-[#D4C4A8] rounded-full mt-2 animate-bounce"></div>
             </div>
           </div>
         </div>
       </section>
+      )}
 
       {/* Welcome / About Section */}
       <section className="py-20 bg-[#F6F1E8] dark:bg-[#25211E]">

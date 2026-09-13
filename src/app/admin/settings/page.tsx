@@ -27,9 +27,19 @@ export default function SettingsPage() {
     accentColor: '#7A4E2D',
     backgroundColor: '#F7F4EF',
     logoSize: 'medium',
+    // Hero Section Settings
+    heroImageUrl: '',
+    heroOverlayOpacity: 0.85,
+    heroGradientLeft: 'rgba(26,24,21,0.88)',
+    heroGradientRight: 'rgba(26,24,21,0.55)',
+    heroGradientBottom: 'rgba(26,24,21,0.75)',
+    heroWarmOverlayColor: 'rgba(212,196,168,0.15)',
+    heroWarmOverlayOpacity: 0.25,
+    heroEnabled: true,
   })
   const [isUploadingLogo, setIsUploadingLogo] = useState(false)
   const [isUploadingFavicon, setIsUploadingFavicon] = useState(false)
+  const [isUploadingHero, setIsUploadingHero] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -39,11 +49,13 @@ export default function SettingsPage() {
     }))
   }
 
-  const handleImageUpload = async (file: File, type: 'logo' | 'favicon') => {
+  const handleImageUpload = async (file: File, type: 'logo' | 'favicon' | 'hero') => {
     if (type === 'logo') {
       setIsUploadingLogo(true)
-    } else {
+    } else if (type === 'favicon') {
       setIsUploadingFavicon(true)
+    } else {
+      setIsUploadingHero(true)
     }
 
     try {
@@ -61,9 +73,9 @@ export default function SettingsPage() {
       if (response.ok && data.success) {
         setSettings(prev => ({
           ...prev,
-          [type === 'logo' ? 'logoUrl' : 'faviconUrl']: data.url
+          [type === 'logo' ? 'logoUrl' : type === 'favicon' ? 'faviconUrl' : 'heroImageUrl']: data.url
         }))
-        setMessage(`${type === 'logo' ? 'Logo' : 'Favicon'} uploaded successfully!`)
+        setMessage(`${type === 'logo' ? 'Logo' : type === 'favicon' ? 'Favicon' : 'Hero image'} uploaded successfully!`)
       } else {
         setMessage(`Failed to upload ${type}: ${data.error || 'Unknown error'}`)
       }
@@ -73,8 +85,10 @@ export default function SettingsPage() {
     } finally {
       if (type === 'logo') {
         setIsUploadingLogo(false)
-      } else {
+      } else if (type === 'favicon') {
         setIsUploadingFavicon(false)
+      } else {
+        setIsUploadingHero(false)
       }
     }
   }
@@ -115,6 +129,15 @@ export default function SettingsPage() {
           accentColor: data.accentColor || '#7A4E2D',
           backgroundColor: data.backgroundColor || '#F7F4EF',
           logoSize: data.logoSize || 'medium',
+          // Hero section settings
+          heroImageUrl: data.heroImageUrl || '',
+          heroOverlayOpacity: data.heroOverlayOpacity ?? 0.85,
+          heroGradientLeft: data.heroGradientLeft || 'rgba(26,24,21,0.88)',
+          heroGradientRight: data.heroGradientRight || 'rgba(26,24,21,0.55)',
+          heroGradientBottom: data.heroGradientBottom || 'rgba(26,24,21,0.75)',
+          heroWarmOverlayColor: data.heroWarmOverlayColor || 'rgba(212,196,168,0.15)',
+          heroWarmOverlayOpacity: data.heroWarmOverlayOpacity ?? 0.25,
+          heroEnabled: data.heroEnabled ?? true,
         }
         setSettings(cleanData)
       } else {
@@ -156,6 +179,15 @@ export default function SettingsPage() {
         accentColor: settings.accentColor || '#7A4E2D',
         backgroundColor: settings.backgroundColor || '#F7F4EF',
         logoSize: settings.logoSize || 'medium',
+        // Hero section settings
+        heroImageUrl: settings.heroImageUrl || '',
+        heroOverlayOpacity: settings.heroOverlayOpacity ?? 0.85,
+        heroGradientLeft: settings.heroGradientLeft || 'rgba(26,24,21,0.88)',
+        heroGradientRight: settings.heroGradientRight || 'rgba(26,24,21,0.55)',
+        heroGradientBottom: settings.heroGradientBottom || 'rgba(26,24,21,0.75)',
+        heroWarmOverlayColor: settings.heroWarmOverlayColor || 'rgba(212,196,168,0.15)',
+        heroWarmOverlayOpacity: settings.heroWarmOverlayOpacity ?? 0.25,
+        heroEnabled: settings.heroEnabled ?? true,
       }
 
       console.log('Sending settings:', cleanSettings)
@@ -233,6 +265,132 @@ export default function SettingsPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Hero Section Settings - Full Width */}
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <ImageIcon className="h-5 w-5 text-amber-600" />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Hero Section</h2>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="heroEnabled"
+                checked={settings.heroEnabled}
+                onChange={(e) => setSettings(prev => ({ ...prev, heroEnabled: e.target.checked }))}
+                className="w-4 h-4 text-amber-600 rounded"
+              />
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Hero Section</label>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hero Image URL</label>
+              <Input
+                name="heroImageUrl"
+                value={settings.heroImageUrl}
+                onChange={handleInputChange}
+                placeholder="https://example.com/hero-image.jpg"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload Hero Image</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) handleImageUpload(file, 'hero')
+                  }}
+                  className="flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
+                />
+                {isUploadingHero && <RefreshCw className="h-4 w-4 animate-spin text-amber-600" />}
+              </div>
+            </div>
+
+            {settings.heroImageUrl && (
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preview</label>
+                <img
+                  src={settings.heroImageUrl}
+                  alt="Hero preview"
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Overlay Opacity (0-1)</label>
+                <Input
+                  name="heroOverlayOpacity"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="1"
+                  value={settings.heroOverlayOpacity}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Warm Overlay Opacity (0-1)</label>
+                <Input
+                  name="heroWarmOverlayOpacity"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="1"
+                  value={settings.heroWarmOverlayOpacity}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gradient Left</label>
+                <Input
+                  name="heroGradientLeft"
+                  value={settings.heroGradientLeft}
+                  onChange={handleInputChange}
+                  placeholder="rgba(26,24,21,0.88)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gradient Right</label>
+                <Input
+                  name="heroGradientRight"
+                  value={settings.heroGradientRight}
+                  onChange={handleInputChange}
+                  placeholder="rgba(26,24,21,0.55)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gradient Bottom</label>
+                <Input
+                  name="heroGradientBottom"
+                  value={settings.heroGradientBottom}
+                  onChange={handleInputChange}
+                  placeholder="rgba(26,24,21,0.75)"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Warm Overlay Color</label>
+              <Input
+                name="heroWarmOverlayColor"
+                value={settings.heroWarmOverlayColor}
+                onChange={handleInputChange}
+                placeholder="rgba(212,196,168,0.15)"
+              />
+            </div>
+          </div>
+        </div>
         {/* General Settings */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center gap-2 mb-4">
