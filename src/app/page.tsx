@@ -118,17 +118,17 @@ export default async function Home() {
             </p>
 
             {/* Buttons - Luxury Classic Style */}
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/menu"
-                className="px-12 py-4 bg-[#D4C4A8] text-[#1a1815] text-sm uppercase tracking-[0.25em] hover:bg-[#C4B498] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20"
+                className="px-10 py-3 bg-[#D4C4A8] text-[#1a1815] text-sm uppercase tracking-[0.2em] hover:bg-[#C4B498] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20 hover:-translate-y-1"
               >
                 EXPLORE MENU →
               </Link>
 
               <Link
                 href="/book-a-table"
-                className="px-12 py-4 border-2 border-[#D4C4A8] text-[#D4C4A8] text-sm uppercase tracking-[0.25em] hover:bg-[#D4C4A8] hover:text-[#1a1815] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20"
+                className="px-10 py-3 border-2 border-[#D4C4A8] text-[#D4C4A8] text-sm uppercase tracking-[0.2em] hover:bg-[#D4C4A8] hover:text-[#1a1815] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20 hover:-translate-y-1"
               >
                 BOOK A TABLE
               </Link>
