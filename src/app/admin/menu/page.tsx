@@ -39,6 +39,7 @@ const MENU_CATEGORIES = [
   "Smoothies",
   "Fresh Juices",
   "Mocktails",
+  "Soft Drinks",
   "Breakfast",
   "Snacks",
   "Momo",

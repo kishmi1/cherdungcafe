@@ -141,11 +141,11 @@ export default function BookATablePage() {
   return (
     <div className="flex flex-col">
       {/* Header */}
-      <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-16">
+      <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Book a Table</h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">Book a Table</h1>
+            <p className="text-base sm:text-xl text-gray-700 max-w-3xl mx-auto">
               Reserve your spot for the perfect dining experience at Cherdung Cafe
             </p>
           </div>

@@ -43,11 +43,11 @@ export default function Navigation({ settings }: NavigationProps) {
   return (
     <nav className="bg-white dark:bg-black sticky top-0 z-50 transition-colors border-b border-gray-200 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             {logoUrl ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="relative">
                   <img 
                     src={logoUrl} 
@@ -56,12 +56,12 @@ export default function Navigation({ settings }: NavigationProps) {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xl font-bold tracking-[0.12em] italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-400 transition-all font-serif">
+                  <span className="text-lg sm:text-xl font-bold tracking-[0.12em] italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-400 transition-all font-serif">
                     cherdung
                   </span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <span className="h-px bg-black dark:bg-white flex-1"></span>
-                    <span className="text-black dark:text-white text-xs font-medium tracking-[0.2em] font-sans">
+                    <span className="text-black dark:text-white text-[10px] sm:text-xs font-medium tracking-[0.2em] font-sans">
                       CAFE
                     </span>
                     <span className="h-px bg-black dark:bg-white flex-1"></span>
@@ -69,19 +69,19 @@ export default function Navigation({ settings }: NavigationProps) {
                 </div>
               </div>
             ) : (
-              <span className="text-black dark:text-white text-2xl font-bold tracking-[0.12em] group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors font-serif">
+              <span className="text-black dark:text-white text-xl sm:text-2xl font-bold tracking-[0.12em] group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors font-serif">
                 {siteName}
               </span>
             )}
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
             {navItems.map((item) => (
               <div key={item.href} className="relative group">
                 <Link
                   href={item.href}
-                  className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-sm uppercase tracking-[0.12em] font-sans font-medium"
+                  className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-xs sm:text-sm uppercase tracking-[0.12em] font-sans font-medium"
                 >
                   {item.label}
                   {item.hasDropdown && <span className="ml-1">▾</span>}
@@ -92,7 +92,7 @@ export default function Navigation({ settings }: NavigationProps) {
             {/* Enquiry Button */}
             <Link
               href="/enquiry"
-              className="px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-[0.12em] hover:bg-amber-200 transition-colors font-sans font-medium"
+              className="px-3 py-2 sm:px-4 sm:py-2 bg-amber-100 text-black text-xs sm:text-sm uppercase tracking-[0.12em] hover:bg-amber-200 transition-colors font-sans font-medium"
             >
               Enquiry
             </Link>
@@ -100,9 +100,9 @@ export default function Navigation({ settings }: NavigationProps) {
             {/* Cart Icon */}
             <Link href="/cart" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors relative" aria-label="Shopping Cart">
               <span className="flex items-center">
-                <ShoppingCart className="h-5 w-5" />
+                <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold font-sans tracking-wide">
+                  <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-[10px] sm:text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-bold font-sans tracking-wide">
                     {cartItemCount > 9 ? '9+' : cartItemCount}
                   </span>
                 )}
@@ -112,14 +112,14 @@ export default function Navigation({ settings }: NavigationProps) {
             {/* Track Order Icon */}
             <Link href="/track-order" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Track Order">
               <span className="flex items-center">
-                <Search className="h-5 w-5" />
+                <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               </span>
             </Link>
 
             {/* Admin Login */}
             <Link href="/login" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors" aria-label="Admin">
               <span className="flex items-center">
-                <Lock className="h-5 w-5" />
+                <Lock className="h-4 w-4 sm:h-5 sm:w-5" />
               </span>
             </Link>
           </div>
@@ -128,7 +128,7 @@ export default function Navigation({ settings }: NavigationProps) {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-black dark:text-white"
+              className="text-black dark:text-white p-2"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -140,12 +140,12 @@ export default function Navigation({ settings }: NavigationProps) {
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800">
-          <div className="px-4 py-6 space-y-4">
+          <div className="px-4 py-4 sm:py-6 space-y-3 sm:space-y-4">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-sm uppercase tracking-[0.12em] font-sans font-medium"
+                className="block text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-sm uppercase tracking-[0.12em] font-sans font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
@@ -154,19 +154,19 @@ export default function Navigation({ settings }: NavigationProps) {
             ))}
             <Link
               href="/enquiry"
-              className="block text-center px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-[0.12em] hover:bg-amber-200 transition-colors font-sans font-medium"
+              className="block text-center px-4 py-3 bg-amber-100 text-black text-sm uppercase tracking-[0.12em] hover:bg-amber-200 transition-colors font-sans font-medium rounded-lg"
               onClick={() => setIsMenuOpen(false)}
             >
               Enquiry
             </Link>
             <Link
               href="/track-order"
-              className="block text-center px-4 py-2 bg-amber-100 text-black text-sm uppercase tracking-[0.12em] hover:bg-amber-200 transition-colors font-sans font-medium"
+              className="block text-center px-4 py-3 bg-amber-100 text-black text-sm uppercase tracking-[0.12em] hover:bg-amber-200 transition-colors font-sans font-medium rounded-lg"
               onClick={() => setIsMenuOpen(false)}
             >
               Track Order
             </Link>
-            <div className="flex items-center justify-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-center space-x-6 pt-4 border-t border-gray-200 dark:border-gray-800">
               <Link href="/cart" className="text-black dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors relative" aria-label="Shopping Cart">
                 <span className="flex items-center">
                   <ShoppingCart className="h-5 w-5" />

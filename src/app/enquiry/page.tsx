@@ -131,11 +131,11 @@ export default function EnquiryPage() {
   return (
     <div className="flex flex-col">
       {/* Header */}
-      <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-16">
+      <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-serif">Make an Enquiry</h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto font-sans">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 font-serif">Make an Enquiry</h1>
+            <p className="text-base sm:text-xl text-gray-700 max-w-3xl mx-auto font-sans">
               Have a question or want to learn more about our services? We'd love to hear from you!
             </p>
           </div>
@@ -143,37 +143,37 @@ export default function EnquiryPage() {
       </section>
 
       {/* Enquiry Form */}
-      <section className="py-16 bg-white">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
             {submitStatus === "success" && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="h-6 w-6 text-green-600" />
+                  <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                   <div>
-                    <h3 className="font-semibold text-green-900">Enquiry Submitted Successfully!</h3>
-                    <p className="text-green-700 text-sm">{submitMessage}</p>
+                    <h3 className="font-semibold text-green-900 text-sm sm:text-base">Enquiry Submitted Successfully!</h3>
+                    <p className="text-green-700 text-xs sm:text-sm">{submitMessage}</p>
                   </div>
                 </div>
               </div>
             )}
 
             {submitStatus === "error" && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
                 <div className="flex items-center gap-3">
-                  <AlertCircle className="h-6 w-6 text-red-600" />
+                  <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
                   <div>
-                    <h3 className="font-semibold text-red-900">Submission Error</h3>
-                    <p className="text-red-700 text-sm">{submitMessage}</p>
+                    <h3 className="font-semibold text-red-900 text-sm sm:text-base">Submission Error</h3>
+                    <p className="text-red-700 text-xs sm:text-sm">{submitMessage}</p>
                   </div>
                 </div>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
+                  <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 font-sans">
                     Name *
                   </label>
                   <input
@@ -182,15 +182,15 @@ export default function EnquiryPage() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+                    className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base ${
                       errors.name ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Your full name"
                   />
-                  {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.name}</p>}
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
+                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 font-sans">
                     Email *
                   </label>
                   <input
@@ -199,17 +199,17 @@ export default function EnquiryPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+                    className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base ${
                       errors.email ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="your@email.com"
                   />
-                  {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
+                  {errors.email && <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.email}</p>}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
+                <label htmlFor="phone" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 font-sans">
                   Phone (Optional)
                 </label>
                 <input
@@ -218,16 +218,16 @@ export default function EnquiryPage() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+                  className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base ${
                     errors.phone ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="+1 (555) 000-0000"
                 />
-                {errors.phone && <p className="text-red-600 text-sm mt-1">{errors.phone}</p>}
+                {errors.phone && <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.phone}</p>}
               </div>
 
               <div>
-                <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
+                <label htmlFor="type" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 font-sans">
                   Enquiry Type *
                 </label>
                 <select
@@ -235,7 +235,7 @@ export default function EnquiryPage() {
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+                  className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base ${
                     errors.type ? "border-red-500" : "border-gray-300"
                   }`}
                 >
@@ -246,11 +246,11 @@ export default function EnquiryPage() {
                     </option>
                   ))}
                 </select>
-                {errors.type && <p className="text-red-600 text-sm mt-1">{errors.type}</p>}
+                {errors.type && <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.type}</p>}
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
+                <label htmlFor="subject" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 font-sans">
                   Subject *
                 </label>
                 <input
@@ -259,16 +259,16 @@ export default function EnquiryPage() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+                  className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base ${
                     errors.subject ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Brief subject of your enquiry"
                 />
-                {errors.subject && <p className="text-red-600 text-sm mt-1">{errors.subject}</p>}
+                {errors.subject && <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.subject}</p>}
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2 font-sans">
+                <label htmlFor="message" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 font-sans">
                   Message *
                 </label>
                 <textarea
@@ -276,31 +276,31 @@ export default function EnquiryPage() {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  rows={6}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+                  rows={5}
+                  className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base ${
                     errors.message ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Please provide details about your enquiry..."
                 />
-                {errors.message && <p className="text-red-600 text-sm mt-1">{errors.message}</p>}
+                {errors.message && <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.message}</p>}
               </div>
 
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-2 sm:space-x-3">
                 <input
                   type="checkbox"
                   id="consent"
                   name="consent"
                   checked={formData.consent}
                   onChange={handleChange}
-                  className={`mt-1 h-4 w-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500 ${
+                  className={`mt-0.5 sm:mt-1 h-4 w-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500 ${
                     errors.consent ? "border-red-500" : ""
                   }`}
                 />
-                <label htmlFor="consent" className="text-sm text-gray-600 font-sans">
+                <label htmlFor="consent" className="text-xs sm:text-sm text-gray-600 font-sans leading-relaxed">
                   I consent to Cherdung Café storing my enquiry details and contacting me regarding my enquiry. I understand my data will be processed according to the privacy policy. *
                 </label>
               </div>
-              {errors.consent && <p className="text-red-600 text-sm">{errors.consent}</p>}
+              {errors.consent && <p className="text-red-600 text-xs sm:text-sm">{errors.consent}</p>}
 
               {/* Honeypot field for spam protection - hidden from users */}
               <div style={{ display: 'none' }}>
@@ -317,25 +317,25 @@ export default function EnquiryPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-amber-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-sans"
+                className="w-full bg-amber-600 text-white py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-sans text-sm sm:text-base"
               >
                 {isSubmitting ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white"></div>
                     Submitting...
                   </>
                 ) : (
                   <>
-                    <Send className="h-5 w-5" />
+                    <Send className="h-4 w-4 sm:h-5 sm:w-5" />
                     Submit Enquiry
                   </>
                 )}
               </button>
             </form>
 
-            <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-3 font-serif">What happens next?</h3>
-              <ul className="text-sm text-gray-600 space-y-2 font-sans">
+            <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-gray-50 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2 sm:mb-3 font-serif text-sm sm:text-base">What happens next?</h3>
+              <ul className="text-xs sm:text-sm text-gray-600 space-y-1.5 sm:space-y-2 font-sans">
                 <li>• We'll review your enquiry within 24 hours</li>
                 <li>• You'll receive an email confirmation of your submission</li>
                 <li>• Our team will respond to your enquiry via email or phone</li>
@@ -343,7 +343,7 @@ export default function EnquiryPage() {
               </ul>
             </div>
 
-            <p className="text-center text-sm text-gray-500 mt-6 font-sans">
+            <p className="text-center text-xs sm:text-sm text-gray-500 mt-4 sm:mt-6 font-sans">
               Prefer to <Link href="/contact" className="text-amber-600 hover:text-amber-700">contact us directly</Link> or visit our café?
             </p>
           </div>

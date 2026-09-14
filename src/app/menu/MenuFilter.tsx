@@ -85,7 +85,7 @@ export default function MenuFilter({ menuItems }: Props) {
     <div>
 
       {/* ================= CATEGORY FILTER ================= */}
-      <div className="mb-10 flex flex-wrap justify-center gap-3">
+      <div className="mb-8 sm:mb-10 flex flex-wrap justify-center gap-2 sm:gap-3">
         {categories.map((category) => {
           const isActive = selectedCategory === category
 
@@ -96,8 +96,8 @@ export default function MenuFilter({ menuItems }: Props) {
               onClick={() => setSelectedCategory(category)}
               className={
                 isActive
-                  ? "rounded-full border border-[#6F8494] bg-[#6F8494] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#5C7282] hover:shadow-md font-sans tracking-wide"
-                  : "rounded-full border border-[#D7E0E5] bg-white px-5 py-2.5 text-sm font-medium text-[#53616A] shadow-sm transition-all duration-300 hover:border-[#9BAFBB] hover:bg-[#EAF0F4] hover:text-[#3E505B] font-sans tracking-wide"
+                  ? "rounded-full border border-[#6F8494] bg-[#6F8494] px-3 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#5C7282] hover:shadow-md font-sans tracking-wide"
+                  : "rounded-full border border-[#D7E0E5] bg-white px-3 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-medium text-[#53616A] shadow-sm transition-all duration-300 hover:border-[#9BAFBB] hover:bg-[#EAF0F4] hover:text-[#3E505B] font-sans tracking-wide"
               }
             >
               {category}
@@ -108,8 +108,8 @@ export default function MenuFilter({ menuItems }: Props) {
 
 
       {/* ================= RESULT COUNT ================= */}
-      <div className="mb-8 text-center">
-        <p className="text-sm text-[#737D83] font-sans tracking-wide">
+      <div className="mb-6 sm:mb-8 text-center">
+        <p className="text-xs sm:text-sm text-[#737D83] font-sans tracking-wide">
           Showing{" "}
           <span className="font-semibold text-[#6F8494] font-sans tracking-wide">
             {filteredItems.length}
@@ -121,7 +121,7 @@ export default function MenuFilter({ menuItems }: Props) {
 
       {/* ================= MENU GRID ================= */}
       {filteredItems.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
 
           {filteredItems.map((menuItem) => (
             <article
@@ -132,16 +132,16 @@ export default function MenuFilter({ menuItems }: Props) {
               {/* ================= POPULAR BADGE ================= */}
               {menuItem.isPopular && (
                 <div
-                  className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-[#C28A4A] px-3 py-1.5 text-xs font-semibold text-white shadow-md font-sans tracking-wide"
+                  className="absolute left-2 sm:left-3 top-2 sm:top-3 z-10 flex items-center gap-1 sm:gap-1.5 rounded-full bg-[#C28A4A] px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-semibold text-white shadow-md font-sans tracking-wide"
                 >
-                  <Star className="h-3.5 w-3.5 fill-current" />
+                  <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current" />
                   Popular
                 </div>
               )}
 
 
               {/* ================= IMAGE ================= */}
-              <div className="relative h-52 w-full overflow-hidden bg-[#EAF0F4]">
+              <div className="relative h-40 sm:h-52 w-full overflow-hidden bg-[#EAF0F4]">
 
                 {menuItem.image ? (
                   <img
@@ -153,7 +153,7 @@ export default function MenuFilter({ menuItems }: Props) {
                   <div
                     className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#EAF0F4] to-[#D8E2E8]"
                   >
-                    <Coffee className="h-14 w-14 text-[#6F8494]" />
+                    <Coffee className="h-10 w-10 sm:h-14 sm:w-14 text-[#6F8494]" />
                   </div>
                 )}
 
@@ -166,78 +166,78 @@ export default function MenuFilter({ menuItems }: Props) {
 
 
               {/* ================= CONTENT ================= */}
-              <div className="flex flex-col p-5">
+              <div className="flex flex-col p-4 sm:p-5">
 
                 {/* CATEGORY */}
                 {menuItem.category && (
-                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8096A3] font-sans">
+                  <p className="mb-1.5 sm:mb-2 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8096A3] font-sans">
                     {menuItem.category}
                   </p>
                 )}
 
                 {/* TITLE + PRICE */}
-                <div className="mb-3 flex items-start justify-between gap-3">
-                  <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-[#292F33] font-serif tracking-wide">
+                <div className="mb-2 sm:mb-3 flex items-start justify-between gap-2 sm:gap-3">
+                  <h3 className="line-clamp-2 text-sm sm:text-base md:text-lg font-semibold leading-snug text-[#292F33] font-serif tracking-wide">
                     {menuItem.title}
                   </h3>
-                  <span className="shrink-0 whitespace-nowrap rounded-full bg-[#F3E9DE] px-3 py-1 text-sm font-bold text-[#7A4E2D] font-sans tracking-wide">
+                  <span className="shrink-0 whitespace-nowrap rounded-full bg-[#F3E9DE] px-2 py-0.5 sm:px-3 sm:py-1 text-xs sm:text-sm font-bold text-[#7A4E2D] font-sans tracking-wide">
                     {menuItem.price}
                   </span>
                 </div>
 
                 {/* DIVIDER */}
-                <div className="mb-3 h-px bg-[#E8EEF1]" />
+                <div className="mb-2 sm:mb-3 h-px bg-[#E8EEF1]" />
 
                 {/* DESCRIPTION */}
                 {menuItem.description && (
-                  <p className="mb-3 line-clamp-3 text-sm leading-6 text-[#737D83] font-sans tracking-wide">
+                  <p className="mb-2 sm:mb-3 line-clamp-2 sm:line-clamp-3 text-xs sm:text-sm leading-5 sm:leading-6 text-[#737D83] font-sans tracking-wide">
                     {menuItem.description}
                   </p>
                 )}
 
                 {/* QUANTITY CONTROLS */}
-                <div className="mb-3 flex items-center justify-center gap-2">
+                <div className="mb-2 sm:mb-3 flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleQuantityChange(menuItem.id, -1)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D7E0E5] bg-white text-[#53616A] transition-colors hover:border-[#9BAFBB] hover:bg-[#EAF0F4]"
+                    className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg border border-[#D7E0E5] bg-white text-[#53616A] transition-colors hover:border-[#9BAFBB] hover:bg-[#EAF0F4]"
                     aria-label="Decrease quantity"
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
-                  <span className="w-8 text-center font-semibold text-[#292F33] font-sans tracking-wide">
+                  <span className="w-7 sm:w-8 text-center font-semibold text-xs sm:text-sm text-[#292F33] font-sans tracking-wide">
                     {quantities[menuItem.id] || 1}
                   </span>
                   <button
                     onClick={() => handleQuantityChange(menuItem.id, 1)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D7E0E5] bg-white text-[#53616A] transition-colors hover:border-[#9BAFBB] hover:bg-[#EAF0F4]"
+                    className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg border border-[#D7E0E5] bg-white text-[#53616A] transition-colors hover:border-[#9BAFBB] hover:bg-[#EAF0F4]"
                     aria-label="Increase quantity"
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
                 </div>
 
                 {/* BUTTONS */}
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   {/* ADD TO CART BUTTON */}
                   <button
                     onClick={() => handleAddToCart(menuItem)}
-                    className="w-full flex items-center justify-center gap-2 rounded-xl border border-[#6F8494] bg-[#6F8494] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#5C7282] hover:shadow-md font-sans tracking-wide"
+                    className="w-full flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-[#6F8494] bg-[#6F8494] px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#5C7282] hover:shadow-md font-sans tracking-wide"
                   >
-                    <ShoppingCart className="h-4 w-4" />
+                    <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     Add to Cart
                   </button>
 
                   {/* ORDER NOW BUTTON */}
                   <button
                     onClick={() => handleOrderNow(menuItem)}
-                    className="w-full flex items-center justify-center gap-2 rounded-xl border border-[#7A4E2D] bg-[#7A4E2D] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#6A4225] hover:shadow-md font-sans tracking-wide"
+                    className="w-full flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-[#7A4E2D] bg-[#7A4E2D] px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#6A4225] hover:shadow-md font-sans tracking-wide"
                   >
                     Order Now
                   </button>
 
                   {/* SUCCESS FEEDBACK */}
                   {showSuccess?.itemId === menuItem.id && (
-                    <div className="text-center text-xs font-semibold text-[#6F8494] font-sans tracking-wide">
+                    <div className="text-center text-[10px] sm:text-xs font-semibold text-[#6F8494] font-sans tracking-wide">
                       {showSuccess.message}
                     </div>
                   )}
@@ -253,23 +253,23 @@ export default function MenuFilter({ menuItems }: Props) {
 
         /* ================= EMPTY STATE ================= */
         <div
-          className="rounded-3xl border border-[#DDE5E9] bg-white px-6 py-20 text-center shadow-sm"
+          className="rounded-3xl border border-[#DDE5E9] bg-white px-4 sm:px-6 py-16 sm:py-20 text-center shadow-sm"
         >
 
           <div
-            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#EAF0F4]"
+            className="mx-auto mb-4 sm:mb-5 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#EAF0F4]"
           >
-            <Coffee className="h-8 w-8 text-[#6F8494]" />
+            <Coffee className="h-7 w-7 sm:h-8 sm:w-8 text-[#6F8494]" />
           </div>
 
           <h3
-            className="text-lg font-semibold text-[#292F33] font-serif tracking-wide leading-tight"
+            className="text-base sm:text-lg font-semibold text-[#292F33] font-serif tracking-wide leading-tight"
           >
             No items found
           </h3>
 
           <p
-            className="mt-2 text-sm text-[#737D83] font-sans tracking-wide"
+            className="mt-2 text-xs sm:text-sm text-[#737D83] font-sans tracking-wide"
           >
             There are no menu items in this category.
           </p>
