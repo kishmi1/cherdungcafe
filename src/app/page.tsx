@@ -74,7 +74,7 @@ export default async function Home() {
 
       {/* Hero Section */}
       {heroSettings.enabled && (
-        <section className="relative h-screen min-h-[400px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px] xl:min-h-[800px] bg-[#1a1815] overflow-hidden">
+        <section className="relative h-[min(100svh,800px)] min-h-[520px] sm:h-screen sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px] xl:min-h-[800px] bg-[#1a1815] overflow-hidden">
           {/*
             HERO BACKGROUND IMAGE - Managed from Settings Database
             Image URL and overlay settings can be changed from Admin Panel
@@ -99,7 +99,7 @@ export default async function Home() {
 
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 max-w-7xl mx-auto py-6 sm:py-10 md:py-14">
-          <div className="text-center max-w-4xl px-2 sm:px-4">
+          <div className="text-center max-w-4xl px-1 sm:px-4">
             {/* Eyebrow Text - Luxury Classic */}
             <p className="text-[11px] sm:text-xs md:text-sm lg:text-base text-[#D4C4A8] mb-3 sm:mb-4 md:mb-5 lg:mb-7 tracking-[0.15em] sm:tracking-[0.18em] md:tracking-[0.22em] lg:tracking-[0.35em] uppercase font-sans font-light opacity-90">
               GOOD FOOD • GREAT COFFEE • WARM MOMENTS
@@ -111,7 +111,7 @@ export default async function Home() {
             </h1>
 
             {/* Supporting Text - Clean Sans */}
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-100 mb-5 sm:mb-6 md:mb-8 lg:mb-10 max-w-md sm:max-w-md md:max-w-lg lg:max-w-2xl mx-auto font-sans leading-relaxed sm:leading-relaxed tracking-[0.02em] sm:tracking-[0.03em] md:tracking-[0.04em] lg:tracking-[0.05em] font-light px-2 sm:px-4" style={{ textShadow: '0 1px 12px rgba(0,0,0,0.5)' }}>
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-100 mb-5 sm:mb-6 md:mb-8 lg:mb-10 max-w-md sm:max-w-md md:max-w-lg lg:max-w-2xl mx-auto font-sans leading-relaxed sm:leading-relaxed tracking-[0.02em] sm:tracking-[0.03em] md:tracking-[0.04em] lg:tracking-[0.05em] font-light px-1 sm:px-4" style={{ textShadow: '0 1px 12px rgba(0,0,0,0.5)' }}>
               At Cherdung Café, we serve more than just coffee and food —<br className="hidden sm:block" />
               we serve cozy corners, meaningful conversations and moments<br className="hidden sm:block" />
               that feel like home.
@@ -156,7 +156,7 @@ export default async function Home() {
       )}
 
       {/* Welcome / About Section */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-[#F6F1E8] dark:bg-[#25211E]">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#F6F1E8] dark:bg-[#25211E]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-14 items-center">
 
@@ -194,7 +194,7 @@ export default async function Home() {
       </section>
 
       {/* Our Services */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-[#E8EDE7] dark:bg-[#202522]">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#E8EDE7] dark:bg-[#202522]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           {/* Section Heading */}
@@ -214,7 +214,7 @@ export default async function Home() {
               return (
                 <div
                   key={service.id}
-                  className="bg-[#FAFBF8] dark:bg-[#292D2A] p-5 sm:p-6 md:p-7 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="bg-[#FAFBF8] dark:bg-[#292D2A] p-4 sm:p-6 md:p-7 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Service Image */}
                   {service.image ? (
@@ -235,7 +235,7 @@ export default async function Home() {
                   </h3>
 
                   {/* Description */}
-                  <p className="text-xs sm:text-sm md:text-base text-[#69736B] dark:text-gray-300 line-clamp-3 font-sans leading-relaxed">
+                  <p className="text-sm md:text-base text-[#69736B] dark:text-gray-300 line-clamp-3 font-sans leading-relaxed">
                     {service.description}
                   </p>
 
@@ -268,7 +268,7 @@ export default async function Home() {
       </section>
 
       {/* Popular Menu */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-[#FBF8F2] dark:bg-[#211E1B]">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#FBF8F2] dark:bg-[#211E1B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           <div className="text-center mb-8 sm:mb-10 md:mb-14">
@@ -301,7 +301,7 @@ export default async function Home() {
                 </h3>
 
                 {menuItem.description && (
-                  <p className="mb-2 sm:mb-1.5 text-xs sm:text-xs md:text-sm text-[#766C63] dark:text-gray-300 font-sans leading-relaxed line-clamp-2">
+                  <p className="mb-2 sm:mb-1.5 text-sm text-[#766C63] dark:text-gray-300 font-sans leading-relaxed line-clamp-2">
                     {menuItem.description}
                   </p>
                 )}
@@ -332,7 +332,7 @@ export default async function Home() {
       </section>
 
       {/* Special Offers */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-gradient-to-r from-[#76503A] to-[#4E3325] text-white">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-r from-[#76503A] to-[#4E3325] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           <div className="text-center mb-8 sm:mb-10 md:mb-14">
@@ -408,7 +408,7 @@ export default async function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-[#F0E8DE] dark:bg-[#27221E]">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#F0E8DE] dark:bg-[#27221E]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           <div className="text-center mb-8 sm:mb-10 md:mb-14">
@@ -555,7 +555,7 @@ export default async function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-[#FAF7F1] dark:bg-[#211F1C]">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#FAF7F1] dark:bg-[#211F1C]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           <div className="text-center mb-8 sm:mb-10 md:mb-14">
@@ -668,7 +668,7 @@ export default async function Home() {
       </section>
 
       {/* Blog Section */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-[#EDE7DF] dark:bg-[#25221F]">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#EDE7DF] dark:bg-[#25221F]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           <div className="text-center mb-8 sm:mb-10 md:mb-14">
@@ -796,7 +796,7 @@ export default async function Home() {
       </section>
 
       {/* Reservation & Enquiry CTA */}
-      <section className="py-10 sm:py-14 md:py-18 lg:py-24 bg-[#29211C] text-white">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#29211C] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-14">
@@ -842,7 +842,7 @@ export default async function Home() {
       </section>
 
       {/* Location / Contact */}
-      <section className="py-14 sm:py-18 md:py-22 lg:py-28 bg-[#F4F0E8] dark:bg-[#24211E]">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#F4F0E8] dark:bg-[#24211E]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
 
           <div className="text-center mb-10 sm:mb-14">
