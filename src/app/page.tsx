@@ -281,7 +281,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {popularMenuItems.map((menuItem) => (
               <div key={menuItem.id} className="group">
                 {menuItem.image ? (
@@ -421,7 +421,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
 
             <div className="text-center">
               <div className="bg-[#E2D6C7] w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 md:mb-4">
@@ -498,7 +498,7 @@ export default async function Home() {
           </div>
 
           {galleryImages.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
               {galleryImages.map((image) => (
                 <div
                   key={image.id}
@@ -513,7 +513,7 @@ export default async function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
 
               <div className="aspect-square bg-gradient-to-br from-[#DDD7CE] to-[#F0ECE5] rounded-lg flex items-center justify-center">
                 <Coffee className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-[#76503A]" />
@@ -682,7 +682,7 @@ export default async function Home() {
           </div>
 
           {latestBlogPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {latestBlogPosts.map((post) => (
                 <div key={post.id} className="bg-[#FCFAF6] dark:bg-[#302C28] p-4 sm:p-5 md:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
                   {post.coverImage ? (
@@ -717,7 +717,7 @@ export default async function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               <div className="bg-[#FCFAF6] dark:bg-[#302C28] p-4 sm:p-5 md:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
                 <div className="aspect-video bg-gradient-to-br from-[#F0E8DC] to-[#E3D9CC] rounded-lg mb-2 sm:mb-3 md:mb-4 flex items-center justify-center">
                   <Coffee className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-[#76503A]" />

@@ -21,11 +21,11 @@ export default function Navigation({ settings }: NavigationProps) {
   // Get logo size in pixels - responsive for mobile
   const getLogoHeight = () => {
     switch (logoSize) {
-      case 'small': return 'h-6 sm:h-8'
-      case 'medium': return 'h-8 sm:h-12'
-      case 'large': return 'h-10 sm:h-16'
-      case 'xlarge': return 'h-12 sm:h-20'
-      default: return 'h-8 sm:h-12'
+      case 'small': return 'h-8 sm:h-10'
+      case 'medium': return 'h-10 sm:h-12'
+      case 'large': return 'h-12 sm:h-16'
+      case 'xlarge': return 'h-14 sm:h-20'
+      default: return 'h-10 sm:h-12'
     }
   }
 
@@ -47,7 +47,7 @@ export default function Navigation({ settings }: NavigationProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             {logoUrl ? (
-              <div className="flex items-center gap-1.5 sm:gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="relative">
                   <img 
                     src={logoUrl} 
@@ -56,12 +56,12 @@ export default function Navigation({ settings }: NavigationProps) {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm sm:text-lg md:text-xl font-bold tracking-[0.1em] sm:tracking-[0.12em] italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-400 transition-all font-serif">
+                  <span className="text-base sm:text-lg md:text-xl font-bold tracking-[0.1em] sm:tracking-[0.12em] italic bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-400 transition-all font-serif">
                     cherdung
                   </span>
-                  <div className="flex items-center gap-0.5 sm:gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <span className="h-px bg-black dark:bg-white flex-1"></span>
-                    <span className="text-black dark:text-white text-[8px] sm:text-[10px] md:text-xs font-medium tracking-[0.15em] sm:tracking-[0.2em] font-sans">
+                    <span className="text-black dark:text-white text-[9px] sm:text-[10px] md:text-xs font-medium tracking-[0.15em] sm:tracking-[0.2em] font-sans">
                       CAFE
                     </span>
                     <span className="h-px bg-black dark:bg-white flex-1"></span>
@@ -69,7 +69,7 @@ export default function Navigation({ settings }: NavigationProps) {
                 </div>
               </div>
             ) : (
-              <span className="text-black dark:text-white text-lg sm:text-xl md:text-2xl font-bold tracking-[0.1em] sm:tracking-[0.12em] group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors font-serif">
+              <span className="text-black dark:text-white text-xl sm:text-2xl md:text-2xl font-bold tracking-[0.1em] sm:tracking-[0.12em] group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors font-serif">
                 {siteName}
               </span>
             )}
