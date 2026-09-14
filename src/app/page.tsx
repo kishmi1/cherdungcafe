@@ -74,7 +74,7 @@ export default async function Home() {
 
       {/* Hero Section */}
       {heroSettings.enabled && (
-        <section className="relative h-screen min-h-[400px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px] xl:min-h-[800px] bg-[#1a1815] overflow-hidden">
+        <section className="relative h-screen min-h-[350px] sm:min-h-[450px] md:min-h-[550px] lg:min-h-[650px] xl:min-h-[750px] bg-[#1a1815] overflow-hidden">
           {/* 
             HERO BACKGROUND IMAGE - Managed from Settings Database
             Image URL and overlay settings can be changed from Admin Panel
@@ -98,20 +98,20 @@ export default async function Home() {
           />
 
         {/* Hero Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center h-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-16 max-w-7xl mx-auto py-8 sm:py-12 md:py-16">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-16 max-w-7xl mx-auto py-4 sm:py-8 md:py-12">
           <div className="text-center max-w-4xl px-2 sm:px-4">
             {/* Eyebrow Text - Luxury Classic */}
-            <p className="text-[8px] sm:text-[10px] md:text-xs lg:text-base text-[#D4C4A8] mb-2 sm:mb-4 md:mb-6 lg:mb-8 tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.35em] uppercase font-sans font-light opacity-90">
+            <p className="text-[10px] sm:text-[10px] md:text-xs lg:text-base text-[#D4C4A8] mb-2 sm:mb-3 md:mb-4 lg:mb-6 tracking-[0.12em] sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.35em] uppercase font-sans font-light opacity-90">
               GOOD FOOD • GREAT COFFEE • WARM MOMENTS
             </p>
 
             {/* Main Heading - Elegant Serif */}
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-7xl font-light text-white mb-3 sm:mb-4 md:mb-6 lg:mb-8 xl:mb-10 tracking-[0.02em] sm:tracking-[0.03em] md:tracking-[0.05em] lg:tracking-[0.08em] leading-[1.1] sm:leading-[1.15] md:leading-[1.2] font-serif" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.3)' }}>
+            <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-7xl font-light text-white mb-3 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-8 tracking-[0.03em] sm:tracking-[0.03em] md:tracking-[0.05em] lg:tracking-[0.08em] leading-[1.1] sm:leading-[1.15] md:leading-[1.2] font-serif" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.3)' }}>
               A Taste of Warmth,<br />A Place to Belong.
             </h1>
 
             {/* Supporting Text - Clean Sans */}
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-100 mb-4 sm:mb-6 md:mb-8 lg:mb-12 max-w-xl sm:max-w-md md:max-w-lg lg:max-w-2xl mx-auto font-sans leading-relaxed sm:leading-relaxed tracking-[0.01em] sm:tracking-[0.02em] md:tracking-[0.03em] lg:tracking-[0.05em] font-light px-2 sm:px-4" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.4)' }}>
+            <p className="text-sm sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-100 mb-4 sm:mb-5 md:mb-6 lg:mb-8 max-w-md sm:max-w-md md:max-w-lg lg:max-w-2xl mx-auto font-sans leading-relaxed sm:leading-relaxed tracking-[0.02em] sm:tracking-[0.02em] md:tracking-[0.03em] lg:tracking-[0.05em] font-light px-2 sm:px-4" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.4)' }}>
               At Cherdung Café, we serve more than just coffee and food —<br className="hidden sm:block" />
               we serve cozy corners, meaningful conversations and moments<br className="hidden sm:block" />
               that feel like home.
@@ -121,14 +121,14 @@ export default async function Home() {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center px-2 sm:px-4 w-full max-w-xs sm:max-w-none mx-auto">
               <Link
                 href="/menu"
-                className="w-full sm:w-auto px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3 lg:px-10 lg:py-3 bg-[#D4C4A8] text-[#1a1815] text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.1em] md:tracking-[0.15em] lg:tracking-[0.2em] hover:bg-[#C4B498] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20 hover:-translate-y-1 text-center"
+                className="w-full sm:w-auto px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3 lg:px-10 lg:py-3 bg-[#D4C4A8] text-[#1a1815] text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.1em] md:tracking-[0.15em] lg:tracking-[0.2em] hover:bg-[#C4B498] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20 hover:-translate-y-1 text-center"
               >
                 EXPLORE MENU →
               </Link>
 
               <Link
                 href="/book-a-table"
-                className="w-full sm:w-auto px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3 lg:px-10 lg:py-3 border-2 border-[#D4C4A8] text-[#D4C4A8] text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.08em] sm:tracking-[0.1em] md:tracking-[0.15em] lg:tracking-[0.2em] hover:bg-[#D4C4A8] hover:text-[#1a1815] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20 hover:-translate-y-1 text-center"
+                className="w-full sm:w-auto px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3 lg:px-10 lg:py-3 border-2 border-[#D4C4A8] text-[#D4C4A8] text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.1em] sm:tracking-[0.1em] md:tracking-[0.15em] lg:tracking-[0.2em] hover:bg-[#D4C4A8] hover:text-[#1a1815] transition-all duration-300 font-sans font-light hover:shadow-lg hover:shadow-[#D4C4A8]/20 hover:-translate-y-1 text-center"
               >
                 BOOK A TABLE
               </Link>
