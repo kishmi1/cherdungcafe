@@ -343,7 +343,10 @@ export default async function OrderSuccessPage({ params }: { params: Promise<{ i
 
           {/* ================= RECOMMENDATIONS ================= */}
           <div className="mt-8">
-            <OrderRecommendations orderId={orderId} />
+            <OrderRecommendations 
+              orderId={orderId}
+              orderItems={order.items.map(item => item.menuItem)}
+            />
           </div>
         </div>
       </section>

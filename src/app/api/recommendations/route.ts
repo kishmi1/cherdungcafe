@@ -253,19 +253,24 @@ async function getRecommendationsFromCart(cartItems: any[], limit: number = 4) {
   return [...uniqueItems, ...popularItems]
 }
 
-// POST recommendations based on cart items
+// POST recommendations based on cart items or order ID
 export async function POST(request: Request) {
   try {
     const body = await request.json()
     const cartItems = body.cartItems
+    const orderId = body.orderId
     const limit = body.limit || 4
 
-    if (!cartItems || !Array.isArray(cartItems)) {
-      return NextResponse.json({ error: 'Cart items are required' }, { status: 400 })
+    // Support both cart items and order ID formats
+    if (cartItems && Array.isArray(cartItems)) {
+      const recommendations = await getRecommendationsFromCart(cartItems, limit)
+      return NextResponse.json(recommendations)
+    } else if (orderId) {
+      const recommendations = await getRecommendations(parseInt(orderId))
+      return NextResponse.json(recommendations)
+    } else {
+      return NextResponse.json({ error: 'Cart items or Order ID is required' }, { status: 400 })
     }
-
-    const recommendations = await getRecommendationsFromCart(cartItems, limit)
-    return NextResponse.json(recommendations)
   } catch (error) {
     console.error('Error fetching recommendations:', error)
     return NextResponse.json({ error: 'Failed to fetch recommendations' }, { status: 500 })

@@ -24,11 +24,13 @@ type RecommendationCombo = {
 }
 
 interface OrderRecommendationsProps {
-  orderId: number
+  orderId?: number
+  orderItems?: MenuItem[]
 }
 
-export default function OrderRecommendations({ orderId }: OrderRecommendationsProps) {
-  const [recommendations, setRecommendations] = useState<RecommendationCombo[]>([])
+export default function OrderRecommendations({ orderId, orderItems }: OrderRecommendationsProps) {
+  const [recommendations, setRecommendations] = useState<MenuItem[]>([])
+  const [additionalItems, setAdditionalItems] = useState<MenuItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [addedItems, setAddedItems] = useState<Set<number>>(new Set())
   const { addToCart } = useCart()
@@ -36,16 +38,80 @@ export default function OrderRecommendations({ orderId }: OrderRecommendationsPr
   useEffect(() => {
     async function fetchRecommendations() {
       try {
-        const response = await fetch('/api/recommendations', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ orderId }),
-        })
-        if (response.ok) {
+        let response
+        
+        // Use cart-based API if orderItems are provided, otherwise use order-based API
+        if (orderItems && orderItems.length > 0) {
+          response = await fetch('/api/recommendations', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              cartItems: orderItems,
+              limit: 8
+            }),
+          })
+        } else if (orderId) {
+          response = await fetch('/api/recommendations', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId }),
+          })
+        }
+        
+        if (response && response.ok) {
           const data = await response.json()
-          setRecommendations(data)
+          // Handle both old combo format and new item format
+          if (Array.isArray(data) && data.length > 0) {
+            // Check if it's the old combo format or new item format
+            if (data[0].mainItem) {
+              // Old format - extract mainItems
+              setRecommendations(data.map((combo: RecommendationCombo) => combo.mainItem))
+            } else {
+              // New format - use items directly
+              setRecommendations(data)
+            }
+          }
+        }
+
+        // Load additional menu items for more variety
+        if (orderItems && orderItems.length > 0) {
+          const menuResponse = await fetch('/api/menu')
+          if (menuResponse.ok) {
+            const allMenuItems = await menuResponse.json()
+            const orderItemIds = new Set(orderItems.map(item => item.id))
+            const recItemIds = new Set(recommendations.map(item => item.id))
+            
+            // Get categories from order items
+            const orderCategories = new Set(orderItems.map(item => item.category).filter(Boolean))
+            
+            const extraItems = allMenuItems
+              .filter((item: MenuItem) => 
+                item.isAvailable && 
+                !orderItemIds.has(item.id) && 
+                !recItemIds.has(item.id)
+              )
+              .sort((a: MenuItem, b: MenuItem) => {
+                // Prioritize items in same category as order items
+                const aInOrderCategory = a.category && orderCategories.has(a.category)
+                const bInOrderCategory = b.category && orderCategories.has(b.category)
+                
+                if (aInOrderCategory && !bInOrderCategory) return -1
+                if (!aInOrderCategory && bInOrderCategory) return 1
+                
+                // Then prioritize popular items
+                if (a.isPopular && !b.isPopular) return -1
+                if (!a.isPopular && b.isPopular) return 1
+                
+                return a.sortOrder - b.sortOrder
+              })
+              .slice(0, 8)
+            
+            setAdditionalItems(extraItems)
+          }
         }
       } catch (error) {
         console.error('Error fetching recommendations:', error)
@@ -55,30 +121,21 @@ export default function OrderRecommendations({ orderId }: OrderRecommendationsPr
     }
 
     fetchRecommendations()
-  }, [orderId])
+  }, [orderId, orderItems])
 
-  const handleAddToOrder = (combo: RecommendationCombo) => {
-    // Add the main item (the item to be added to complete the combo)
-    addToCart(combo.mainItem)
-    setAddedItems(prev => new Set(prev).add(combo.mainItem.id))
+  const handleAddToOrder = (item: MenuItem) => {
+    // Add the item to cart
+    addToCart(item)
+    setAddedItems(prev => new Set(prev).add(item.id))
     
     // Reset the "added" state after 2 seconds
     setTimeout(() => {
       setAddedItems(prev => {
         const newSet = new Set(prev)
-        newSet.delete(combo.mainItem.id)
+        newSet.delete(item.id)
         return newSet
       })
     }, 2000)
-  }
-
-  const getItemPrice = (price: string) => {
-    return parseFloat(price.replace(/[^0-9.]/g, '')) || 0
-  }
-
-  const getComboPrice = (combo: RecommendationCombo) => {
-    // Only return the price of the item to be added (mainItem)
-    return getItemPrice(combo.mainItem.price)
   }
 
   if (isLoading) {
@@ -110,23 +167,23 @@ export default function OrderRecommendations({ orderId }: OrderRecommendationsPr
   return (
     <div className="rounded-2xl border border-[#DDE5E9] bg-white p-6 shadow-sm">
       <h2 className="mb-2 text-lg font-semibold text-[#292F33]">
-        Complete Your Order
+        Perfect Pairs With Your Order
       </h2>
       <p className="mb-6 text-sm text-[#737D83]">
-        Perfect combos to complete your meal.
+        These items complement what you just ordered.
       </p>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {recommendations.map((combo, index) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        {recommendations.map((item) => (
           <div
-            key={`${combo.mainItem.id}-${combo.suggestedItem?.id || index}`}
+            key={item.id}
             className="group overflow-hidden rounded-xl border border-[#DDE5E9] bg-[#F8FAFB] transition-all duration-300 hover:border-[#6F8494] hover:shadow-md"
           >
             <div className="relative h-32 overflow-hidden bg-[#EAF0F4]">
-              {combo.mainItem.image ? (
+              {item.image ? (
                 <img
-                  src={combo.mainItem.image}
-                  alt={combo.mainItem.title}
+                  src={item.image}
+                  alt={item.title}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : (
@@ -134,38 +191,45 @@ export default function OrderRecommendations({ orderId }: OrderRecommendationsPr
                   <Coffee className="h-8 w-8 text-[#6F8494]" />
                 </div>
               )}
-              {combo.suggestedItem && (
-                <div className="absolute top-2 right-2 bg-[#6F8494] text-white text-xs px-2 py-1 rounded-full font-semibold">
-                  Combo
+              {item.isPopular && (
+                <div className="absolute top-2 right-2 bg-[#C28A4A] text-white text-xs px-2 py-1 rounded-full font-semibold">
+                  Popular
                 </div>
               )}
             </div>
             
             <div className="p-4">
               <h3 className="mb-1 text-sm font-semibold text-[#292F33] line-clamp-1">
-                {combo.mainItem.title}
+                {item.title}
               </h3>
-              <p className="mb-3 text-xs text-[#737D83] line-clamp-2">
-                {combo.comboName !== combo.mainItem.title ? combo.comboName : combo.mainItem.description || 'Delicious item'}
-              </p>
+              {item.category && (
+                <p className="mb-2 text-xs text-[#8096A3] uppercase tracking-wide">
+                  {item.category}
+                </p>
+              )}
+              {item.description && (
+                <p className="mb-3 text-xs text-[#737D83] line-clamp-2">
+                  {item.description}
+                </p>
+              )}
               
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold text-[#7A4E2D]">
-                  {combo.mainItem.price}
+                  {item.price}
                 </span>
                 
                 <button
-                  onClick={() => handleAddToOrder(combo)}
-                  disabled={addedItems.has(combo.mainItem.id)}
+                  onClick={() => handleAddToOrder(item)}
+                  disabled={addedItems.has(item.id)}
                   className={`
                     flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-300
-                    ${addedItems.has(combo.mainItem.id)
+                    ${addedItems.has(item.id)
                       ? 'bg-green-600 text-white'
                       : 'bg-[#6F8494] text-white hover:bg-[#5C7282]'
                     }
                   `}
                 >
-                  {addedItems.has(combo.mainItem.id) ? (
+                  {addedItems.has(item.id) ? (
                     <>
                       <ShoppingCart className="h-3 w-3" />
                       Added
@@ -173,7 +237,7 @@ export default function OrderRecommendations({ orderId }: OrderRecommendationsPr
                   ) : (
                     <>
                       <Plus className="h-3 w-3" />
-                      Add to Order
+                      Add
                     </>
                   )}
                 </button>
@@ -192,6 +256,92 @@ export default function OrderRecommendations({ orderId }: OrderRecommendationsPr
           View Cart & Checkout
         </Link>
       </div>
+
+      {/* Additional Items Section */}
+      {additionalItems.length > 0 && (
+        <div className="mt-8 pt-6 border-t border-[#E8EEF1]">
+          <h3 className="mb-4 text-base font-semibold text-[#292F33]">
+            More From Our Menu
+          </h3>
+          <p className="mb-6 text-sm text-[#737D83]">
+            Explore other delicious items that might interest you.
+          </p>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {additionalItems.map((item) => (
+              <div
+                key={item.id}
+                className="group overflow-hidden rounded-xl border border-[#DDE5E9] bg-[#F8FAFB] transition-all duration-300 hover:border-[#6F8494] hover:shadow-md"
+              >
+                <div className="relative h-32 overflow-hidden bg-[#EAF0F4]">
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <Coffee className="h-8 w-8 text-[#6F8494]" />
+                    </div>
+                  )}
+                  {item.isPopular && (
+                    <div className="absolute top-2 right-2 bg-[#C28A4A] text-white text-xs px-2 py-1 rounded-full font-semibold">
+                      Popular
+                    </div>
+                  )}
+                </div>
+                
+                <div className="p-4">
+                  <h3 className="mb-1 text-sm font-semibold text-[#292F33] line-clamp-1">
+                    {item.title}
+                  </h3>
+                  {item.category && (
+                    <p className="mb-2 text-xs text-[#8096A3] uppercase tracking-wide">
+                      {item.category}
+                    </p>
+                  )}
+                  {item.description && (
+                    <p className="mb-3 text-xs text-[#737D83] line-clamp-2">
+                      {item.description}
+                    </p>
+                  )}
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-[#7A4E2D]">
+                      {item.price}
+                    </span>
+                    
+                    <button
+                      onClick={() => handleAddToOrder(item)}
+                      disabled={addedItems.has(item.id)}
+                      className={`
+                        flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-300
+                        ${addedItems.has(item.id)
+                          ? 'bg-green-600 text-white'
+                          : 'bg-[#6F8494] text-white hover:bg-[#5C7282]'
+                        }
+                      `}
+                    >
+                      {addedItems.has(item.id) ? (
+                        <>
+                          <ShoppingCart className="h-3 w-3" />
+                          Added
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="h-3 w-3" />
+                          Add
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
