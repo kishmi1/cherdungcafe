@@ -1,10 +1,22 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useCart } from "@/lib/cart-context"
 import { useRouter } from "next/navigation"
-import { Coffee, ArrowLeft, MapPin, CreditCard, Truck, Store } from "lucide-react"
+import { Coffee, ArrowLeft, MapPin, CreditCard, Truck, Store, Plus } from "lucide-react"
 import Link from "next/link"
+
+type MenuItem = {
+  id: number
+  title: string
+  description: string | null
+  image: string | null
+  price: string
+  category: string | null
+  isPopular: boolean
+  isAvailable: boolean
+  sortOrder: number
+}
 
 type FormData = {
   fullName: string
@@ -18,11 +30,13 @@ type FormData = {
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { cart, getCartTotal, clearCart } = useCart()
+  const { cart, getCartTotal, clearCart, addToCart } = useCart()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [paymentStep, setPaymentStep] = useState<string>("idle")
   const [error, setError] = useState("")
   const [failedOrderId, setFailedOrderId] = useState<number | null>(null)
+  const [recommendations, setRecommendations] = useState<MenuItem[]>([])
+  const [addedItems, setAddedItems] = useState<Set<number>>(new Set())
 
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
@@ -33,6 +47,38 @@ export default function CheckoutPage() {
     paymentMethod: "CASH",
     notes: "",
   })
+
+  // Load recommendations based on cart items
+  useEffect(() => {
+    const loadRecommendations = async () => {
+      if (cart.length === 0) {
+        setRecommendations([])
+        return
+      }
+
+      try {
+        const response = await fetch('/api/recommendations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            cartItems: cart.map(cartItem => cartItem.menuItem),
+            limit: 3
+          })
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setRecommendations(data)
+        }
+      } catch (error) {
+        console.error('Failed to load recommendations:', error)
+      }
+    }
+
+    loadRecommendations()
+  }, [cart])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -317,6 +363,20 @@ export default function CheckoutPage() {
   const deliveryFee = formData.orderType === "DELIVERY" ? 50 : 0
   const totalAmount = getCartTotal() + deliveryFee
 
+  const handleAddRecommendation = (item: MenuItem) => {
+    addToCart(item)
+    setAddedItems(prev => new Set(prev).add(item.id))
+    
+    // Simple feedback
+    setTimeout(() => {
+      setAddedItems(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(item.id)
+        return newSet
+      })
+    }, 2000)
+  }
+
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-[#F8FAFB]">
@@ -565,6 +625,75 @@ export default function CheckoutPage() {
                   placeholder="Any special instructions for your order?"
                 />
               </div>
+
+              {/* CHECKOUT RECOMMENDATIONS */}
+              {recommendations.length > 0 && (
+                <div className="rounded-2xl border border-[#DDE5E9] bg-white p-6 shadow-sm">
+                  <div className="mb-4">
+                    <h2 className="text-lg font-semibold text-[#292F33]">
+                      Complete Your Meal
+                    </h2>
+                    <p className="text-sm text-[#737D83]">
+                      Add something delicious to your order.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {recommendations.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex flex-col p-3 rounded-lg bg-[#F8FAFB] border border-[#E8EEF1] hover:border-[#6F8494] transition-colors"
+                      >
+                        <div className="h-20 w-full flex-shrink-0 overflow-hidden rounded-lg bg-[#EAF0F4] mb-2">
+                          {item.image ? (
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center">
+                              <Coffee className="h-6 w-6 text-[#6F8494]" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-[#292F33] truncate mb-1">
+                            {item.title}
+                          </p>
+                          <p className="text-xs text-[#737D83] mb-2">
+                            {item.price}
+                          </p>
+                        </div>
+                        
+                        <button
+                          type="button"
+                          onClick={() => handleAddRecommendation(item)}
+                          disabled={addedItems.has(item.id)}
+                          className={`
+                            flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-300
+                            ${addedItems.has(item.id)
+                              ? 'bg-green-600 text-white'
+                              : 'bg-[#6F8494] text-white hover:bg-[#5C7282]'
+                            }
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                          `}
+                        >
+                          {addedItems.has(item.id) ? (
+                            "Added"
+                          ) : (
+                            <>
+                              <Plus className="h-3 w-3" />
+                              Add
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* ERROR MESSAGE */}
               {error && (

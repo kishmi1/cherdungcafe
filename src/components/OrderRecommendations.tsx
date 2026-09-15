@@ -147,7 +147,7 @@ export default function OrderRecommendations({ orderId, orderItems }: OrderRecom
         <p className="mb-6 text-sm text-[#737D83]">
           Perfect combos to complete your meal.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="animate-pulse">
               <div className="h-32 bg-[#EAF0F4] rounded-lg mb-3"></div>
@@ -173,7 +173,7 @@ export default function OrderRecommendations({ orderId, orderItems }: OrderRecom
         These items complement what you just ordered.
       </p>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {recommendations.map((item) => (
           <div
             key={item.id}
@@ -267,7 +267,7 @@ export default function OrderRecommendations({ orderId, orderItems }: OrderRecom
             Explore other delicious items that might interest you.
           </p>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {additionalItems.map((item) => (
               <div
                 key={item.id}
