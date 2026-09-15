@@ -21,12 +21,14 @@ type Props = {
   recommendations: MenuItem[]
   title?: string
   subtitle?: string
+  showComboText?: boolean
 }
 
 export default function Recommendations({ 
   recommendations, 
   title = "You May Also Like",
-  subtitle = "Complete your meal with these favorites"
+  subtitle = "Complete your meal with these favorites",
+  showComboText = false
 }: Props) {
   const [showSuccess, setShowSuccess] = useState<{ itemId: number; message: string } | null>(null)
   const [quantities, setQuantities] = useState<Record<number, number>>({})
@@ -84,7 +86,7 @@ export default function Recommendations({
       </div>
 
       {/* ================= RECOMMENDATIONS GRID ================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
         {recommendations.map((menuItem) => (
           <article
             key={menuItem.id}
@@ -97,6 +99,15 @@ export default function Recommendations({
               >
                 <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current" />
                 Popular
+              </div>
+            )}
+
+            {/* ================= RECOMMENDED BADGE ================= */}
+            {!menuItem.isPopular && showComboText && (
+              <div
+                className="absolute right-2 sm:right-3 top-2 sm:top-3 z-10 flex items-center gap-1 sm:gap-1.5 rounded-full bg-[#6F8494] px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-semibold text-white shadow-md font-sans tracking-wide"
+              >
+                Great Match
               </div>
             )}
 

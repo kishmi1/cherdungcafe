@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma"
 import { CheckCircle, Clock, Coffee, ArrowRight, Home, CreditCard, XCircle } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import OrderRecommendations from "@/components/OrderRecommendations"
 
 type OrderStatus = "PENDING" | "CONFIRMED" | "PREPARING" | "READY" | "COMPLETED" | "CANCELLED"
 type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED"
@@ -101,7 +102,7 @@ export default async function OrderSuccessPage({ params }: { params: Promise<{ i
       {/* ================= ORDER DETAILS ================= */}
       <section className="bg-[#F8FAFB] py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 mb-8">
             
             {/* ================= ORDER INFO ================= */}
             <div className="lg:col-span-2 space-y-6">
@@ -338,6 +339,11 @@ export default async function OrderSuccessPage({ params }: { params: Promise<{ i
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* ================= RECOMMENDATIONS ================= */}
+          <div className="mt-8">
+            <OrderRecommendations orderId={orderId} />
           </div>
         </div>
       </section>

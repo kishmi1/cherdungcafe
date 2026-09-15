@@ -28,41 +28,6 @@ export default async function MenuPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFB]">
 
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden bg-[#EAF0F4] py-12 sm:py-16 md:py-20">
-
-        {/* Decorative Background */}
-        <div
-          className="absolute -left-20 -top-20 h-56 w-56 rounded-full bg-[#B9C9D2]/25 blur-3xl"
-        />
-
-        <div
-          className="absolute -bottom-24 -right-20 h-64 w-64 rounded-full bg-[#D8C4AE]/20 blur-3xl"
-        />
-
-        <div
-          className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8"
-        >
-
-         
-
-          <h1
-            className="mb-3 sm:mb-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-[0.03em] text-[#29343A] font-serif leading-tight"
-          >
-            Our Menu
-          </h1>
-
-          <p
-            className="mx-auto max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-[#68767D] font-sans tracking-wide"
-          >
-            Freshly prepared café favorites,
-            made for every moment.
-          </p>
-
-        </div>
-      </section>
-
-
       {/* ================= MENU SECTION ================= */}
       <section className="bg-[#F8FAFB] py-12 sm:py-16 md:py-20">
 
@@ -70,27 +35,22 @@ export default async function MenuPage() {
 
           {/* ================= MENU HEADER ================= */}
           <div className="mb-8 sm:mb-10 text-center">
-
             <p
               className="mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[#8096A3] font-sans"
             >
               Taste Something Special
             </p>
-
             <h2
               className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-[0.03em] text-[#29343A] font-serif leading-tight"
             >
               Our Favorites
             </h2>
-
             <p
               className="mx-auto mt-2 sm:mt-3 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed text-[#737D83] font-sans tracking-wide"
             >
               Explore our freshly prepared menu
             </p>
-
           </div>
-
 
           {/* ================= CLIENT FILTER ================= */}
           {menuItems.length > 0 ? (
@@ -119,22 +79,6 @@ export default async function MenuPage() {
             </div>
 
           )}
-
-        </div>
-
-      </section>
-
-
-      {/* ================= BOTTOM ACCENT ================= */}
-      <section className="bg-[#E9EEF1] py-6 sm:py-8">
-
-        <div className="mx-auto max-w-4xl px-4 text-center">
-
-          <p
-            className="text-xs sm:text-sm font-medium text-[#65747C] font-sans tracking-wide"
-          >
-            Fresh ingredients · Quality coffee · Made with care
-          </p>
 
         </div>
 

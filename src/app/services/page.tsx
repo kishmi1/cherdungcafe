@@ -98,50 +98,6 @@ export default async function ServicesPage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
 
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden bg-[#F3EADF] py-16 md:py-20">
-        <div className="absolute -left-20 -top-20 h-52 w-52 rounded-full bg-[#D8C2A8]/20 blur-3xl" />
-        <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-[#A7B09A]/20 blur-3xl" />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-
-            
-
-            <h1
-              className="
-                mb-4
-                text-4xl
-                font-light
-                tracking-tight
-                text-[#3B2A20]
-                md:text-5xl
-                lg:text-6xl
-                font-serif
-              "
-            >
-              Our Services
-            </h1>
-
-            <p
-              className="
-                mx-auto
-                max-w-3xl
-                text-base
-                leading-relaxed
-                text-[#756E68]
-                md:text-lg
-                font-sans
-              "
-            >
-              More than just coffee — an experience crafted for you.
-            </p>
-
-          </div>
-        </div>
-      </section>
-
-
       {/* ================= ALL SERVICES ================= */}
       <section className="bg-[#EDE6DC] py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -39,7 +39,7 @@ function EmptyCartPage() {
               if (!a.isPopular && b.isPopular) return 1
               return a.sortOrder - b.sortOrder
             })
-            .slice(0, 8) // Show 8 items in empty cart
+            .slice(0, 10) // Show 10 items in empty cart
           setMenuItems(availableItems)
         }
       } catch (error) {
@@ -71,21 +71,11 @@ function EmptyCartPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFB]">
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden bg-[#EAF0F4] py-8 sm:py-12 md:py-16 lg:py-20">
-        <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <h1 className="mb-2 sm:mb-3 md:mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light tracking-tight text-[#29343A]">
-            Your Cart
-          </h1>
-          <p className="mx-auto max-w-2xl text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-[#68767D]">
-            Review your items before checkout
-          </p>
-        </div>
-      </section>
 
       {/* ================= EMPTY STATE WITH MENU ITEMS ================= */}
       <section className="bg-[#F8FAFB] py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
           {/* EMPTY CART MESSAGE */}
           <div className="mb-6 sm:mb-8 md:mb-10 text-center">
             <div className="mx-auto mb-3 sm:mb-4 md:mb-5 flex h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-[#EAF0F4]">
@@ -104,18 +94,23 @@ function EmptyCartPage() {
             <>
               <div className="mb-4 sm:mb-6 md:mb-8 text-center">
                 <p
-                  className="mb-2 text-[10px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#8096A3] font-sans"
+                  className="mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[#8096A3] font-sans"
                 >
-                  Popular Items
+                  Taste Something Special
                 </p>
                 <h2
-                  className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-[0.03em] text-[#29343A] font-serif leading-tight"
+                  className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-[0.03em] text-[#29343A] font-serif leading-tight"
                 >
-                  Start Your Order
+                  Our Favorites
                 </h2>
+                <p
+                  className="mx-auto mt-2 sm:mt-3 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed text-[#737D83] font-sans tracking-wide"
+                >
+                  Explore our freshly prepared menu
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
                 {menuItems.map((menuItem) => (
                   <article
                     key={menuItem.id}
@@ -278,7 +273,7 @@ export default function CartPage() {
 
       setIsLoading(true)
       try {
-        // Load recommendations
+        // Load recommendations (more items for better variety)
         const response = await fetch('/api/recommendations', {
           method: 'POST',
           headers: {
@@ -287,7 +282,7 @@ export default function CartPage() {
           body: JSON.stringify({
             type: 'cart',
             cartItems: cart.map(item => item.menuItem),
-            limit: 4
+            limit: 8
           })
         })
 
@@ -297,12 +292,15 @@ export default function CartPage() {
           setRecommendations(recs)
         }
 
-        // Load additional menu items (excluding cart items and recommendations)
+        // Load additional menu items that are contextually relevant
         const menuResponse = await fetch('/api/menu')
         if (menuResponse.ok) {
           const allMenuItems = await menuResponse.json()
           const cartItemIds = new Set(cart.map(item => item.menuItem.id))
           const recItemIds = new Set(recs ? recs.map((item: MenuItem) => item.id) : [])
+          
+          // Get categories from cart items
+          const cartCategories = new Set(cart.map(item => item.menuItem.category).filter(Boolean))
           
           const additional = allMenuItems
             .filter((item: MenuItem) => 
@@ -311,12 +309,20 @@ export default function CartPage() {
               !recItemIds.has(item.id)
             )
             .sort((a: MenuItem, b: MenuItem) => {
-              // Prioritize popular items
+              // Prioritize items in same category as cart items
+              const aInCartCategory = a.category && cartCategories.has(a.category)
+              const bInCartCategory = b.category && cartCategories.has(b.category)
+              
+              if (aInCartCategory && !bInCartCategory) return -1
+              if (!aInCartCategory && bInCartCategory) return 1
+              
+              // Then prioritize popular items
               if (a.isPopular && !b.isPopular) return -1
               if (!a.isPopular && b.isPopular) return 1
+              
               return a.sortOrder - b.sortOrder
             })
-            .slice(0, 4)
+            .slice(0, 8)
           
           setAdditionalItems(additional)
         }
@@ -369,17 +375,6 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFB]">
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden bg-[#EAF0F4] py-8 sm:py-12 md:py-16 lg:py-20">
-        <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <h1 className="mb-2 sm:mb-3 md:mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light tracking-tight text-[#29343A]">
-            Your Cart
-          </h1>
-          <p className="mx-auto max-w-2xl text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-[#68767D]">
-            Review your items before checkout
-          </p>
-        </div>
-      </section>
 
       {/* ================= CART CONTENT ================= */}
       <section className="bg-[#F8FAFB] py-8 sm:py-12 md:py-16 lg:py-20">
@@ -523,8 +518,9 @@ export default function CartPage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Recommendations 
               recommendations={recommendations}
-              title="Perfect With Your Order"
-              subtitle="Complete your meal with these popular items"
+              title="Pairs Perfectly With Your Order"
+              subtitle="These items complement what you've added to your cart"
+              showComboText={true}
             />
           </div>
         </section>
@@ -539,22 +535,22 @@ export default function CartPage() {
               <p
                 className="mb-2 text-[10px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#8096A3] font-sans"
               >
-                More From Our Menu
+                More Options For You
               </p>
               <h2
                 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-[0.03em] text-[#29343A] font-serif leading-tight"
               >
-                Explore More Favorites
+                Discover Similar Items
               </h2>
               <p
                 className="mx-auto mt-2 sm:mt-3 max-w-2xl text-[10px] sm:text-xs md:text-sm lg:text-base leading-relaxed text-[#737D83] font-sans tracking-wide"
               >
-                Discover other delicious items from our menu
+                Explore items that complement your current selection
               </p>
             </div>
 
             {/* MENU GRID */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
               {additionalItems.map((menuItem) => (
                 <article
                   key={menuItem.id}
