@@ -1,6 +1,16 @@
 import Link from "next/link"
 import { MapPin, Coffee, Heart, Leaf, Star, Users, Utensils, Calendar, Gift } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "About Cherdung Café | Our Story",
+  description: "Learn about Cherdung Café in Sankhamul, Kathmandu — our story, philosophy, values, and what makes us different. Discover our commitment to quality coffee, fresh food, and warm hospitality.",
+  openGraph: {
+    title: "About Cherdung Café | Our Story",
+    description: "Learn about Cherdung Café in Sankhamul, Kathmandu — our story, philosophy, values, and what makes us different.",
+  },
+}
 
 async function getGalleryImages() {
   try {
@@ -20,11 +30,13 @@ export default async function AboutPage() {
     <div className="flex flex-col">
       {/* About Hero Section */}
       <section className="relative h-[70vh] min-h-[500px] bg-black">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.4)), url("https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1920&q=80")',
           }}
+          role="img"
+          aria-label="Cherdung Cafe about page hero image showing cafe atmosphere"
         />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
           <h1 className="text-5xl md:text-7xl font-light text-white mb-6 tracking-[0.05em] leading-tight font-serif">About Cherdung Cafe</h1>
@@ -150,11 +162,13 @@ export default async function AboutPage() {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
-              <div 
+              <div
                 className="aspect-[4/3] bg-cover bg-center rounded-lg shadow-2xl"
                 style={{
                   backgroundImage: 'url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=90")',
                 }}
+                role="img"
+                aria-label="Coffee preparation at Cherdung Cafe showing quality and care"
               />
             </div>
             

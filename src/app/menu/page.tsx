@@ -5,9 +5,13 @@ import MenuFilter from "./MenuFilter"
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
-  title: "Menu - Cherdung Café",
+  title: "Menu | Cherdung Café Kathmandu",
   description:
-    "Explore our coffee, food, and café favorites.",
+    "Explore our complete menu at Cherdung Café in Kathmandu. Discover specialty coffee, fresh food, delicious meals, and café favorites made with quality ingredients.",
+  openGraph: {
+    title: "Menu | Cherdung Café Kathmandu",
+    description: "Explore our complete menu at Cherdung Café in Kathmandu. Discover specialty coffee, fresh food, and delicious meals.",
+  },
 }
 
 export default async function MenuPage() {

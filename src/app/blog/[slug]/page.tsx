@@ -63,7 +63,7 @@ export async function generateMetadata({
   return {
     title:
       post.metaTitle ||
-      `${post.title} - Cherdung Café Blog`,
+      `${post.title} | Cherdung Café Blog`,
 
     description:
       post.metaDescription ||
@@ -78,6 +78,10 @@ export async function generateMetadata({
         post.excerpt ||
         post.content.substring(0, 160),
 
+      type: "article",
+      publishedTime: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
+      modifiedTime: new Date(post.updatedAt).toISOString(),
+      authors: [post.author?.name || "Cherdung Café"],
       images: post.coverImage
         ? [post.coverImage]
         : [],
@@ -235,6 +239,16 @@ export default async function BlogPostPage({
       post.category
     )
 
+  const blogSchemaData = post.publishedAt ? {
+    title: post.title,
+    description: post.metaDescription || post.excerpt || post.content.substring(0, 160),
+    author: post.author?.name || "Cherdung Café",
+    datePublished: new Date(post.publishedAt).toISOString(),
+    dateModified: new Date(post.updatedAt).toISOString(),
+    url: `https://cherdungcafe.vercel.app/blog/${post.slug}`,
+    imageUrl: post.coverImage || undefined
+  } : undefined
+
   const fallbackContent = `
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -257,6 +271,7 @@ export default async function BlogPostPage({
         color: "#292522",
       }}
     >
+      {blogSchemaData && <BlogPostingSchema {...blogSchemaData} />}
 
       {/* =====================================================
           BLOG HERO

@@ -6,39 +6,39 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/staff/", "/api/"],
       },
       {
         userAgent: "GPTBot",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/staff/", "/api/"],
       },
       {
         userAgent: "ChatGPT-User",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/staff/", "/api/"],
       },
       {
         userAgent: "Google-Extended",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/staff/", "/api/"],
       },
       {
         userAgent: "CCBot",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/staff/", "/api/"],
       },
       {
         userAgent: "anthropic-ai",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/staff/", "/api/"],
       },
       {
         userAgent: "Claude-Web",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin/", "/staff/", "/api/"],
       },
     ],
-    sitemap: "https://cherdungcafe.com/sitemap.xml",
+    sitemap: "https://cherdungcafe.vercel.app/sitemap.xml",
   }
 }

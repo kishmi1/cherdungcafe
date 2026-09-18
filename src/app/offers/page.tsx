@@ -383,7 +383,7 @@ export default function OffersPage() {
 
                       <img
                         src={offer.image}
-                        alt={offer.title}
+                        alt={`${offer.title} - special offer at Cherdung Cafe`}
                         className="
                           h-full
                           w-full

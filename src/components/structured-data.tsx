@@ -11,41 +11,23 @@ export function StructuredData({ data }: StructuredDataProps) {
   )
 }
 
-// LocalBusiness / CafeOrCoffeeShop schema
+// LocalBusiness / Restaurant schema
 export function LocalBusinessSchema() {
   const data = {
     "@context": "https://schema.org",
-    "@type": "CafeOrCoffeeShop",
+    "@type": "Restaurant",
     "name": "Cherdung Café",
-    "image": "https://cherdungcafe.com/og-image.jpg",
-    "description": "Your neighborhood café serving specialty coffee, delicious food, and memorable experiences.",
+    "image": "https://cherdungcafe.vercel.app/logo.png",
+    "description": "Cherdung Café in Sankhamul, Kathmandu — enjoy coffee, delicious food, fresh meals, offers, and a warm place to dine, relax and connect.",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "123 Coffee Street",
-      "addressLocality": "City",
-      "addressRegion": "State",
-      "postalCode": "12345",
-      "addressCountry": "US"
+      "addressLocality": "Sankhamul",
+      "addressRegion": "Kathmandu",
+      "addressCountry": "NP"
     },
-    "telephone": "+1-555-123-4567",
-    "email": "hello@cherdungcafe.com",
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        "opens": "07:00",
-        "closes": "20:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Saturday", "Sunday"],
-        "opens": "08:00",
-        "closes": "21:00"
-      }
-    ],
-    "priceRange": "$$",
-    "servesCuisine": "Coffee, Bakery, Cafe Food",
-    "url": "https://cherdungcafe.com"
+    "url": "https://cherdungcafe.vercel.app",
+    "servesCuisine": "Coffee, Bakery, Cafe Food, Nepali Food",
+    "priceRange": "$$"
   }
 
   return <StructuredData data={data} />
@@ -167,19 +149,22 @@ export function OrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Cherdung Café",
-    "url": "https://cherdungcafe.com",
-    "logo": "https://cherdungcafe.com/logo.png",
-    "sameAs": [
-      "https://facebook.com/cherdungcafe",
-      "https://instagram.com/cherdungcafe",
-      "https://twitter.com/cherdungcafe"
-    ],
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+1-555-123-4567",
-      "contactType": "customer service",
-      "email": "hello@cherdungcafe.com"
-    }
+    "url": "https://cherdungcafe.vercel.app",
+    "logo": "https://cherdungcafe.vercel.app/logo.png",
+    "description": "Cherdung Café in Sankhamul, Kathmandu — enjoy coffee, delicious food, fresh meals, offers, and a warm place to dine, relax and connect."
+  }
+
+  return <StructuredData data={data} />
+}
+
+// WebSite schema
+export function WebSiteSchema() {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Cherdung Café",
+    "url": "https://cherdungcafe.vercel.app",
+    "description": "Cherdung Café in Sankhamul, Kathmandu — enjoy coffee, delicious food, fresh meals, offers, and a warm place to dine, relax and connect."
   }
 
   return <StructuredData data={data} />

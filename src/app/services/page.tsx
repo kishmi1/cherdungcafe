@@ -167,7 +167,7 @@ export default async function ServicesPage() {
                     <div className="overflow-hidden">
                       <img
                         src={service.image}
-                        alt={service.title}
+                        alt={`${service.title} - cafe service at Cherdung Cafe`}
                         className="
                           h-48
                           w-full
@@ -343,6 +343,8 @@ export default async function ServicesPage() {
                     backgroundImage:
                       'url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=90")',
                   }}
+                  role="img"
+                  aria-label="People enjoying coffee and food at Cherdung Cafe"
                 />
 
               </div>

@@ -223,6 +223,8 @@ export default async function Home() {
                   backgroundImage:
                     'url("https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&q=90")',
                 }}
+                role="img"
+                aria-label="Cherdung Cafe interior showing warm atmosphere and comfortable seating"
               />
             </div>
 
@@ -283,7 +285,7 @@ export default async function Home() {
                 {service.image ? (
                   <img
                     src={service.image}
-                    alt={service.title}
+                    alt={`${service.title} - service offered at Cherdung Cafe`}
                     className="mb-4 sm:mb-5 h-28 sm:h-36 lg:h-44 w-full rounded-lg object-cover"
                   />
                 ) : (
@@ -357,7 +359,7 @@ export default async function Home() {
                 {menuItem.image ? (
                   <img
                     src={menuItem.image}
-                    alt={menuItem.title}
+                    alt={`${menuItem.title} - popular menu item at Cherdung Cafe`}
                     className="mb-2.5 sm:mb-3 aspect-[4/3] sm:aspect-square w-full rounded-lg object-cover"
                   />
                 ) : (
